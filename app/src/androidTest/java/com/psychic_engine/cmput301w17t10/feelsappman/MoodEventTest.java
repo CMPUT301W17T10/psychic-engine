@@ -33,10 +33,10 @@ public class MoodEventTest extends TestCase {
     }
     
     public void testSetMood() {
-        Mood moodHappy = newMood(MoodState.Happy);
+        Mood moodHappy = new Mood(MoodState.Happy);
         MoodEvent moodEvent = new MoodEvent(mood);
         assertEquals(moodEvent.getMood(), moodHappy);
-        Mood moodSad = newMood(MoodState.Sad);
+        Mood moodSad = new Mood(MoodState.Sad);
         moodEvent.setMood(moodSad);
         assertEquals(moodEvent.getMood(), moodSad);
     }
