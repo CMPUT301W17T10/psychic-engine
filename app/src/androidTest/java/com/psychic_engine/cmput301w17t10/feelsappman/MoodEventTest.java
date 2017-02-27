@@ -15,6 +15,14 @@ public class MoodEventTest extends ActivityInstrumentationTestCase2 {
         moodEvent.setId(1);
         assertEquals(moodEvent.getId(), 1);
     }
+    
+    public void testSetId() {
+        MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.Happy));
+        moodEvent.setId(22);
+        assertEquals(moodEvent.getId(), 22);
+        moodEvent.setId(33);
+        assertEquals(moodEvent.getId(), 33);
+    }
 
     public void testGetMood() {
         Mood mood = new Mood(MoodState.Happy);
@@ -40,8 +48,26 @@ public class MoodEventTest extends ActivityInstrumentationTestCase2 {
             e.printStackTrace();
         }
     }
+    
+    public void testSetTrigger() {
+        MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.Happy));
+        try {
+            moodEvent.setTrigger("So happy");
+            assertEquals(moodEvent.getTrigger(), "So happy");
+            moodEvent.setTrigger("angry");
+            assertEquals(moodEvent.getTrigger(), "angry");
+        } catch (triggerTooLongException e){
+            e.printStackTrace();
+        }
 
     public void testGetDate() {
+        MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.Happy));
+        //Date date = new Date(2017, 02, 28);
+        //moodEvent.setDate(date);
+        //assertTrue(equals(moodEvent.getDate(), date));
+    }
+        
+    public void testSetDate() {
         MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.Happy));
         //Date date = new Date(2017, 02, 28);
         //moodEvent.setDate(date);
@@ -54,8 +80,22 @@ public class MoodEventTest extends ActivityInstrumentationTestCase2 {
         //moodEvent.setPicture(picture);
         //assertEquals(equals(moodEvent.getPicture(), picture));
     }
+        
+    public void testSetPicture() {
+        MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.Happy));
+        //Photograph picture = new Picture( ... )
+        //moodEvent.setPicture(picture);
+        //assertEquals(equals(moodEvent.getPicture(), picture));
+    }
 
     public void testGetLocation() {
+        MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.Happy));
+        //Location location = new Location( ... )
+        //moodEvent.setLocation(location);
+        //assertEquals(equals(moodEvent.getLocation(), location));
+    }
+        
+    public void testSetLocation() {
         MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.Happy));
         //Location location = new Location( ... )
         //moodEvent.setLocation(location);
