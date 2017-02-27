@@ -2,13 +2,15 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 
 import android.test.ActivityInstrumentationTestCase2;
 
+import junit.framework.TestCase;
+
 import java.util.Date;
 
 /**
  * Created by jyuen1 on 2/27/17.
  */
 
-public class MoodEventTest extends ActivityInstrumentationTestCase2 {
+public class MoodEventTest extends TestCase {
 
     public void testGetId() {
         MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.Happy));
