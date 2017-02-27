@@ -10,18 +10,13 @@ public class Photograph {
 
     private static Integer BYTE;
     private Boolean limitSize;
-    private Bitmap image;
-
+    private Bitmap map;
     public Photograph() {
 
     }
 
     public Bitmap getImage() {
-        return this.image;
-    }
-
-    public void setImage() {
-
+        return this.map;
     }
 
     public void deleteImage() {
