@@ -10,6 +10,4 @@ public class triggerTooLongException extends Exception{
     public triggerTooLongException(String detailMessage) {
         super(detailMessage);
     }
-
-
 }
