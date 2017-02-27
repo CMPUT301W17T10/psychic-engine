@@ -7,6 +7,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 public class PhotographTest {
 
     public void testGetImage() {
+
         //assume photograph exists
 
     }
