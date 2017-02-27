@@ -9,6 +9,10 @@ public class Photograph {
     private static Integer BYTE;
     private Boolean limitSize;
 
+    public Photograph() {
+
+    }
+
     public void getImage() {
 
     }
