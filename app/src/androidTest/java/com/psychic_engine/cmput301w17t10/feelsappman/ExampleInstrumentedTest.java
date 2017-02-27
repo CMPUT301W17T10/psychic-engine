@@ -1,4 +1,4 @@
-package com.psychic_engine.cmput301w17t10.FeelsAppMan;
+package com.psychic_engine.cmput301w17t10.feelsappman;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.psychic_engine.cmput301w17t10.FeelsAppMan", appContext.getPackageName());
+        assertEquals("com.psychic_engine.cmput301w17t10.feelsappman", appContext.getPackageName());
     }
 }
