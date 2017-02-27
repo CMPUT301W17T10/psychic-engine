@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FeelsAppMan.iml" filepath="$PROJECT_DIR$/FeelsAppMan.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/psychic-engine.iml" filepath="$PROJECT_DIR$/psychic-engine.iml" />
     </modules>
   </component>
 </project>

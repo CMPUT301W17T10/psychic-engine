@@ -1,4 +1,4 @@
-package com.example.jordiwork.feelsappman;
+package com.feelsappman;
 
 import org.junit.Test;
 
