@@ -43,6 +43,10 @@ public class MoodEvent {
         this.trigger = trigger;
     }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public void setPicture(Photograph picture) {
         this.picture = picture;
     }
