@@ -7,7 +7,7 @@ import android.media.Image;
  */
 
 public class Mood {
-    private MoodState state;
+    private MoodState mood;
     private MoodColor color;
     private Image icon;
 
@@ -19,10 +19,10 @@ public class Mood {
 
     public Image getIcon() { return icon; }
 
-    public MoodState getMood() { return state; }
+    public MoodState getMood() { return mood; }
 
     public void setMood(MoodState mood) {
-        state = mood;
+        this.mood = mood;
         switch(mood) {
             case Sad:
                 color = MoodColor.Blue;
