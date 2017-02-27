@@ -6,26 +6,22 @@ import android.media.Image;
  * Created by jyuen1 on 2/27/17.
  */
 
-enum MoodState {
-    Sad, Happy, Shame, Fear, Anger, Surprised, Disgust, Confused
-};
-
-enum MoodColor {
-    Blue, Green, Purple, Orange, Red, Pink, LightGreen, Yellow
-};
-
 public class Mood {
     private MoodState state;
     private MoodColor color;
     private Image icon;
 
     public Mood(MoodState mood) {
-        setMoodState(mood);
+        setMood(mood);
     }
 
-    public MoodState getMoodState() { return state; }
+    public MoodColor getColor() { return color; }
 
-    public void setMoodState(MoodState mood) {
+    public Image getIcon() { return icon; }
+
+    public MoodState getMood() { return state; }
+
+    public void setMood(MoodState mood) {
         state = mood;
         switch(mood) {
             case Sad:
