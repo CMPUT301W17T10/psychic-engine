@@ -21,6 +21,15 @@ public class Participant {
         this.pendingRequests = new ArrayList<Participant>();
     }
 
+    //public void addmoodevent(MoodEvent moodEvent){
+      //  moodEvents.add(moodEvent);
+    //}
+
+    /*public void addfollowers(Participant participant){
+        followers.add(participant);
+
+    }*/
+
     public ArrayList<MoodEvent> getMoodList() {
         return this.moodEvents;
     }
