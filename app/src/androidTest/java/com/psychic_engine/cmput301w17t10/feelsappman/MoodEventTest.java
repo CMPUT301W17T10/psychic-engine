@@ -18,10 +18,19 @@ public class MoodEventTest extends ActivityInstrumentationTestCase2 {
 
     public void testGetMood() {
         Mood mood = new Mood(MoodState.Happy);
-        MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.Happy));
+        MoodEvent moodEvent = new MoodEvent(mood);
         assertEquals(moodEvent.getMood(), mood);
     }
-
+    
+    public void testSetMood() {
+        Mood moodHappy = newMood(MoodState.Happy);
+        MoodEvent moodEvent = new MoodEvent(mood);
+        assertEquals(moodEvent.getMood(), moodHappy);
+        Mood moodSad = newMood(MoodState.Sad);
+        moodEvent.setMood(moodSad);
+        assertEquals(moodEvent.getMood(), moodSad);
+    }
+    
     public void testGetTrigger() {
         MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.Happy));
         try {
