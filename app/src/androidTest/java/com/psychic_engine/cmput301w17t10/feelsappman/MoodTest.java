@@ -2,11 +2,13 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 
 import android.test.ActivityInstrumentationTestCase2;
 
+import junit.framework.TestCase;
+
 /**
  * Created by jyuen1 on 2/27/17.
  */
 
-public class MoodTest extends ActivityInstrumentationTestCase2 {
+public class MoodTest extends TestCase {
 
     public void testGetColor() {
         Mood moodHappy = new Mood(MoodState.Happy);
@@ -48,7 +50,7 @@ public class MoodTest extends ActivityInstrumentationTestCase2 {
         //assertEquals(moodSurprised.getIcon(), "surprisedicon.png");
 
         Mood moodDisgust = new Mood(MoodState.Disgust);
-        //assertEquals(moodDisgust.getIcon(), "disgusticon.png");
+        assertEquals(moodDisgust.getIcon(), "disgusticon.png");
 
         Mood moodConfused = new Mood(MoodState.Confused);
         //assertEquals(moodConfused.getIcon(), "confusedicon.png");
