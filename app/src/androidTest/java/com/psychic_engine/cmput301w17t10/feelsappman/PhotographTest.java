@@ -7,15 +7,14 @@ import java.lang.Object;
  * Created by hnkhan on 2/27/17. Editted by adong
  */
 
-<<<<<<< HEAD
 public class PhotographTest extends ActivityInstrumentationTestCase2 {
-=======
+
 public class PhotographTest {
 
     public void testGetImage() {
 
         //assume photograph exists
->>>>>>> ef0a453050ce4783fd93974317cf5dd80538c8d7
+
 
     //TODO Temporary activity to be the added
     public PhotographTest() {
@@ -31,7 +30,7 @@ public class PhotographTest {
         //assume photograph exists
         Photograph testPhotograph = new Photograph();
         testPhotograph.setImage();
-        assertEquals(, );
+        assertEquals();
     }
 
 
