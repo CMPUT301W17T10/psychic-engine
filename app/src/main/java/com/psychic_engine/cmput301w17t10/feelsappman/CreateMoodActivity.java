@@ -27,18 +27,20 @@ public class CreateMoodActivity extends AppCompatActivity {
         List<String> moodCategories = new ArrayList<String>();
         MoodState[] moodStates = MoodState.values();
         for (MoodState moodState : moodStates) {
-            moodCategories.add(moodState.name());
+            moodCategories.add(moodState.toString());
         }
 
         List<String> socialSettingCategories = new ArrayList<String>();
         SocialSetting[] socialSettings = SocialSetting.values();
         for (SocialSetting socialSetting : socialSettings) {
-            socialSettingCategories.add(socialSetting.name());
+            socialSettingCategories.add(socialSetting.toString());
         }
 
         // Creating adapter for spinners
-        ArrayAdapter<String> moodSpinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, moodCategories);
-        ArrayAdapter<String> socialSettingSpinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, socialSettingCategories);
+        ArrayAdapter<String> moodSpinnerAdapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, moodCategories);
+        ArrayAdapter<String> socialSettingSpinnerAdapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, socialSettingCategories);
 
         // Drop down layout style - list view with radio button
         moodSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
