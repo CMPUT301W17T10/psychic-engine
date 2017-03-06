@@ -34,7 +34,7 @@ public class MoodEventTest extends TestCase {
     
     public void testSetMood() {
         Mood moodHappy = new Mood(MoodState.Happy);
-        MoodEvent moodEvent = new MoodEvent(mood);
+        MoodEvent moodEvent = new MoodEvent(moodHappy);
         assertEquals(moodEvent.getMood(), moodHappy);
         Mood moodSad = new Mood(MoodState.Sad);
         moodEvent.setMood(moodSad);
@@ -58,9 +58,10 @@ public class MoodEventTest extends TestCase {
             assertEquals(moodEvent.getTrigger(), "So happy");
             moodEvent.setTrigger("angry");
             assertEquals(moodEvent.getTrigger(), "angry");
-        } catch (triggerTooLongException e){
+        } catch (triggerTooLongException e) {
             e.printStackTrace();
         }
+    }
 
     public void testGetDate() {
         MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.Happy));
