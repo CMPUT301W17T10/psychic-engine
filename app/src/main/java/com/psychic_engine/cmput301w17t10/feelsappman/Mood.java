@@ -56,6 +56,9 @@ public class Mood {
                 color = MoodColor.YELLOW;
                 //icon = "confusedicon.png";
                 break;
+            default:
+                color = null;
+                icon = null;
         }
     }
 }
