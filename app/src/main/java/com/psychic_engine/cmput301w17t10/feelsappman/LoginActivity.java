@@ -22,7 +22,7 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import static android.app.Activity.RESULT_OK;
+// created by Alex Dong | March 6, 2017
 
 public class LoginActivity extends AppCompatActivity {
 /*
@@ -36,10 +36,15 @@ public class LoginActivity extends AppCompatActivity {
     private EditText participantEditText;
     private Button loginButton;
     private Button signupButton;
+
+    public ArrayList<Participant> getParticipantList() {
+        return participantList;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         loginButton = (Button) findViewById(R.id.loginButton);
         signupButton = (Button) findViewById(R.id.signupButton);
         participantEditText = (EditText) findViewById(R.id.nameEditText);
@@ -51,18 +56,16 @@ public class LoginActivity extends AppCompatActivity {
                 if (!participantList.contains(participantName)) {
                     Toast.makeText(LoginActivity.this,
                             "This participant does not exist, please sign up"
-                            ,Toast.LENGTH_LONG).show();
+                            , Toast.LENGTH_LONG).show();
                 }
-                int position = participantList.indexOf(participantName);
-                Participant participant = participantList.get(position);
-
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("participant", participantName);
-
-
+                Gson gsonOut = new Gson();
+                Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
+                intent.putExtra("participantListObjects", gsonOut.toJson(participantList));
+                intent.putExtra("participantSelfObject", participantName);
+                startActivity(intent);
             }
         });
-
+        // signup button does not take participant to a signup activity - alex
         signupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
@@ -74,8 +77,11 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "New participant created!"
                             , Toast.LENGTH_LONG).show();
                 }
-                Toast.makeText(LoginActivity.this, "This participant has already signed up",
+                // Different from UI Interface (Text View vs Toast Popup)
+                else {
+                Toast.makeText(LoginActivity.this, "The username is already taken",
                         Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -84,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         loadFromFile();
-
+        participantList.clear(); // Remove after testing
     }
     private void loadFromFile() {
 
