@@ -49,11 +49,25 @@
         android:id="@+id/imageView"
         android:layout_weight="1.11" />
 
-    <Button
-        android:id="@+id/create"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Create" />
+        android:layout_height="wrap_content">
+
+        <Button
+            android:text="Cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancel"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create"
+            android:layout_weight="1" />
+    </LinearLayout>
 
 
 </LinearLayout>
