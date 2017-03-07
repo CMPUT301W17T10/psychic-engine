@@ -9,31 +9,25 @@ import java.util.Date;
  */
 
 public class MoodEvent {
-    private int id;
     private Mood mood;
     private String trigger;
     private Date date;
     private Photograph picture;
     private Location location;
 
-    public MoodEvent(Mood mood) {
+    public MoodEvent(Mood mood, String trigger, Photograph picture, Location location) {
         this.mood = mood;
         this.date = new Date();
-        this.trigger = "";
-        this.picture = null;
-        this.location = null;
+        this.trigger = trigger;
+        this.picture = picture;
+        this.location = location;
     }
 
-    public int getId() { return id; }
     public Mood getMood() { return mood; }
     public String getTrigger() { return trigger; }
     public Date getDate() { return date; }
     public Photograph getPicture() { return picture; }
     public Location getLocation() { return location; }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public void setMood(Mood mood) {
         this.mood = mood;

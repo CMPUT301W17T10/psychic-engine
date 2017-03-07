@@ -11,87 +11,87 @@ import junit.framework.TestCase;
 public class MoodTest extends TestCase {
 
     public void testGetColor() {
-        Mood moodHappy = new Mood(MoodState.Happy);
-        assertEquals(moodHappy.getColor(), MoodColor.Green);
+        Mood moodHappy = new Mood(MoodState.HAPPY);
+        assertEquals(moodHappy.getColor(), MoodColor.GREEN);
 
-        Mood moodSad = new Mood(MoodState.Sad);
-        assertEquals(moodSad.getColor(), MoodColor.Blue);
+        Mood moodSad = new Mood(MoodState.SAD);
+        assertEquals(moodSad.getColor(), MoodColor.BLUE);
 
-        Mood moodShame = new Mood(MoodState.Shame);
-        assertEquals(moodShame.getColor(), MoodColor.Purple);
+        Mood moodShame = new Mood(MoodState.SHAME);
+        assertEquals(moodShame.getColor(), MoodColor.PURPLE);
 
-        Mood moodSurprised = new Mood(MoodState.Surprised);
-        assertEquals(moodSurprised.getColor(), MoodColor.Pink);
+        Mood moodSurprised = new Mood(MoodState.SURPRISED);
+        assertEquals(moodSurprised.getColor(), MoodColor.PINK);
 
-        Mood moodDisgust = new Mood(MoodState.Disgust);
-        assertEquals(moodDisgust.getColor(), MoodColor.LightGreen);
+        Mood moodDisgust = new Mood(MoodState.DISGUST);
+        assertEquals(moodDisgust.getColor(), MoodColor.LIGHTGREEN);
 
-        Mood moodConfused = new Mood(MoodState.Confused);
-        assertEquals(moodConfused.getColor(), MoodColor.Yellow);
+        Mood moodConfused = new Mood(MoodState.CONFUSED);
+        assertEquals(moodConfused.getColor(), MoodColor.YELLOW);
 
-        Mood moodFear = new Mood(MoodState.Fear);
-        assertEquals(moodFear.getColor(), MoodColor.Orange);
+        Mood moodFear = new Mood(MoodState.FEAR);
+        assertEquals(moodFear.getColor(), MoodColor.ORANGE);
 
-        Mood moodAnger = new Mood(MoodState.Anger);
-        assertEquals(moodAnger.getColor(), MoodColor.Red);
+        Mood moodAnger = new Mood(MoodState.ANGER);
+        assertEquals(moodAnger.getColor(), MoodColor.RED);
     }
 
     public void testGetIcon() {
-        Mood moodHappy = new Mood(MoodState.Happy);
+        Mood moodHappy = new Mood(MoodState.HAPPY);
         //assertEquals(moodHappy.getIcon(), "happyicon.png");
 
-        Mood moodSad = new Mood(MoodState.Sad);
+        Mood moodSad = new Mood(MoodState.SAD);
         //assertEquals(moodSad.getIcon(), "sadicon.png");
 
-        Mood moodShame = new Mood(MoodState.Shame);
+        Mood moodShame = new Mood(MoodState.SHAME);
         //assertEquals(moodShame.getIcon(), "shameicon.png");
 
-        Mood moodSurprised = new Mood(MoodState.Surprised);
+        Mood moodSurprised = new Mood(MoodState.SURPRISED);
         //assertEquals(moodSurprised.getIcon(), "surprisedicon.png");
 
-        Mood moodDisgust = new Mood(MoodState.Disgust);
+        Mood moodDisgust = new Mood(MoodState.DISGUST);
         assertEquals(moodDisgust.getIcon(), "disgusticon.png");
 
-        Mood moodConfused = new Mood(MoodState.Confused);
+        Mood moodConfused = new Mood(MoodState.CONFUSED);
         //assertEquals(moodConfused.getIcon(), "confusedicon.png");
 
-        Mood moodFear = new Mood(MoodState.Fear);
+        Mood moodFear = new Mood(MoodState.FEAR);
         //assertEquals(moodFear.getIcon(), "fearicon.png");
 
-        Mood moodAnger = new Mood(MoodState.Anger);
+        Mood moodAnger = new Mood(MoodState.ANGER);
         //assertEquals(moodAnger.getIcon(), "angericon.png");
     }
 
     public void testGetMood() {
-        Mood moodHappy = new Mood(MoodState.Happy);
-        assertEquals(moodHappy.getMood(), MoodState.Happy);
+        Mood moodHappy = new Mood(MoodState.HAPPY);
+        assertEquals(moodHappy.getMood(), MoodState.HAPPY);
 
-        Mood moodSad = new Mood(MoodState.Sad);
-        assertEquals(moodSad.getMood(), MoodState.Sad);
+        Mood moodSad = new Mood(MoodState.SAD);
+        assertEquals(moodSad.getMood(), MoodState.SAD);
 
-        Mood moodShame = new Mood(MoodState.Shame);
-        assertEquals(moodShame.getMood(), MoodState.Shame);
+        Mood moodShame = new Mood(MoodState.SHAME);
+        assertEquals(moodShame.getMood(), MoodState.SHAME);
 
-        Mood moodSurprised = new Mood(MoodState.Surprised);
-        assertEquals(moodSurprised.getMood(), MoodState.Surprised);
+        Mood moodSurprised = new Mood(MoodState.SURPRISED);
+        assertEquals(moodSurprised.getMood(), MoodState.SURPRISED);
 
-        Mood moodDisgust = new Mood(MoodState.Disgust);
-        assertEquals(moodDisgust.getMood(), MoodState.Disgust);
+        Mood moodDisgust = new Mood(MoodState.DISGUST);
+        assertEquals(moodDisgust.getMood(), MoodState.DISGUST);
 
-        Mood moodConfused = new Mood(MoodState.Confused);
-        assertEquals(moodConfused.getMood(), MoodState.Confused);
+        Mood moodConfused = new Mood(MoodState.CONFUSED);
+        assertEquals(moodConfused.getMood(), MoodState.CONFUSED);
 
-        Mood moodFear = new Mood(MoodState.Fear);
-        assertEquals(moodFear.getMood(), MoodState.Fear);
+        Mood moodFear = new Mood(MoodState.FEAR);
+        assertEquals(moodFear.getMood(), MoodState.FEAR);
 
-        Mood moodAnger = new Mood(MoodState.Anger);
-        assertEquals(moodAnger.getMood(), MoodState.Anger);
+        Mood moodAnger = new Mood(MoodState.ANGER);
+        assertEquals(moodAnger.getMood(), MoodState.ANGER);
     }
 
     public void testSetMood() {
-        Mood mood = new Mood(MoodState.Happy);
-        assertEquals(mood.getMood(), MoodState.Happy);
-        mood.setMood(MoodState.Anger);
-        assertEquals(mood.getMood(), MoodState.Anger);
+        Mood mood = new Mood(MoodState.HAPPY);
+        assertEquals(mood.getMood(), MoodState.HAPPY);
+        mood.setMood(MoodState.ANGER);
+        assertEquals(mood.getMood(), MoodState.ANGER);
     }
 }
