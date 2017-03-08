@@ -34,16 +34,18 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         solo.enterText((EditText) solo.getView(R.id.nameEditText), "TestParticipant1");
         solo.clickOnButton("Sign Up");
 
+        // Test if Sign up added a user into the GSON
+        assertTrue(activity.getParticipantList().size() == 1);
+
         // ParticipantTestList connects to the participantlist in activity??
         ArrayList<Participant> participantTestList = activity.getParticipantList();
         Participant firstParticipant = participantTestList.get(0);
         assertEquals("TestParticipant1", firstParticipant.getLogin());
         solo.clearEditText((EditText) solo.getView(R.id.nameEditText));
         solo.enterText((EditText) solo.getView(R.id.nameEditText), "TestParticipant1");
-        participantTestList = activity.getParticipantList();
 
         // Test if activity added a duplicate username or not (unique name) US 03.01.01
-        assertTrue(participantTestList.size() == 1);
+        assertFalse(participantTestList.size() == 2);
     }
 
     public void testSignin() {
