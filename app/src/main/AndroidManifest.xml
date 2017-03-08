@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.psychic_engine.cmput301w17t10.feelsappman" >
+    package="com.psychic_engine.cmput301w17t10.feelsappman">
 
     <application
         android:allowBackup="true"
@@ -9,6 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity android:name=".SelfNewsFeedActivity" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
