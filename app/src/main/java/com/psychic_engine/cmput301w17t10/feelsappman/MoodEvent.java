@@ -11,12 +11,14 @@ import java.util.Date;
 public class MoodEvent {
     private Mood mood;
     private String trigger;
+    private SocialSetting socialSetting;
     private Date date;
     private Photograph picture;
     private Location location;
 
-    public MoodEvent(Mood mood, String trigger, Photograph picture, Location location) {
+    public MoodEvent(Mood mood, SocialSetting socialSetting, String trigger, Photograph picture, Location location) {
         this.mood = mood;
+        this.socialSetting = socialSetting;
         this.date = new Date();
         this.trigger = trigger;
         this.picture = picture;
@@ -24,6 +26,7 @@ public class MoodEvent {
     }
 
     public Mood getMood() { return this.mood; }
+    public SocialSetting getSocialSetting() { return this.socialSetting; }
     public String getTrigger() { return this.trigger; }
     public Date getDate() { return this.date; }
     public Photograph getPicture() { return this.picture; }
@@ -32,6 +35,8 @@ public class MoodEvent {
     public void setMood(Mood mood) {
         this.mood = mood;
     }
+
+    public void setSocialSetting(SocialSetting socialSetting) { this.socialSetting = socialSetting; }
 
     public void setTrigger(String trigger) throws triggerTooLongException {
         this.trigger = trigger;

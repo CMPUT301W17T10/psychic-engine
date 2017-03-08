@@ -46,5 +46,14 @@ public class Participant {
     public ArrayList<Participant> getPendingRequests() {
         return this.pendingRequests;
     }
+
+    /**
+     * replace old mood event with new mood event at index
+     * @param index
+     * @param moodEvent
+     */
+    public void setMood(int index, MoodEvent moodEvent) {
+        moodEvents.set(index, moodEvent);
+    }
 }
 
