@@ -54,7 +54,7 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         solo.clickOnButton("LOGIN");
 
         // Current activity should be LoginActivity
-        // If it is NewsFeed Activity, then signin pass without checking if name exists
+        // If it is NewsFeed Activity, then sign in pass without checking if name exists
         solo.assertCurrentActivity("SIGN IN PASS WITHOUT CHECK", LoginActivity.class);
     }
     public void tearDown() throws Exception {

@@ -7,22 +7,15 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-<<<<<<< HEAD
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-=======
         android:theme="@style/AppTheme" >
         <activity android:name=".SelfNewsFeedActivity" >
->>>>>>> 47d8a3d989bee81fff994e48199b4f4135dc78cd
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
-        <activity android:name=".LoginActivity"></activity>
-=======
         <activity
             android:name=".CreateMoodActivity"
             android:label="CreateMoodActivity">
@@ -32,7 +25,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
->>>>>>> 47d8a3d989bee81fff994e48199b4f4135dc78cd
     </application>
 
 </manifest>
