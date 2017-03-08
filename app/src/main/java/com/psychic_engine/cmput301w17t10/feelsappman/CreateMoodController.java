@@ -34,9 +34,9 @@ public class CreateMoodController {
 
         MoodEvent moodEvent = new MoodEvent(mood, trigger, photo, location);
 
-        return true;
-
         // TODO need a class that keeps track of the current user so i can add this mood to that users mood list
+        
+        return true;
     }
 
 }
