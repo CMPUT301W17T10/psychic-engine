@@ -24,38 +24,41 @@ public class Mood {
     public void setMood(MoodState mood) {
         this.mood = mood;
         switch(mood) {
-            case Sad:
-                color = MoodColor.Blue;
+            case SAD:
+                color = MoodColor.BLUE;
                 //icon = "sadicon.png";
                 break;
-            case Happy:
-                color = MoodColor.Green;
+            case HAPPY:
+                color = MoodColor.GREEN;
                 //icon = "happyicon.png";
                 break;
-            case Shame:
-                color = MoodColor.Purple;
+            case SHAME:
+                color = MoodColor.PURPLE;
                 //icon = "shameicon.png";
                 break;
-            case Fear:
-                color = MoodColor.Orange;
+            case FEAR:
+                color = MoodColor.ORANGE;
                 //icon = "fearicon.png";
                 break;
-            case Anger:
-                color = MoodColor.Red;
+            case ANGER:
+                color = MoodColor.RED;
                 //icon = "angericon.png";
                 break;
-            case Surprised:
-                color = MoodColor.Pink;
+            case SURPRISED:
+                color = MoodColor.PINK;
                 //icon = "surprisedicon.png";
                 break;
-            case Disgust:
-                color = MoodColor.LightGreen;
+            case DISGUST:
+                color = MoodColor.LIGHTGREEN;
                 //icon = "disgusticon.png";
                 break;
-            case Confused:
-                color = MoodColor.Yellow;
+            case CONFUSED:
+                color = MoodColor.YELLOW;
                 //icon = "confusedicon.png";
                 break;
+            default:
+                color = null;
+                icon = null;
         }
     }
 }

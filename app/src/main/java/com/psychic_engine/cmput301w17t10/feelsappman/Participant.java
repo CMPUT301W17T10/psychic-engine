@@ -29,6 +29,7 @@ public class Participant {
         followers.add(participant);
 
     }*/
+    public String getLogin() { return this.login;}
 
     public ArrayList<MoodEvent> getMoodList() {
         return this.moodEvents;
