@@ -13,7 +13,9 @@ public class Participant {
     public ArrayList<Participant> following;
     public ArrayList<Participant> pendingRequests;
 
+
     public Participant(String loginName) {
+
         this.login = loginName;
         this.moodEvents = new ArrayList<MoodEvent>();
         this.followers = new ArrayList<Participant>();

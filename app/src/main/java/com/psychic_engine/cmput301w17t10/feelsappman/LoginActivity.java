@@ -25,6 +25,9 @@ import java.util.ArrayList;
 // created by Alex Dong | March 6, 2017
 
 public class LoginActivity extends AppCompatActivity {
+    // View has a controller
+    // Controller has a model
+    // Model implement Abstract observable
 /*
  Temporarily have a file that would save the participant names that have signed up
  loadFromFile()
@@ -51,33 +54,29 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                setResult(RESULT_OK);
                 String participantName = participantEditText.getText().toString();
-                if (!participantList.contains(participantName)) {
-                    Toast.makeText(LoginActivity.this,
-                            "This participant does not exist, please sign up"
-                            , Toast.LENGTH_LONG).show();
-                }
-                else {
+                if (participantList.contains(participantName)) {
                     Gson gsonOut = new Gson();
                     Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
                     intent.putExtra("participantListObjects", gsonOut.toJson(participantList));
                     intent.putExtra("participantSelfObject", participantName);
                     startActivity(intent);
                 }
+                else {
+                    Toast.makeText(LoginActivity.this,
+                            "This participant does not exist, please sign up"
+                            , Toast.LENGTH_LONG).show();
+                }
             }
         });
+
         // signup button does not take participant to a signup activity - alex
         signupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 String participantName = participantEditText.getText().toString();
                 if (!participantList.contains(participantName)) {
-                    Participant newParticipant = new Participant(participantName);
-                    participantList.add(newParticipant);
-                    saveInFile();
-                    Toast.makeText(LoginActivity.this, "New participant created!"
-                            , Toast.LENGTH_LONG).show();
+                    participantList.add(new Participant(participantName));
                 }
                 // Different from UI Interface (Text View vs Toast Popup)
                 else {
