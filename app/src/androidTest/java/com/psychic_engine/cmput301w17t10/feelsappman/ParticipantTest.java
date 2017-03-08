@@ -9,7 +9,7 @@ import junit.framework.TestCase;
  */
 
 public class ParticipantTest extends TestCase {
-
+/*
     public void testgetmoodlist(){
         Participant a = new Participant("first");
         Mood mood = new Mood(MoodState.Anger);
@@ -22,6 +22,7 @@ public class ParticipantTest extends TestCase {
 
 
     }
+    */
     public void testgetFollowers(){
         Participant a = new Participant("first");
         Participant b = new Participant("second");
