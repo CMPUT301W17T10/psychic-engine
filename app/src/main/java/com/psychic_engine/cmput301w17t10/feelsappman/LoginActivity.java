@@ -58,11 +58,13 @@ public class LoginActivity extends AppCompatActivity {
                             "This participant does not exist, please sign up"
                             , Toast.LENGTH_LONG).show();
                 }
-                Gson gsonOut = new Gson();
-                Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
-                intent.putExtra("participantListObjects", gsonOut.toJson(participantList));
-                intent.putExtra("participantSelfObject", participantName);
-                startActivity(intent);
+                else {
+                    Gson gsonOut = new Gson();
+                    Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
+                    intent.putExtra("participantListObjects", gsonOut.toJson(participantList));
+                    intent.putExtra("participantSelfObject", participantName);
+                    startActivity(intent);
+                }
             }
         });
         // signup button does not take participant to a signup activity - alex

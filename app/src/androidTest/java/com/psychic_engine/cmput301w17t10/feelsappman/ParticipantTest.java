@@ -12,12 +12,12 @@ public class ParticipantTest extends TestCase {
 /*
     public void testgetmoodlist(){
         Participant a = new Participant("first");
-        Mood mood = new Mood(MoodState.Anger);
-        MoodEvent moodEvent = new MoodEvent(mood);
+        //Mood mood = new Mood(MoodState.Anger);
+        //MoodEvent moodEvent = new MoodEvent(mood);
 
-        a.moodEvents.add(moodEvent);
+        //a.moodEvents.add(moodEvent);
 
-        assertEquals(a.moodEvents,a.getMoodList());
+        //assertEquals(a.moodEvents,a.getMoodList());
 
 
 
