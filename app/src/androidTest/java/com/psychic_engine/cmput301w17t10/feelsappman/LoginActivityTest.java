@@ -32,7 +32,7 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         LoginActivity activity = (LoginActivity) solo.getCurrentActivity();
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.nameEditText), "TestParticipant1");
-        solo.clickOnButton("SIGN UP");
+        solo.clickOnButton("Sign Up");
 
         // ParticipantTestList connects to the participantlist in activity??
         ArrayList<Participant> participantTestList = activity.getParticipantList();
@@ -51,11 +51,12 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         solo.clearEditText((EditText) solo.getView(R.id.nameEditText));
 
         solo.enterText((EditText) solo.getView(R.id.nameEditText), "TestParticipant2");
-        solo.clickOnButton("LOGIN");
+        solo.clickOnButton("Login");
 
         // Current activity should be LoginActivity
         // If it is NewsFeed Activity, then sign in pass without checking if name exists
         solo.assertCurrentActivity("SIGN IN PASS WITHOUT CHECK", LoginActivity.class);
+
     }
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();

@@ -23,11 +23,11 @@ public class MoodEvent {
         this.location = location;
     }
 
-    public Mood getMood() { return mood; }
-    public String getTrigger() { return trigger; }
-    public Date getDate() { return date; }
-    public Photograph getPicture() { return picture; }
-    public Location getLocation() { return location; }
+    public Mood getMood() { return this.mood; }
+    public String getTrigger() { return this.trigger; }
+    public Date getDate() { return this.date; }
+    public Photograph getPicture() { return this.picture; }
+    public Location getLocation() { return this.location; }
 
     public void setMood(Mood mood) {
         this.mood = mood;

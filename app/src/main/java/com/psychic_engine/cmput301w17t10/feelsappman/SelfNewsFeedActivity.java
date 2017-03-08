@@ -26,8 +26,9 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
 
         Gson gsonIn = new Gson();
         Intent intentIn = getIntent();
+        Type listType = new TypeToken<ArrayList<Participant>>(){}.getType();
         String gsonObject = getIntent().getStringExtra("participantListObjects");
-        selfParticipant = gsonIn.fromJson(gsonObject, Participant.class);
+        selfParticipant = gsonIn.fromJson(gsonObject, listType);
 
     }
 }
