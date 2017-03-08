@@ -59,35 +59,21 @@ public class CreateMoodActivity extends AppCompatActivity {
     void createMoodEvent() {
         // get the mood from the mood spinner
         String moodString = moodSpinner.getSelectedItem().toString();
-        Mood mood = null;
-
-        switch(moodString) {        // TODO refactor this - inside MoodState enum class?
-            case "Sad": mood = new Mood(MoodState.SAD); break;
-            case "Happy": mood = new Mood(MoodState.HAPPY); break;
-            case "Shame": mood = new Mood(MoodState.SHAME); break;
-            case "Fear": mood = new Mood(MoodState.FEAR); break;
-            case "Anger": mood = new Mood(MoodState.ANGER); break;
-            case "Surprised": mood = new Mood(MoodState.SURPRISED); break;
-            case "Disgust": mood = new Mood(MoodState.DISGUST); break;
-            case "Confused": mood = new Mood(MoodState.CONFUSED); break;
-            default:
-                Toast.makeText(CreateMoodActivity.this,
-                        "Please specify a mood.",
-                        Toast.LENGTH_LONG).show();
-                return;
-        }
 
         // get the trigger from the trigger edit text
         String trigger = triggerEditText.getText().toString();
-        if (trigger.equals(defaultTriggerMsg))
-            trigger = "";
 
         Photograph photo = null; // TODO get photo from imageView but not sure what type it is
         Location location = null; // TODO get location from location box - need to know how to use GOOGLE MAPS first
 
-        MoodEvent moodEvent = new MoodEvent(mood, trigger, photo, location);
+        //TODO call this explicitly like this or through notifyObservers()
+        boolean success = CreateMoodController.updateMoodEventList(moodString, trigger, photo, location);
 
-        // TODO need a class that keeps track of the current user so i can add this mood to that users mood list
+        if (!success)
+            Toast.makeText(CreateMoodActivity.this,
+                    "Please specify a mood.",
+                    Toast.LENGTH_LONG).show();
+
     }
 
     void setUpSpinners() {
@@ -195,8 +181,6 @@ public class CreateMoodActivity extends AppCompatActivity {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO (maybe?): createMoodController can observe when this button is pressed
-                // and perform below actions for this class
                 createMoodEvent();
             }
         });
