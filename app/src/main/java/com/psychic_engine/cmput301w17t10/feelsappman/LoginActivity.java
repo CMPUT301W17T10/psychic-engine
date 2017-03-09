@@ -1,8 +1,10 @@
 package com.psychic_engine.cmput301w17t10.feelsappman;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,21 +27,22 @@ import java.util.ArrayList;
 // created by Alex Dong | March 6, 2017
 
 public class LoginActivity extends AppCompatActivity {
+    // View has a controller
+    // Controller has a model
+    // Model implement Abstract observable
 /*
  Temporarily have a file that would save the participant names that have signed up
  loadFromFile()
  saveFromFile()
  ArrayList<Participant> participants
   */
+
     private static final String FILENAME = "file.sav";
-    private ArrayList<Participant> participantList;
     private EditText participantEditText;
     private Button loginButton;
     private Button signupButton;
+    private ParticipantSingleton instance;
 
-    public ArrayList<Participant> getParticipantList() {
-        return participantList;
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,38 +54,39 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                setResult(RESULT_OK);
                 String participantName = participantEditText.getText().toString();
-                if (!participantList.contains(participantName)) {
+                if (ParticipantSingleton.getInstance().participantNameTaken(participantName)) {
+                    instance.setSelfParticipant(participantName);
+                    Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
+                    startActivity(intent);
+                }
+                else {
                     Toast.makeText(LoginActivity.this,
                             "This participant does not exist, please sign up"
                             , Toast.LENGTH_LONG).show();
                 }
-                else {
-                    Gson gsonOut = new Gson();
-                    Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
-                    intent.putExtra("participantListObjects", gsonOut.toJson(participantList));
-                    intent.putExtra("participantSelfObject", participantName);
-                    startActivity(intent);
-                }
             }
         });
-        // signup button does not take participant to a signup activity - alex
+
+        // signup button does not take participant to a signup activity (UML) - alex
         signupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 String participantName = participantEditText.getText().toString();
-                if (!participantList.contains(participantName)) {
-                    Participant newParticipant = new Participant(participantName);
-                    participantList.add(newParticipant);
-                    saveInFile();
-                    Toast.makeText(LoginActivity.this, "New participant created!"
-                            , Toast.LENGTH_LONG).show();
+                if (ParticipantSingleton.participantNameTaken(participantName)) {
+                    Toast.makeText(LoginActivity.this, "The username is already taken",
+                            Toast.LENGTH_SHORT).show();
                 }
-                // Different from UI Interface (Text View vs Toast Popup)
                 else {
-                Toast.makeText(LoginActivity.this, "The username is already taken",
-                        Toast.LENGTH_LONG).show();
+                    if (ParticipantSingleton.getInstance().addParticipant(participantName)) {
+                        Toast.makeText(LoginActivity.this, participantName
+                                +" has been added!", Toast.LENGTH_SHORT).show();
+                        saveInFile();
+                    }
+                    else {
+                        Toast.makeText(LoginActivity.this, "Unable to add participant",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -91,33 +95,35 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        loadFromFile();
-        participantList.clear(); // Remove after testing
+        if (instance.isLoaded() == null) {
+            loadFromFile();
+        }
     }
     private void loadFromFile() {
 
         try {
             FileInputStream fis = openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-
             Gson gson = new Gson();
             // Took from https://google-gson.googlecode.com/svn/trunk/gson/docs/javadocs/com/google/gson/Gson.html Jan-21-2016
-            Type listType = new TypeToken<ArrayList<Participant>>() {}.getType();
-            participantList = gson.fromJson(in, listType);
-
+            Type listType = new TypeToken<ParticipantSingleton>() {}.getType();
+            instance = gson.fromJson(in, ParticipantSingleton.class);
+            if (instance != null)
+                instance.setInstance(instance);
+            else
+                instance = ParticipantSingleton.getInstance();
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            participantList = new ArrayList<Participant>();
+            instance = ParticipantSingleton.getInstance();
         }
 
     }
 
     private void saveInFile() {
         try {
-            FileOutputStream fos = openFileOutput(FILENAME, 0);
+            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
             Gson gson = new Gson();
-            gson.toJson(participantList, out);
+            gson.toJson(ParticipantSingleton.getInstance(), out);
             out.flush();
 
             fos.close();
@@ -128,5 +134,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveInFile();
+    }
 }

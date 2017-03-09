@@ -13,7 +13,9 @@ public class Participant {
     public ArrayList<Participant> following;
     public ArrayList<Participant> pendingRequests;
 
+
     public Participant(String loginName) {
+
         this.login = loginName;
         this.moodEvents = new ArrayList<MoodEvent>();
         this.followers = new ArrayList<Participant>();
@@ -45,6 +47,19 @@ public class Participant {
 
     public ArrayList<Participant> getPendingRequests() {
         return this.pendingRequests;
+    }
+
+    /**
+     * replace old mood event with new mood event at index
+     * @param index
+     * @param moodEvent
+     */
+    public void setMoodEvent(int index, MoodEvent moodEvent) {
+        moodEvents.set(index, moodEvent);
+    }
+
+    public void addMoodEvent(MoodEvent moodEvent) {
+        moodEvents.add(moodEvent);
     }
 }
 

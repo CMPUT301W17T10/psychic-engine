@@ -3,8 +3,8 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -22,10 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jyuen1 on 3/6/17.
+ * Created by jyuen1 on 3/7/2017.
  */
 
-public class CreateMoodActivity extends AppCompatActivity {
+public class EditMoodActivity extends AppCompatActivity{
     private static final String defaultTriggerMsg = "20 chars or 3 words.";
     private static int RESULT_LOAD_IMAGE = 1;
 
@@ -38,54 +38,61 @@ public class CreateMoodActivity extends AppCompatActivity {
     private Button createButton;
     private Button cancelButton;
 
+    private MoodEvent moodEvent;    // the moodEvent to be edited
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_mood);
+        setContentView(R.layout.activity_edit_mood);
+
+        // TODO initialize moodEvent - how are we passing it in via intent, global, index in array? or something else?
+        /*
+        Bundle extras = getIntent().getExtras();
+        Participant participant = ParticipantSingleton.getCurrentUser();
+        // singleton has an array of all participants?  login sets current user?
+        int moodEventPosition = extras.getInt(CallingActivity.EXTRA_MOODEVENT_POSITION);
+        moodEvent = participant.getMoodList().get(moodEventPosition);
+        */
 
         // set up mood and social setting spinners (drop downs)
         setUpSpinners();
         // set up events that happen when user clicks in trigger and outside trigger
         setUpTrigger();
+        // set up the currently displayed picture
+        setUpImageView();
         // set up events that happen when user clicks browse button
         setUpBrowse();
         // set up events that happen when user clicks create button
-        setUpCreate();
+        setUpSave();
         // set up events that happen when user clicks cancel button
         setUpCancel();
     }
 
 
-    void createMoodEvent() {
+    void saveMoodEvent() {
         // get the mood from the mood spinner
         String moodString = moodSpinner.getSelectedItem().toString();
 
-        String socialSettingString = moodSpinner.getSelectedItem().toString();
+        // get the social setting from the social setting spinner
+        String socialSettingString = socialSettingSpinner.getSelectedItem().toString();
 
         // get the trigger from the trigger edit text
         String trigger = triggerEditText.getText().toString();
 
-        Photograph photo = null; // TODO get photo from imageView but not sure what type it is
+        Photograph photo = null; // TODO get photo from imageView but not sure what type it is, could be some primitive type and convert to Photograph type in the controller
         Location location = null; // TODO get location from location box - need to know how to use GOOGLE MAPS first
 
         //TODO call this explicitly like this or through notifyObservers()
-        boolean success = CreateMoodController.updateMoodEventList(moodString, socialSettingString, trigger, photo, location);
-
-        if (!success)
-            Toast.makeText(CreateMoodActivity.this,
-                    "Please specify a mood.",
-                    Toast.LENGTH_LONG).show();
-
+        //EditMoodController.updateMoodEventList(moodEventPosition, moodString, socialSettingString, trigger, photo, location);
     }
 
     void setUpSpinners() {
         // Spinner elements
-        moodSpinner = (Spinner) findViewById(R.id.moodDropDown);
-        socialSettingSpinner = (Spinner) findViewById(R.id.socialSettingDropDown);
+        moodSpinner = (Spinner) findViewById(R.id.moodDropDown1);
+        socialSettingSpinner = (Spinner) findViewById(R.id.socialSettingDropDown1);
 
         // Spinner drop down elements
         List<String> moodCategories = new ArrayList<String>();
-        moodCategories.add("");     // default option
         MoodState[] moodStates = MoodState.values();
         for (MoodState moodState : moodStates) {
             moodCategories.add(moodState.toString());
@@ -113,18 +120,25 @@ public class CreateMoodActivity extends AppCompatActivity {
         // Attaching adapter to spinner
         moodSpinner.setAdapter(moodSpinnerAdapter);
         socialSettingSpinner.setAdapter(socialSettingSpinnerAdapter);
+
+        // set the previous mood
+        moodSpinner.setSelection(moodSpinnerAdapter.getPosition(
+                moodEvent.getMood().toString()));
+        // set the previous social setting
+        socialSettingSpinner.setSelection(socialSettingSpinnerAdapter.getPosition(
+                moodEvent.getSocialSetting().toString()));
+
     }
 
     void setUpTrigger() {
-
-        triggerEditText = (EditText) findViewById(R.id.trigger);
-        triggerEditText.setText("");
+        // display the previous trigger
+        triggerEditText = (EditText) findViewById(R.id.trigger1);
+        triggerEditText.setText(moodEvent.getTrigger());
+        if (triggerEditText.getText().equals(""))
+            triggerEditText.setText(defaultTriggerMsg);
 
         // TODO not working perfectly - requires 2 clicks after initial click
-        // TODO giving me errors in test - leaving it blank for now
         // clear trigger edit text when user clicks in it if default msg is displayed
-        /*
-        triggerEditText = (EditText) findViewById(R.id.trigger);
         triggerEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,7 +158,12 @@ public class CreateMoodActivity extends AppCompatActivity {
                 }
             }
         });
-        */
+    }
+
+    void setUpImageView() {
+        // display the previous image
+        photoImageView = (ImageView) findViewById(R.id.imageView1);
+        photoImageView.setImageBitmap(moodEvent.getPicture().getImage());   // TODO requires photograph class to return the correct image
     }
 
     void setUpBrowse() {
@@ -180,23 +199,22 @@ public class CreateMoodActivity extends AppCompatActivity {
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
 
-            photoImageView = (ImageView) findViewById(R.id.imageView);
             photoImageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
         }
     }
 
-    void setUpCreate() {
-        createButton = (Button) findViewById(R.id.create);
+    void setUpSave() {
+        createButton = (Button) findViewById(R.id.save);
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createMoodEvent();
+                saveMoodEvent();
             }
         });
     }
 
     void setUpCancel() {
-        cancelButton = (Button) findViewById(R.id.cancel);
+        cancelButton = (Button) findViewById(R.id.cancel1);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
