@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
-import java.util.ArrayList;a
+import java.util.ArrayList;
 
 // created by Alex Dong | March 6, 2017
 
