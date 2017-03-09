@@ -70,7 +70,7 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         solo.assertCurrentActivity("SIGN IN PASS WITHOUT CHECK", LoginActivity.class);
         solo.clickOnButton("Sign up");
         solo.clickOnButton("Login");
-        solo.assertCurrentActivity("SIGN IN DID NOT PASS TO NEXT ACTIVITY", SelfNewsFeedActivity.class);
+        solo.assertCurrentActivity("SIGN IN DID NOT PASS TO NEXT ACTIVITY", SelfNewsFeedActvity.class);
 
 
     }

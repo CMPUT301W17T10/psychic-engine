@@ -10,7 +10,7 @@ public class PhotographTest extends ActivityInstrumentationTestCase2 {
 
         //TODO Temporary activity to be the added
         public PhotographTest() {
-            super(SelfNewsFeedActivity.class);
+            super(SelfNewsFeedActvity.class);
         }
 
         public void testSetImage() {

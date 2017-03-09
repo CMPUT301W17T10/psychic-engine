@@ -43,9 +43,7 @@ public class CreateMoodController {
             trigger = "";
 
         MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
-
-        Participant participant = ParticipantSingleton.getSelfParticipant()
-        // TODO decide on method to add mood to moodList in Participant class 
+        // TODO decide on method to add mood to moodList in Participant class
 
         return true;
     }
