@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String participantName = participantEditText.getText().toString();
-                if (ParticipantSingleton.getInstance().participantNameTaken(participantName)) {
+                if (instance.participantNameTaken(participantName)) {
                     instance.setSelfParticipant(instance.searchParticipant(participantName));
                     Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
                     startActivity(intent);
@@ -81,7 +81,6 @@ public class LoginActivity extends AppCompatActivity {
                     if (ParticipantSingleton.getInstance().addParticipant(participantName)) {
                         Toast.makeText(LoginActivity.this, participantName
                                 +" has been added!", Toast.LENGTH_SHORT).show();
-                        saveInFile();
                     }
                     else {
                         Toast.makeText(LoginActivity.this, "Unable to add participant",
@@ -95,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        if (instance.isLoaded() == null) {
+        if (ParticipantSingleton.isLoaded() == null) {
             loadFromFile();
         }
     }
@@ -106,7 +105,6 @@ public class LoginActivity extends AppCompatActivity {
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
             Gson gson = new Gson();
             // Took from https://google-gson.googlecode.com/svn/trunk/gson/docs/javadocs/com/google/gson/Gson.html Jan-21-2016
-            Type listType = new TypeToken<ParticipantSingleton>() {}.getType();
             instance = gson.fromJson(in, ParticipantSingleton.class);
             if (instance != null)
                 instance.setInstance(instance);

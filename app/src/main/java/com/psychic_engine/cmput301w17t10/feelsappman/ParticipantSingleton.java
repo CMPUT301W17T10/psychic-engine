@@ -105,11 +105,12 @@ public class ParticipantSingleton {
      * @return true if successful
      * @return false if unsuccessful
      */
+    // TODO: participantList.size() does not return properly ??? - alex
     public Boolean addParticipant(String participantName) {
         try {
             Participant newParticipant = new Participant(participantName);
             participantList.add(newParticipant);
-            participantCount++;
+            participantCount = participantList.size();
             return true;
         } catch (Throwable e) {
             return false;
@@ -164,6 +165,13 @@ public class ParticipantSingleton {
         return found;
     }
 
+    /**
+     * Method searches for the participant object using their login name and returns the objectID
+     * affiliated with that login to be used for either setting the selfParticipant value or
+     * finding the object in the storage of participants
+     * @param participantName
+     * @return
+     */
     public Participant searchParticipant(String participantName) {
         for(Participant participant : instance.getParticipantList()) {
             if (participant.getLogin().equals(participantName)) {

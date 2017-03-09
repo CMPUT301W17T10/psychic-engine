@@ -15,11 +15,6 @@ import java.util.ArrayList;
 //SelfNewsFeedActivity named, I dont know which activity it corresponds to in the UML -Alex
 
 public class SelfNewsFeedActivity extends AppCompatActivity {
-
-    private ArrayList<Participant> selfParticipant;
-    private ParticipantSingleton instance;
-    private Participant singleParticipant;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
