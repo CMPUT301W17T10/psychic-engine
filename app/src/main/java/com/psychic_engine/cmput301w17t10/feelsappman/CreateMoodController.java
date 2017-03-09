@@ -44,7 +44,8 @@ public class CreateMoodController {
 
         MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
 
-        // TODO need a class that keeps track of the current user so i can add this mood to that users mood list
+        Participant participant = ParticipantSingleton.getSelfParticipant()
+        // TODO decide on method to add mood to moodList in Participant class 
 
         return true;
     }
