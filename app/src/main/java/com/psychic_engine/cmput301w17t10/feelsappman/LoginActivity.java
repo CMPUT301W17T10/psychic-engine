@@ -55,7 +55,10 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String participantName = participantEditText.getText().toString();
-                if (ParticipantSingleton.getInstance().participantNameTaken(participantName)) {
+
+
+                if (instance.participantNameTaken(participantName)) {
+                    instance.setSelfParticipant(instance.searchParticipant(participantName));
                     Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActvity.class);
                     intent.putExtra("username",participantName);
                     //intent.putExtra("location",location);
@@ -76,21 +79,18 @@ public class LoginActivity extends AppCompatActivity {
                 setResult(RESULT_OK);
                 String participantName = participantEditText.getText().toString();
                 if (ParticipantSingleton.participantNameTaken(participantName)) {
-                    Log.i("Participant take", "Participant name: "+participantName+" is taken");
                     Toast.makeText(LoginActivity.this, "The username is already taken",
                             Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Participant newParticipant = new Participant(participantName);
-                    if (ParticipantSingleton.getInstance().addParticipant(newParticipant)) {
-                        saveInFile();
+                    if (ParticipantSingleton.getInstance().addParticipant(participantName)) {
+                        Toast.makeText(LoginActivity.this, participantName
+                                +" has been added!", Toast.LENGTH_SHORT).show();
                     }
                     else {
                         Toast.makeText(LoginActivity.this, "Unable to add participant",
                                 Toast.LENGTH_SHORT).show();
                     }
-                // Different from UI Interface (Text View vs Toast Popup)
-
                 }
             }
         });
@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        if (instance.isLoaded() == null) {
+        if (ParticipantSingleton.isLoaded() == null) {
             loadFromFile();
         }
     }
@@ -110,16 +110,11 @@ public class LoginActivity extends AppCompatActivity {
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
             Gson gson = new Gson();
             // Took from https://google-gson.googlecode.com/svn/trunk/gson/docs/javadocs/com/google/gson/Gson.html Jan-21-2016
-            Type listType = new TypeToken<ParticipantSingleton>() {}.getType();
+            instance = gson.fromJson(in, ParticipantSingleton.class);
             if (instance != null)
                 instance.setInstance(instance);
             else
                 instance = ParticipantSingleton.getInstance();
-            System.out.println(instance);
-            System.out.println(listType);
-            System.out.println(in);
-            instance = gson.fromJson(in, ParticipantSingleton.class);
-
         } catch (FileNotFoundException e) {
             instance = ParticipantSingleton.getInstance();
         }
@@ -142,5 +137,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveInFile();
+    }
 }

@@ -1,5 +1,6 @@
 package com.psychic_engine.cmput301w17t10.feelsappman;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -52,9 +53,24 @@ public class ParticipantSingleton {
 
     /** Method to get the main participant of the program
      * The initialization will not set a participant until you log in
+     * @return true if successful in assigning selfParticipant
+     * @return false if unsuccessful in assigning selfParticipant
      **/
-     public void setSelfParticipant(Participant participant) {
-        selfParticipant = participant;
+     public Boolean setSelfParticipant(Participant participant) {
+         try {
+             for (Participant storedParticipant : instance.getParticipantList()) {
+                 if (participant.getLogin().equals(storedParticipant.getLogin())) {
+                     Log.d("setSelfParticipantPrint", storedParticipant.getLogin());
+                     selfParticipant = participant;
+                     return true;
+                 }
+             }
+             selfParticipant = null;
+             return false;
+         } catch (Throwable e) {
+             selfParticipant = null;
+             return false;
+         }
     }
 
     /**
@@ -85,14 +101,16 @@ public class ParticipantSingleton {
      * Method to add a new participant into storage. It is only called in the login page
      * when you sign up for a new account.
      * @see LoginActivity
-     * @param participant
+     * @param participantName
      * @return true if successful
      * @return false if unsuccessful
      */
-    public Boolean addParticipant(Participant participant) {
+    // TODO: participantList.size() does not return properly ??? - alex
+    public Boolean addParticipant(String participantName) {
         try {
-            participantList.add(participant);
-            participantCount++;
+            Participant newParticipant = new Participant(participantName);
+            participantList.add(newParticipant);
+            participantCount = participantList.size();
             return true;
         } catch (Throwable e) {
             return false;
@@ -102,12 +120,13 @@ public class ParticipantSingleton {
     /**
      * Method to remove a participant from the storage. Not really called at the moment unless
      * the user would like to delete their account.
-     * @param participant
      */
-    public Boolean removeParticipant(Participant participant) {
+    /*
+    public Boolean removeParticipant() {
+
         try {
-            int index = participantList.indexOf(participant);
-            participantList.remove(index);
+            participantList.remove(selfParticipant);
+            instance.setSelfParticipant(null);
             participantCount--;
             return true;
         }
@@ -115,7 +134,7 @@ public class ParticipantSingleton {
             return false;
         }
     }
-
+    */
     /**
      * Method to determine whether or not there is an instance or not. Used in the Singleton class
      * to determine whether or not it should initialize another ParticipantSingleton class
@@ -138,11 +157,27 @@ public class ParticipantSingleton {
 
     public static boolean participantNameTaken(String participantName) {
         Boolean found = false;
-        for(Participant participant: ParticipantSingleton.getInstance().getParticipantList()) {
+        for(Participant participant: instance.getParticipantList()) {
             if (participant.getLogin().equals(participantName)) {
                 found = true;
             }
         }
         return found;
+    }
+
+    /**
+     * Method searches for the participant object using their login name and returns the objectID
+     * affiliated with that login to be used for either setting the selfParticipant value or
+     * finding the object in the storage of participants
+     * @param participantName
+     * @return
+     */
+    public Participant searchParticipant(String participantName) {
+        for(Participant participant : instance.getParticipantList()) {
+            if (participant.getLogin().equals(participantName)) {
+                return participant;
+            }
+        }
+        return null;
     }
 }

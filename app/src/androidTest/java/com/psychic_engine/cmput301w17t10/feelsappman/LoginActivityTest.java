@@ -32,45 +32,52 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
     public void testSignup() {
         LoginActivity activity = (LoginActivity) solo.getCurrentActivity();
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+        ParticipantSingleton.getInstance().getParticipantList().clear();
         solo.enterText((EditText) solo.getView(R.id.nameEditText), "TestParticipant1");
-        solo.clickOnButton("Sign Up");
-        System.out.println("--------------- Sign up should add above");
-        ArrayList<Participant> participantTestList = ParticipantSingleton.getInstance().getParticipantList();
-        System.out.println("Size: "+ParticipantSingleton.getInstance().getParticipantCount());
+        // TODO getParticipantCount() does not return 0 even after clearing
+        assertTrue(ParticipantSingleton.getInstance().getParticipantCount() == 0);
+        solo.clickOnText("Sign Up");
         // Test if Sign up added a user into the GSON
-        assertTrue(participantTestList.size() == 1);
-
+        assertTrue(ParticipantSingleton.getInstance().getParticipantCount() == 1);
         // ParticipantTestList connects to the participantlist in activity??
-        Participant firstParticipant = participantTestList.get(0);
+        Participant firstParticipant = ParticipantSingleton.getInstance().getParticipantList().get(0);
         assertEquals("TestParticipant1", firstParticipant.getLogin());
+
         solo.clearEditText((EditText) solo.getView(R.id.nameEditText));
         solo.enterText((EditText) solo.getView(R.id.nameEditText), "TestParticipant1");
-
         // Test if activity added a duplicate username or not (unique name) US 03.01.01
-        assertTrue(participantTestList.size() == 1);
-
+        assertTrue(ParticipantSingleton.getInstance().getParticipantCount() == 1);
         solo.clearEditText((EditText) solo.getView(R.id.nameEditText));
         solo.enterText((EditText) solo.getView(R.id.nameEditText), "TestParticipant2");
-        solo.clickOnButton("Sign up");
-        assertTrue(participantTestList.size() == 2);
-        solo.clickOnButton("Sign up");
-        assertTrue(participantTestList.size() == 2);
+        solo.clickOnText("Sign Up");
+        assertTrue(ParticipantSingleton.getInstance().getParticipantCount() == 2);
+        solo.clickOnText("Sign Up");
+        assertTrue(ParticipantSingleton.getInstance().getParticipantCount() == 2);
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
     }
 
     public void testLogin() {
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+        ParticipantSingleton.getInstance().getParticipantList().clear();
         solo.clearEditText((EditText) solo.getView(R.id.nameEditText));
-
-        solo.enterText((EditText) solo.getView(R.id.nameEditText), "TestParticipant2");
-        solo.clickOnButton("Login");
+        solo.assertCurrentActivity("SIGN IN PASS WITHOUT CHECK", LoginActivity.class);
+        solo.enterText((EditText) solo.getView(R.id.nameEditText), "TestParticipant3");
+        solo.clickOnText("Login");
+        solo.assertCurrentActivity("SIGN IN PASS WITHOUT CHECK", LoginActivity.class);
 
         // Current activity should be LoginActivity
         // If it is SelfNewsFeed Activity, then sign in pass without checking if name exists
+
+        solo.clickOnText("Sign Up");
+        solo.clickOnText("Login");
         solo.assertCurrentActivity("SIGN IN PASS WITHOUT CHECK", LoginActivity.class);
+<<<<<<< HEAD
         solo.clickOnButton("Sign up");
         solo.clickOnButton("Login");
         solo.assertCurrentActivity("SIGN IN DID NOT PASS TO NEXT ACTIVITY", SelfNewsFeedActvity.class);
+=======
+        solo.assertCurrentActivity("SIGN IN DID NOT PASS TO NEXT ACTIVITY", SelfNewsFeedActivity.class);
+>>>>>>> c6929da5c6a48879b070a5f0800fa1f9eeddaf38
 
 
     }
