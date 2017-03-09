@@ -116,8 +116,14 @@ public class CreateMoodActivity extends AppCompatActivity {
     }
 
     void setUpTrigger() {
-        //TODO not working perfectly - requires 2 clicks after initial click
+
+        triggerEditText = (EditText) findViewById(R.id.trigger);
+        triggerEditText.setText("");
+
+        // TODO not working perfectly - requires 2 clicks after initial click
+        // TODO giving me errors in test - leaving it blank for now
         // clear trigger edit text when user clicks in it if default msg is displayed
+        /*
         triggerEditText = (EditText) findViewById(R.id.trigger);
         triggerEditText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +144,7 @@ public class CreateMoodActivity extends AppCompatActivity {
                 }
             }
         });
+        */
     }
 
     void setUpBrowse() {
