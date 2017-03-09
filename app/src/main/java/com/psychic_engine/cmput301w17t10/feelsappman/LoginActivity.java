@@ -108,15 +108,11 @@ public class LoginActivity extends AppCompatActivity {
             Gson gson = new Gson();
             // Took from https://google-gson.googlecode.com/svn/trunk/gson/docs/javadocs/com/google/gson/Gson.html Jan-21-2016
             Type listType = new TypeToken<ParticipantSingleton>() {}.getType();
+            instance = gson.fromJson(in, ParticipantSingleton.class);
             if (instance != null)
                 instance.setInstance(instance);
             else
                 instance = ParticipantSingleton.getInstance();
-            System.out.println(instance);
-            System.out.println(listType);
-            System.out.println(in);
-            instance = gson.fromJson(in, ParticipantSingleton.class);
-
         } catch (FileNotFoundException e) {
             instance = ParticipantSingleton.getInstance();
         }
@@ -139,5 +135,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveInFile();
+    }
 }
