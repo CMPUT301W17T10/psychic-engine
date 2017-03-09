@@ -54,8 +54,12 @@ public class Participant {
      * @param index
      * @param moodEvent
      */
-    public void setMood(int index, MoodEvent moodEvent) {
+    public void setMoodEvent(int index, MoodEvent moodEvent) {
         moodEvents.set(index, moodEvent);
+    }
+
+    public void addMoodEvent(MoodEvent moodEvent) {
+        moodEvents.add(moodEvent);
     }
 }
 
