@@ -1,8 +1,10 @@
 package com.psychic_engine.cmput301w17t10.feelsappman;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,15 +36,13 @@ public class LoginActivity extends AppCompatActivity {
  saveFromFile()
  ArrayList<Participant> participants
   */
+
     private static final String FILENAME = "file.sav";
-    private ArrayList<Participant> participantList;
     private EditText participantEditText;
     private Button loginButton;
     private Button signupButton;
+    private ParticipantSingleton instance;
 
-    public ArrayList<Participant> getParticipantList() {
-        return participantList;
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,11 +55,8 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String participantName = participantEditText.getText().toString();
-                if (participantList.contains(participantName)) {
-                    Gson gsonOut = new Gson();
+                if (ParticipantSingleton.getInstance().participantNameTaken(participantName)) {
                     Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
-                    intent.putExtra("participantListObjects", gsonOut.toJson(participantList));
-                    intent.putExtra("participantSelfObject", participantName);
                     startActivity(intent);
                 }
                 else {
@@ -70,18 +67,27 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // signup button does not take participant to a signup activity - alex
+        // signup button does not take participant to a signup activity (UML) - alex
         signupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 String participantName = participantEditText.getText().toString();
-                if (!participantList.contains(participantName)) {
-                    participantList.add(new Participant(participantName));
+                if (ParticipantSingleton.participantNameTaken(participantName)) {
+                    Log.i("Participant take", "Participant name: "+participantName+" is taken");
+                    Toast.makeText(LoginActivity.this, "The username is already taken",
+                            Toast.LENGTH_SHORT).show();
                 }
-                // Different from UI Interface (Text View vs Toast Popup)
                 else {
-                Toast.makeText(LoginActivity.this, "The username is already taken",
-                        Toast.LENGTH_LONG).show();
+                    Participant newParticipant = new Participant(participantName);
+                    if (ParticipantSingleton.getInstance().addParticipant(newParticipant)) {
+                        saveInFile();
+                    }
+                    else {
+                        Toast.makeText(LoginActivity.this, "Unable to add participant",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                // Different from UI Interface (Text View vs Toast Popup)
+
                 }
             }
         });
@@ -90,33 +96,39 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        loadFromFile();
-        participantList.clear(); // Remove after testing
+        if (instance.isLoaded() == null) {
+            loadFromFile();
+        }
     }
     private void loadFromFile() {
 
         try {
             FileInputStream fis = openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-
             Gson gson = new Gson();
             // Took from https://google-gson.googlecode.com/svn/trunk/gson/docs/javadocs/com/google/gson/Gson.html Jan-21-2016
-            Type listType = new TypeToken<ArrayList<Participant>>() {}.getType();
-            participantList = gson.fromJson(in, listType);
+            Type listType = new TypeToken<ParticipantSingleton>() {}.getType();
+            if (instance != null)
+                instance.setInstance(instance);
+            else
+                instance = ParticipantSingleton.getInstance();
+            System.out.println(instance);
+            System.out.println(listType);
+            System.out.println(in);
+            instance = gson.fromJson(in, ParticipantSingleton.class);
 
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            participantList = new ArrayList<Participant>();
+            instance = ParticipantSingleton.getInstance();
         }
 
     }
 
     private void saveInFile() {
         try {
-            FileOutputStream fos = openFileOutput(FILENAME, 0);
+            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
             Gson gson = new Gson();
-            gson.toJson(participantList, out);
+            gson.toJson(ParticipantSingleton.getInstance(), out);
             out.flush();
 
             fos.close();
