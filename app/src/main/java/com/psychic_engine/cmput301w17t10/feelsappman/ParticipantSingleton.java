@@ -60,7 +60,7 @@ public class ParticipantSingleton {
          try {
              for (Participant storedParticipant : instance.getParticipantList()) {
                  if (participant.getLogin().equals(storedParticipant.getLogin())) {
-                     Log.d("setSelfParticipantPrint", storedParticipant.getLogin());
+                     Log.i("setSelfParticipantPrint", storedParticipant.getLogin());
                      selfParticipant = participant;
                      return true;
                  }

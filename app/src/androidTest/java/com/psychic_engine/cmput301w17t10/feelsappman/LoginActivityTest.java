@@ -32,10 +32,13 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
     public void testSignup() {
         LoginActivity activity = (LoginActivity) solo.getCurrentActivity();
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
+        Log.d("Before Clear" , String.valueOf(ParticipantSingleton.getInstance().getParticipantCount()));
         ParticipantSingleton.getInstance().getParticipantList().clear();
+        Log.d("After Clear" , String.valueOf(ParticipantSingleton.getInstance().getParticipantCount()));
         solo.enterText((EditText) solo.getView(R.id.nameEditText), "TestParticipant1");
         // TODO getParticipantCount() does not return 0 even after clearing
         assertTrue(ParticipantSingleton.getInstance().getParticipantCount() == 0);
+
         solo.clickOnText("Sign Up");
         // Test if Sign up added a user into the GSON
         assertTrue(ParticipantSingleton.getInstance().getParticipantCount() == 1);
@@ -71,13 +74,10 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         solo.clickOnText("Sign Up");
         solo.clickOnText("Login");
         solo.assertCurrentActivity("SIGN IN PASS WITHOUT CHECK", LoginActivity.class);
-<<<<<<< HEAD
         solo.clickOnButton("Sign up");
         solo.clickOnButton("Login");
         solo.assertCurrentActivity("SIGN IN DID NOT PASS TO NEXT ACTIVITY", SelfNewsFeedActvity.class);
-=======
-        solo.assertCurrentActivity("SIGN IN DID NOT PASS TO NEXT ACTIVITY", SelfNewsFeedActivity.class);
->>>>>>> c6929da5c6a48879b070a5f0800fa1f9eeddaf38
+
 
 
     }

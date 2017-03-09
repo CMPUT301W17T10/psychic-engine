@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonWriter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -86,6 +87,9 @@ public class LoginActivity extends AppCompatActivity {
                     if (ParticipantSingleton.getInstance().addParticipant(participantName)) {
                         Toast.makeText(LoginActivity.this, participantName
                                 +" has been added!", Toast.LENGTH_SHORT).show();
+                        for (Participant participant : instance.getParticipantList()) {
+                            Log.i("PARTICIPANT", participant.getLogin() + "| Size" + instance.getParticipantCount());
+                        }
                     }
                     else {
                         Toast.makeText(LoginActivity.this, "Unable to add participant",
@@ -99,18 +103,25 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        Toast.makeText(LoginActivity.this, "Entering onStart Method", Toast.LENGTH_SHORT).show();
         if (ParticipantSingleton.isLoaded() == null) {
+            Toast.makeText(LoginActivity.this, "Instance is null, attempting to load from file",
+                    Toast.LENGTH_SHORT).show();
             loadFromFile();
         }
     }
+    // TODO: GSON does not properly load files. Will crash the application or cause incosistencies
+    // TODO: Need to change format of the GSON file
+    // TODO: Temporary Solution: Clear data on your disk before running the program
     private void loadFromFile() {
-
         try {
             FileInputStream fis = openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
             Gson gson = new Gson();
             // Took from https://google-gson.googlecode.com/svn/trunk/gson/docs/javadocs/com/google/gson/Gson.html Jan-21-2016
-            instance = gson.fromJson(in, ParticipantSingleton.class);
+            Type type = new TypeToken<ParticipantSingleton>() {}.getType();
+            System.out.println("BUFFEREDREADER " + gson.fromJson(in,type));
+            instance = gson.fromJson(in, type);
             if (instance != null)
                 instance.setInstance(instance);
             else
@@ -120,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
-
+    // TODO: Does not crash with onPause() override method, but will not saveInFile
     private void saveInFile() {
         try {
             FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
@@ -128,7 +139,6 @@ public class LoginActivity extends AppCompatActivity {
             Gson gson = new Gson();
             gson.toJson(ParticipantSingleton.getInstance(), out);
             out.flush();
-
             fos.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException();
@@ -137,6 +147,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveInFile();
+    }
     @Override
     protected void onStop() {
         super.onStop();
