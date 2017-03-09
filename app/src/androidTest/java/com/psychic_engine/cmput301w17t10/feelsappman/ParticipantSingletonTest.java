@@ -43,7 +43,7 @@ public class ParticipantSingletonTest extends ActivityInstrumentationTestCase2{
     public void testGetParticipantCount() {
         ParticipantSingleton instance = ParticipantSingleton.getInstance();
         assertTrue("count not 1", instance.getParticipantCount() == 1);
-        instance.addParticipant("meep");
+        assertTrue(instance.addParticipant("meep"));
         assertTrue("count not 2", instance.getParticipantCount() == 2);
     }
 
@@ -61,30 +61,34 @@ public class ParticipantSingletonTest extends ActivityInstrumentationTestCase2{
     public void testSearchParticipant() {
         ParticipantSingleton instance = ParticipantSingleton.getInstance();
         assertEquals("index or error", instance.searchParticipant("meep"), instance.getParticipantList().get(1));
-        assertEquals(instance.searchParticipant("exist"), null);
+        assertEquals(instance.searchParticipant("notexist"), null);
     }
 
     public void testSetSelfParticipant() {
         ParticipantSingleton instance = ParticipantSingleton.getInstance();
-        assertFalse("aaa was set but DNE",instance.setSelfParticipant("aaa"));
-        assertTrue("did not set 'oi' even if exists",instance.setSelfParticipant("oi"));
+        Participant someParticipant = instance.searchParticipant("aaa");
+        assertFalse("aaa was set but DNE",instance.setSelfParticipant(someParticipant));
+        Participant anotherParticipant = instance.searchParticipant("oi");
+        assertTrue("did not set 'oi' even if exists",instance.setSelfParticipant(anotherParticipant));
     }
 
     public void testGetSelfParticipant() {
         ParticipantSingleton instance = ParticipantSingleton.getInstance();
         assertTrue("it is null",instance.getSelfParticipant() == null);
-        instance.setSelfParticipant("oi");
+        instance.setSelfParticipant(instance.searchParticipant("oi"));
         assertEquals("self participant not 'oi'",instance.getSelfParticipant().getLogin(), "oi");
     }
 
+    // Currently only removes its own account from the file
+    // Later on if needed, will remove other participants such as followers
+    /*
     public void testRemoveParticipant() {
         ParticipantSingleton instance = ParticipantSingleton.getInstance();
         assertTrue("count not 2", instance.getParticipantCount() == 2);
-        Log.d("1st", "first remove");
-        assertFalse("did delete", instance.removeParticipant("I dont exist"));
-        Log.d("2nd", "second remove");
-        assertTrue("failed remove",instance.removeParticipant("meep"));
+        assertTrue("failed remove",instance.removeParticipant());
         assertTrue("count is not 1", instance.getParticipantCount() == 1);
-        assertEquals(instance.getParticipantList().indexOf("meep"), -1);
+        Participant thisParticipant = instance.searchParticipant("oi");
+        assertEquals(instance.getParticipantList().indexOf(thisParticipant), -1);
     }
+    */
 }

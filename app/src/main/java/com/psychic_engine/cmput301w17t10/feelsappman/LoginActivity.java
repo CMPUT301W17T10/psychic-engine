@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String participantName = participantEditText.getText().toString();
                 if (ParticipantSingleton.getInstance().participantNameTaken(participantName)) {
-                    instance.setSelfParticipant(participantName);
+                    instance.setSelfParticipant(instance.searchParticipant(participantName));
                     Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
                     startActivity(intent);
                 }

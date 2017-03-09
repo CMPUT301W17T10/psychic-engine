@@ -56,12 +56,19 @@ public class ParticipantSingleton {
      * @return true if successful in assigning selfParticipant
      * @return false if unsuccessful in assigning selfParticipant
      **/
-     public Boolean setSelfParticipant(String participantName) {
-         if (this.searchParticipant(participantName) != null) {
-             selfParticipant = instance.searchParticipant(participantName);
-             return true;
-         }
-         else {
+     public Boolean setSelfParticipant(Participant participant) {
+         try {
+             for (Participant storedParticipant : instance.getParticipantList()) {
+                 if (participant.getLogin().equals(storedParticipant.getLogin())) {
+                     Log.d("setSelfParticipantPrint", storedParticipant.getLogin());
+                     selfParticipant = participant;
+                     return true;
+                 }
+             }
+             selfParticipant = null;
+             return false;
+         } catch (Throwable e) {
+             selfParticipant = null;
              return false;
          }
     }
@@ -112,15 +119,13 @@ public class ParticipantSingleton {
     /**
      * Method to remove a participant from the storage. Not really called at the moment unless
      * the user would like to delete their account.
-     * @param participantName
      */
-    public Boolean removeParticipant(String participantName) {
+    /*
+    public Boolean removeParticipant() {
+
         try {
-            Log.d("START","REMOVEPARTICIPANT");
-            Participant participantToRemove = instance.searchParticipant(participantName);
-            Log.d("participantToRemove", participantToRemove.getLogin());
-            instance.getParticipantList().remove(participantToRemove);
-            Log.d("removeParticipant", "HERE");
+            participantList.remove(selfParticipant);
+            instance.setSelfParticipant(null);
             participantCount--;
             return true;
         }
@@ -128,7 +133,7 @@ public class ParticipantSingleton {
             return false;
         }
     }
-
+    */
     /**
      * Method to determine whether or not there is an instance or not. Used in the Singleton class
      * to determine whether or not it should initialize another ParticipantSingleton class
@@ -159,11 +164,8 @@ public class ParticipantSingleton {
         return found;
     }
 
-    // searchParticipant currently not working - alex
     public Participant searchParticipant(String participantName) {
-        Log.d("Start", "SEARCHPARTICIPANT");
         for(Participant participant : instance.getParticipantList()) {
-            Log.d("Participants", participant.getLogin());
             if (participant.getLogin().equals(participantName)) {
                 return participant;
             }
