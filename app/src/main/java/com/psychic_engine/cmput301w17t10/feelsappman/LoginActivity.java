@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
     private Button signupButton;
     private ParticipantSingleton instance;
-
+    private ParticipantController participantController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,50 +52,46 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.loginButton);
         signupButton = (Button) findViewById(R.id.signupButton);
         participantEditText = (EditText) findViewById(R.id.nameEditText);
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String participantName = participantEditText.getText().toString();
-
-
-                if (instance.participantNameTaken(participantName)) {
-                    instance.setSelfParticipant(instance.searchParticipant(participantName));
-                    Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActvity.class);
-                    intent.putExtra("username",participantName);
-                    //intent.putExtra("location",location);
-                    //intent.putExtra("realname",realname);
-                    startActivity(intent);
-                }
-                else {
-                    Toast.makeText(LoginActivity.this,
-                            "This participant does not exist, please sign up"
-                            , Toast.LENGTH_LONG).show();
-                }
+            String participantName = participantEditText.getText().toString();
+            if (ParticipantSingleton.participantNameTaken(participantName)) {
+                Log.d("Searching", "Searching for "+participantName);
+                Participant self = instance.searchParticipant(participantName);
+                instance.setSelfParticipant(self);
+                Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActvity.class);
+                //intent.putExtra("location",location);
+                //intent.putExtra("realname",realname);
+                Toast.makeText(LoginActivity.this, "Welcome "+ instance.getSelfParticipant().getLogin(), Toast.LENGTH_SHORT).show();
+                startActivity(intent);
+            }
+            else {
+                Toast.makeText(LoginActivity.this,
+                        "This participant does not exist, please sign up"
+                        , Toast.LENGTH_SHORT).show();
+            }
             }
         });
 
         // signup button does not take participant to a signup activity (UML) - alex
         signupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                setResult(RESULT_OK);
-                String participantName = participantEditText.getText().toString();
-                if (ParticipantSingleton.participantNameTaken(participantName)) {
-                    Toast.makeText(LoginActivity.this, "The username is already taken",
-                            Toast.LENGTH_SHORT).show();
+            setResult(RESULT_OK);
+            String participantName = participantEditText.getText().toString();
+            if (ParticipantSingleton.participantNameTaken(participantName)) {
+                Toast.makeText(LoginActivity.this, "The username is already taken",
+                        Toast.LENGTH_SHORT).show();
+            }
+            else {
+                if (ParticipantSingleton.getInstance().addParticipant(participantName)) {
+                    Toast.makeText(LoginActivity.this, participantName
+                            +" has been added!", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    if (ParticipantSingleton.getInstance().addParticipant(participantName)) {
-                        Toast.makeText(LoginActivity.this, participantName
-                                +" has been added!", Toast.LENGTH_SHORT).show();
-                        for (Participant participant : instance.getParticipantList()) {
-                            Toast.makeText(LoginActivity.this, participant.getLogin() + "| Size" + instance.getParticipantCount(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    else {
-                        Toast.makeText(LoginActivity.this, "Unable to add participant",
-                                Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(LoginActivity.this, "Input invalid, please try again",
+                            Toast.LENGTH_SHORT).show();
                 }
+            }
             }
         });
     }
@@ -103,16 +99,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        Toast.makeText(LoginActivity.this, "Entering onStart Method", Toast.LENGTH_SHORT).show();
         if (ParticipantSingleton.isLoaded() == null) {
             Toast.makeText(LoginActivity.this, "Instance is null, attempting to load from file",
                     Toast.LENGTH_SHORT).show();
             loadFromFile();
-            if (instance.isLoaded() != null ) {
-                Toast.makeText(LoginActivity.this, "Instance is not not null", Toast.LENGTH_SHORT).show();
             }
         }
-    }
     // TODO: GSON does not properly load files. Will crash the application sometimes
     // TODO: Temporary Solution: Clear data on your disk before running the program
     private void loadFromFile() {
@@ -124,7 +116,6 @@ public class LoginActivity extends AppCompatActivity {
             Type type = new TypeToken<ParticipantSingleton>() {}.getType();
             instance = gson.fromJson(in, type);
             if (instance != null) {
-                Toast.makeText(LoginActivity.this, "Instance id " + instance.toString() + " | Size " + String.valueOf(instance.getParticipantCount()), Toast.LENGTH_LONG).show();
                 instance.setInstance(instance);
             }
             else

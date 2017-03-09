@@ -65,7 +65,6 @@ public class ParticipantSingleton {
                      return true;
                  }
              }
-             selfParticipant = null;
              return false;
          } catch (Throwable e) {
              selfParticipant = null;
@@ -108,6 +107,9 @@ public class ParticipantSingleton {
     // TODO: participantList.size() does not return properly ??? - alex
     public Boolean addParticipant(String participantName) {
         try {
+            if (participantName.equals("")){
+                return false;
+            }
             Participant newParticipant = new Participant(participantName);
             participantList.add(newParticipant);
             participantCount = participantList.size();
@@ -173,7 +175,9 @@ public class ParticipantSingleton {
      * @return
      */
     public Participant searchParticipant(String participantName) {
-        for(Participant participant : instance.getParticipantList()) {
+        Log.d("StartSearch", "Starting the search");
+        for(Participant participant : participantList) {
+            Log.d("Stored", participant.getLogin());
             if (participant.getLogin().equals(participantName)) {
                 return participant;
             }
