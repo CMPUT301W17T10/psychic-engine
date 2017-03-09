@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String participantName = participantEditText.getText().toString();
                 if (ParticipantSingleton.getInstance().participantNameTaken(participantName)) {
+                    instance.setSelfParticipant(participantName);
                     Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
                     startActivity(intent);
                 }
@@ -73,21 +74,19 @@ public class LoginActivity extends AppCompatActivity {
                 setResult(RESULT_OK);
                 String participantName = participantEditText.getText().toString();
                 if (ParticipantSingleton.participantNameTaken(participantName)) {
-                    Log.i("Participant take", "Participant name: "+participantName+" is taken");
                     Toast.makeText(LoginActivity.this, "The username is already taken",
                             Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Participant newParticipant = new Participant(participantName);
-                    if (ParticipantSingleton.getInstance().addParticipant(newParticipant)) {
+                    if (ParticipantSingleton.getInstance().addParticipant(participantName)) {
+                        Toast.makeText(LoginActivity.this, participantName
+                                +" has been added!", Toast.LENGTH_SHORT).show();
                         saveInFile();
                     }
                     else {
                         Toast.makeText(LoginActivity.this, "Unable to add participant",
                                 Toast.LENGTH_SHORT).show();
                     }
-                // Different from UI Interface (Text View vs Toast Popup)
-
                 }
             }
         });

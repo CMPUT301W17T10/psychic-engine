@@ -1,5 +1,6 @@
 package com.psychic_engine.cmput301w17t10.feelsappman;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -52,9 +53,17 @@ public class ParticipantSingleton {
 
     /** Method to get the main participant of the program
      * The initialization will not set a participant until you log in
+     * @return true if successful in assigning selfParticipant
+     * @return false if unsuccessful in assigning selfParticipant
      **/
-     public void setSelfParticipant(Participant participant) {
-        selfParticipant = participant;
+     public Boolean setSelfParticipant(String participantName) {
+         if (this.searchParticipant(participantName) != null) {
+             selfParticipant = instance.searchParticipant(participantName);
+             return true;
+         }
+         else {
+             return false;
+         }
     }
 
     /**
@@ -85,13 +94,14 @@ public class ParticipantSingleton {
      * Method to add a new participant into storage. It is only called in the login page
      * when you sign up for a new account.
      * @see LoginActivity
-     * @param participant
+     * @param participantName
      * @return true if successful
      * @return false if unsuccessful
      */
-    public Boolean addParticipant(Participant participant) {
+    public Boolean addParticipant(String participantName) {
         try {
-            participantList.add(participant);
+            Participant newParticipant = new Participant(participantName);
+            participantList.add(newParticipant);
             participantCount++;
             return true;
         } catch (Throwable e) {
@@ -102,12 +112,15 @@ public class ParticipantSingleton {
     /**
      * Method to remove a participant from the storage. Not really called at the moment unless
      * the user would like to delete their account.
-     * @param participant
+     * @param participantName
      */
-    public Boolean removeParticipant(Participant participant) {
+    public Boolean removeParticipant(String participantName) {
         try {
-            int index = participantList.indexOf(participant);
-            participantList.remove(index);
+            Log.d("START","REMOVEPARTICIPANT");
+            Participant participantToRemove = instance.searchParticipant(participantName);
+            Log.d("participantToRemove", participantToRemove.getLogin());
+            instance.getParticipantList().remove(participantToRemove);
+            Log.d("removeParticipant", "HERE");
             participantCount--;
             return true;
         }
@@ -138,11 +151,23 @@ public class ParticipantSingleton {
 
     public static boolean participantNameTaken(String participantName) {
         Boolean found = false;
-        for(Participant participant: ParticipantSingleton.getInstance().getParticipantList()) {
+        for(Participant participant: instance.getParticipantList()) {
             if (participant.getLogin().equals(participantName)) {
                 found = true;
             }
         }
         return found;
+    }
+
+    // searchParticipant currently not working - alex
+    public Participant searchParticipant(String participantName) {
+        Log.d("Start", "SEARCHPARTICIPANT");
+        for(Participant participant : instance.getParticipantList()) {
+            Log.d("Participants", participant.getLogin());
+            if (participant.getLogin().equals(participantName)) {
+                return participant;
+            }
+        }
+        return null;
     }
 }

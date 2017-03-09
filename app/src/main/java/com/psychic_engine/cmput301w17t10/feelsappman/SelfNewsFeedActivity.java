@@ -16,21 +16,13 @@ import java.util.ArrayList;
 
 public class SelfNewsFeedActivity extends AppCompatActivity {
     private ArrayList<Participant> selfParticipant;
+    private ParticipantSingleton instance;
     private Participant singleParticipant;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // testing CreateMoodActivity
-        //Intent intent = new Intent(this, CreateMoodActivity.class);
-        //startActivity(intent);
-
-        Gson gsonIn = new Gson();
-        String gsonObject = getIntent().getStringExtra("participantListObjects");
-        Type listType = new TypeToken<ArrayList<Participant>>() {}.getType();
-        selfParticipant = gsonIn.fromJson(gsonObject, listType);
-        System.out.println(selfParticipant);
 
 
     }
