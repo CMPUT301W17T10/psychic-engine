@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,7 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:text="Date jere"/>
+        android:layout_alignParentTop="true"
+        android:text="Sample date"
+        android:textSize="14sp" />
 
     <Button
         android:text="Delete"
@@ -32,5 +35,36 @@
         android:layout_alignBaseline="@+id/deletebutton"
         android:layout_alignBottom="@+id/deletebutton"
         android:layout_toStartOf="@+id/deletebutton" />
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/editbutton"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/date"
+        android:layout_above="@+id/location" />
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="51dp"
+        android:text="Sample location"
+        android:layout_above="@+id/deletebutton"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/mood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/image"
+        android:layout_marginTop="21dp"
+        android:text="Sample Mood" />
 
 </RelativeLayout>
