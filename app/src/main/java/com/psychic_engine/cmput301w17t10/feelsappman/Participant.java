@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by adong on 2/27/17.
  */
 
-public class Participant {
+public class Participant extends ModelFrame{
     public String login;
     public ArrayList<MoodEvent> moodEvents;
     public ArrayList<Participant> followers;
@@ -15,23 +15,13 @@ public class Participant {
 
 
     public Participant(String loginName) {
-
         this.login = loginName;
         this.moodEvents = new ArrayList<MoodEvent>();
         this.followers = new ArrayList<Participant>();
         this.following = new ArrayList<Participant>();
         this.pendingRequests = new ArrayList<Participant>();
     }
-
-    //public void addmoodevent(MoodEvent moodEvent){
-      //  moodEvents.add(moodEvent);
-    //}
-
-    /*public void addfollowers(Participant participant){
-        followers.add(participant);
-
-    }*/
-    public String getLogin() { return this.login;}
+    public String getLogin() {return this.login;}
 
     public ArrayList<MoodEvent> getMoodList() {
         return this.moodEvents;
@@ -60,6 +50,14 @@ public class Participant {
 
     public void addMoodEvent(MoodEvent moodEvent) {
         moodEvents.add(moodEvent);
+    }
+
+    public void addmoodevent(MoodEvent moodEvent){
+       moodEvents.add(moodEvent);
+    }
+
+    public void addfollowers(Participant participant){
+        followers.add(participant);
     }
 }
 

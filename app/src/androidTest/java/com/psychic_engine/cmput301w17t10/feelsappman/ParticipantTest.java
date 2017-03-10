@@ -9,44 +9,52 @@ import junit.framework.TestCase;
  */
 
 public class ParticipantTest extends TestCase {
-/*
-    public void testgetmoodlist(){
-        Participant a = new Participant("first");
-        //Mood mood = new Mood(MoodState.Anger);
-        //MoodEvent moodEvent = new MoodEvent(mood);
 
-        //a.moodEvents.add(moodEvent);
-
-        //assertEquals(a.moodEvents,a.getMoodList());
-
-
-
+    public void testGetLogin() {
+        Participant a = new Participant("alex");
+        assertEquals(a.getLogin(), "alex");
     }
-    */
-    public void testgetFollowers(){
+    public void testGetMoodList(){
+        Participant a = new Participant("first");
+        Mood mood = new Mood(MoodState.ANGER);
+        MoodEvent moodEvent = new MoodEvent(mood, null, null, null ,null);
+        a.moodEvents.add(moodEvent);
+        assertEquals(a.moodEvents,a.getMoodList());
+    }
+
+    public void testGetFollowers(){
         Participant a = new Participant("first");
         Participant b = new Participant("second");
-
         a.followers.add(b);
-
         assertEquals(a.followers,a.getFollowers());
     }
 
-    public void testgetFollowing(){
+    public void testGetFollowing(){
         Participant a = new Participant("first");
         Participant b = new Participant("second");
-
         a.following.add(b);
-
         assertEquals(a.following,a.getFollowing());
     }
 
-    public void testgetPendingRequest(){
+    public void testGetPendingRequest(){
         Participant a = new Participant("first");
         Participant b = new Participant("second");
-
         a.pendingRequests.add(b);
-
         assertEquals(a.pendingRequests,a.getPendingRequests());
     }
+
+    // Not really required for the Participant model
+    /*
+    public void testSetMoodEvent() {
+        Participant a = new Participant("first");
+        Mood mood = new Mood(MoodState.ANGER);
+        MoodEvent moodEvent = new MoodEvent(mood, null, null, null, null);
+        a.moodEvents.add(moodEvent);
+
+        Mood replaceMood = new Mood(MoodState.HAPPY);
+        MoodEvent replaceMoodEvent = new MoodEvent(replaceMood, null, null, null, null);
+        a.setMoodEvent(0, replaceMoodEvent);
+        assertEquals(a.moodEvents.get(0), replaceMoodEvent);
+    }
+    */
 }

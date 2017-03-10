@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonWriter;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -42,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
     private Button signupButton;
     private ParticipantSingleton instance;
-
+    private ParticipantController participantController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,47 +52,46 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.loginButton);
         signupButton = (Button) findViewById(R.id.signupButton);
         participantEditText = (EditText) findViewById(R.id.nameEditText);
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String participantName = participantEditText.getText().toString();
-
-
-                if (instance.participantNameTaken(participantName)) {
-                    instance.setSelfParticipant(instance.searchParticipant(participantName));
-                    Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActvity.class);
-                    intent.putExtra("username",participantName);
-                    //intent.putExtra("location",location);
-                    //intent.putExtra("realname",realname);
-                    startActivity(intent);
-                }
-                else {
-                    Toast.makeText(LoginActivity.this,
-                            "This participant does not exist, please sign up"
-                            , Toast.LENGTH_LONG).show();
-                }
+            String participantName = participantEditText.getText().toString();
+            if (ParticipantSingleton.participantNameTaken(participantName)) {
+                Log.d("Searching", "Searching for "+participantName);
+                Participant self = instance.searchParticipant(participantName);
+                instance.setSelfParticipant(self);
+                Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActvity.class);
+                //intent.putExtra("location",location);
+                //intent.putExtra("realname",realname);
+                Toast.makeText(LoginActivity.this, "Welcome "+ instance.getSelfParticipant().getLogin(), Toast.LENGTH_SHORT).show();
+                startActivity(intent);
+            }
+            else {
+                Toast.makeText(LoginActivity.this,
+                        "This participant does not exist, please sign up"
+                        , Toast.LENGTH_SHORT).show();
+            }
             }
         });
 
         // signup button does not take participant to a signup activity (UML) - alex
         signupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                setResult(RESULT_OK);
-                String participantName = participantEditText.getText().toString();
-                if (ParticipantSingleton.participantNameTaken(participantName)) {
-                    Toast.makeText(LoginActivity.this, "The username is already taken",
-                            Toast.LENGTH_SHORT).show();
+            setResult(RESULT_OK);
+            String participantName = participantEditText.getText().toString();
+            if (ParticipantSingleton.participantNameTaken(participantName)) {
+                Toast.makeText(LoginActivity.this, "The username is already taken",
+                        Toast.LENGTH_SHORT).show();
+            }
+            else {
+                if (ParticipantSingleton.getInstance().addParticipant(participantName)) {
+                    Toast.makeText(LoginActivity.this, participantName
+                            +" has been added!", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    if (ParticipantSingleton.getInstance().addParticipant(participantName)) {
-                        Toast.makeText(LoginActivity.this, participantName
-                                +" has been added!", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Toast.makeText(LoginActivity.this, "Unable to add participant",
-                                Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(LoginActivity.this, "Input invalid, please try again",
+                            Toast.LENGTH_SHORT).show();
                 }
+            }
             }
         });
     }
@@ -100,19 +100,24 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         if (ParticipantSingleton.isLoaded() == null) {
+            Toast.makeText(LoginActivity.this, "Instance is null, attempting to load from file",
+                    Toast.LENGTH_SHORT).show();
             loadFromFile();
+            }
         }
-    }
+    // TODO: GSON does not properly load files. Will crash the application sometimes
+    // TODO: Temporary Solution: Clear data on your disk before running the program
     private void loadFromFile() {
-
         try {
             FileInputStream fis = openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
             Gson gson = new Gson();
             // Took from https://google-gson.googlecode.com/svn/trunk/gson/docs/javadocs/com/google/gson/Gson.html Jan-21-2016
-            instance = gson.fromJson(in, ParticipantSingleton.class);
-            if (instance != null)
+            Type type = new TypeToken<ParticipantSingleton>() {}.getType();
+            instance = gson.fromJson(in, type);
+            if (instance != null) {
                 instance.setInstance(instance);
+            }
             else
                 instance = ParticipantSingleton.getInstance();
         } catch (FileNotFoundException e) {
@@ -120,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
-
+    // TODO: Does not crash with onPause() override method, but will not saveInFile some
     private void saveInFile() {
         try {
             FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
@@ -128,7 +133,6 @@ public class LoginActivity extends AppCompatActivity {
             Gson gson = new Gson();
             gson.toJson(ParticipantSingleton.getInstance(), out);
             out.flush();
-
             fos.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException();
@@ -137,6 +141,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveInFile();
+    }
     @Override
     protected void onStop() {
         super.onStop();
