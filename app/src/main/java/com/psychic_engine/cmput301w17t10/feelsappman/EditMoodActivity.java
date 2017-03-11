@@ -118,6 +118,7 @@ public class EditMoodActivity extends AppCompatActivity{
 
         //Taken from http://stackoverflow.com/questions/26865787/get-bitmap-from-imageview-in-android-l
         //March 10, 2017
+        //gets drawable from imageview and converts drawable to bitmap
         BitmapDrawable drawable = (BitmapDrawable) photoImageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
 

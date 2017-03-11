@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 
 /**
- * Created by hnkhan on 2/27/17.
+ * Created by hnkhan on 2/27/17. Edited by pslin 03/10/17
  */
 
 public class Photograph {
@@ -14,6 +14,7 @@ public class Photograph {
     private Bitmap map;
     public Photograph(Bitmap image) {
         this.map = image;
+        //getAllocationByteCount exclusive to API>18
         if (Build.VERSION.SDK_INT > 18) {
             this.BYTE = image.getAllocationByteCount();
         } else {

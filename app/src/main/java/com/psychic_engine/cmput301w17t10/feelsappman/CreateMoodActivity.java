@@ -104,10 +104,11 @@ public class CreateMoodActivity extends AppCompatActivity {
 
         //Taken from http://stackoverflow.com/questions/26865787/get-bitmap-from-imageview-in-android-l
         //March 10, 2017
+        //gets drawable from imageview and converts drawable to bitmap
         BitmapDrawable drawable = (BitmapDrawable) photoImageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
 
-        Photograph photo = new Photograph(bitmap); // TODO get photo from imageView but not sure what type it is
+        Photograph photo = new Photograph(bitmap);
         Location location = null; // TODO get location from location box - need to know how to use GOOGLE MAPS first
 
         //TODO call this explicitly like this or through notifyObservers()
