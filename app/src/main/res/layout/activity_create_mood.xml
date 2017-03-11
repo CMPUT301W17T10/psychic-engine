@@ -8,6 +8,7 @@
 
     <Spinner
         android:id="@+id/moodDropDown"
+        android:prompt="@string/select_mood"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
@@ -15,6 +16,7 @@
 
     <Spinner
         android:id="@+id/socialSettingDropDown"
+        android:prompt="@string/social_setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
@@ -22,12 +24,13 @@
 
     <EditText
         android:id="@+id/trigger"
+        android:hint="@string/trigger_cause"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
         android:maxLength="20"
-        android:text="20 chars or 3 words." />
+        android:text="@string/comment_constraint" />
 
     <EditText
         android:id="@+id/location"
@@ -40,7 +43,7 @@
         android:id="@+id/browse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Browse" />
+        android:text="@string/browse" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -55,7 +58,7 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/cancel"
@@ -65,7 +68,7 @@
             android:id="@+id/create"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create"
+            android:text="@string/create"
             android:layout_weight="1" />
     </LinearLayout>
 

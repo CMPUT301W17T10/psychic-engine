@@ -8,6 +8,7 @@
 
     <Spinner
         android:id="@+id/moodDropDown1"
+        android:prompt = "@string/select_mood"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
@@ -16,12 +17,15 @@
     <Spinner
         android:id="@+id/socialSettingDropDown1"
         android:layout_width="match_parent"
+
+        android:prompt="@string/social_setting"
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
         android:spinnerMode="dropdown" />
 
     <EditText
         android:id="@+id/trigger1"
+        android:hint="@string/trigger_cause"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -31,6 +35,7 @@
 
     <EditText
         android:id="@+id/location1"
+        android:hint="@string/add_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"

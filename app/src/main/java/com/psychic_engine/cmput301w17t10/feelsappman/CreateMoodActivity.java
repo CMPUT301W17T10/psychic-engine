@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -99,12 +100,9 @@ public class CreateMoodActivity extends AppCompatActivity {
     void createMoodEvent() {
         // get the mood from the mood spinner
         String moodString = moodSpinner.getSelectedItem().toString();
-
         String socialSettingString = moodSpinner.getSelectedItem().toString();
-
         // get the trigger from the trigger edit text
         String trigger = triggerEditText.getText().toString();
-
         //initially sets photo to null
         Photograph photo = null;
         boolean photoTooLarge = TRUE;
@@ -136,13 +134,18 @@ public class CreateMoodActivity extends AppCompatActivity {
                     "Photo size is too large! (Max 65536 bytes)",
                     Toast.LENGTH_LONG).show();
         }
+        //TODO: MoodEvent list for selfParticipant needs to save
+        //TODO: MoodEvent list resets on app termination and reopen
+        //TODO: Maybe try to get the bring in saveInFile on a superclass and keep on all activities
+        for (MoodEvent mood : ParticipantSingleton.getInstance().getSelfParticipant().getMoodList()) {
+            Log.i("MoodEvent Added", "This mood event is of: " + mood.getMood().getMood());
+        }
     }
 
     void setUpSpinners() {
         // Spinner elements
         moodSpinner = (Spinner) findViewById(R.id.moodDropDown);
         socialSettingSpinner = (Spinner) findViewById(R.id.socialSettingDropDown);
-
         // Spinner drop down elements
         List<String> moodCategories = new ArrayList<String>();
         moodCategories.add("");     // default option

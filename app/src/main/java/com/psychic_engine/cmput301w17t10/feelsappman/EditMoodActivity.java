@@ -148,7 +148,6 @@ public class EditMoodActivity extends AppCompatActivity{
         // Spinner elements
         moodSpinner = (Spinner) findViewById(R.id.moodDropDown1);
         socialSettingSpinner = (Spinner) findViewById(R.id.socialSettingDropDown1);
-
         // Spinner drop down elements
         List<String> moodCategories = new ArrayList<String>();
         MoodState[] moodStates = MoodState.values();

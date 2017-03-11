@@ -43,16 +43,7 @@ public class CreateMoodController {
             trigger = "";
 
         MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
-
-
-        // TODO remove these lines - making a participant for testing
-        Participant test = new Participant("testperson");
-        //ParticipantSingleton.getInstance().addParticipant(test);
-        //ParticipantSingleton.getInstance().setSelfParticipant(test);
-        ParticipantSingleton.getInstance().getSelfParticipant().addMoodEvent(moodEvent);
-        //Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
-        //participant.addMoodEvent(moodEvent);
-
+        ParticipantSingleton.getInstance().getSelfParticipant().getMoodList().add(moodEvent);
         return true;
     }
 
