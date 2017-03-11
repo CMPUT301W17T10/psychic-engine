@@ -59,8 +59,6 @@ public class SelfNewsFeedActvity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-
     }
 
 
