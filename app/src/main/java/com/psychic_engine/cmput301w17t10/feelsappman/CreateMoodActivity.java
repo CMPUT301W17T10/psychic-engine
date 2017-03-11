@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -23,6 +25,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.psychic_engine.cmput301w17t10.feelsappman.R.id.imageView;
 
 /**
  * Created by jyuen1 on 3/6/17.
@@ -98,17 +102,28 @@ public class CreateMoodActivity extends AppCompatActivity {
         // get the trigger from the trigger edit text
         String trigger = triggerEditText.getText().toString();
 
-        Photograph photo = null; // TODO get photo from imageView but not sure what type it is
+        //Taken from http://stackoverflow.com/questions/26865787/get-bitmap-from-imageview-in-android-l
+        //March 10, 2017
+        BitmapDrawable drawable = (BitmapDrawable) photoImageView.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
+
+        Photograph photo = new Photograph(bitmap); // TODO get photo from imageView but not sure what type it is
         Location location = null; // TODO get location from location box - need to know how to use GOOGLE MAPS first
 
         //TODO call this explicitly like this or through notifyObservers()
-        boolean success = CreateMoodController.updateMoodEventList(moodString, socialSettingString, trigger, photo, location);
+        if (photo.getLimitSize()) {
+            boolean success = CreateMoodController.updateMoodEventList(moodString, socialSettingString, trigger, photo, location);
 
-        if (!success)
+            if (!success)
+                Toast.makeText(CreateMoodActivity.this,
+                        "Please specify a mood.",
+                        Toast.LENGTH_LONG).show();
+
+        } else {
             Toast.makeText(CreateMoodActivity.this,
-                    "Please specify a mood.",
+                    "Photo size is too large! (Max 65536 bytes)",
                     Toast.LENGTH_LONG).show();
-
+        }
     }
 
     void setUpSpinners() {
@@ -214,7 +229,7 @@ public class CreateMoodActivity extends AppCompatActivity {
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
 
-            photoImageView = (ImageView) findViewById(R.id.imageView);
+            photoImageView = (ImageView) findViewById(imageView);
             photoImageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
         }
     }
