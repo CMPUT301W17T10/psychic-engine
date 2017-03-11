@@ -23,12 +23,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class SelfNewsFeedActvity extends AppCompatActivity {
-    private ArrayList<Participant> selfParticipant;
-    private Participant singleParticipant;
-
-
-
-
+    private ParticipantSingleton instance;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -48,25 +43,11 @@ public class SelfNewsFeedActvity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_self_news_feed_actvity);
-
-        // testing CreateMoodActivity
-        //Intent intent = new Intent(this, CreateMoodActivity.class);
-        //startActivity(intent);
-
-        Gson gsonIn = new Gson();
-        String gsonObject = getIntent().getStringExtra("participantListObjects");
-        Type listType = new TypeToken<ArrayList<Participant>>() {}.getType();
-        selfParticipant = gsonIn.fromJson(gsonObject, listType);
-        System.out.println(selfParticipant);
-        Intent intent = getIntent();
-        String message = intent.getExtras().getString("username");
-
-
-
+        instance = ParticipantSingleton.getInstance();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(message);
+        getSupportActionBar().setTitle(instance.getSelfParticipant().getLogin());
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -79,14 +60,6 @@ public class SelfNewsFeedActvity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
     }
 
@@ -106,8 +79,9 @@ public class SelfNewsFeedActvity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_add) {
+            Intent intent = new Intent(SelfNewsFeedActvity.this,CreateMoodActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

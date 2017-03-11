@@ -50,11 +50,10 @@ public class ParticipantSingletonTest extends ActivityInstrumentationTestCase2{
 
     public void testGetParticipantList() {
         ParticipantSingleton instance = ParticipantSingleton.getInstance();
-        ArrayList<Participant> participantArrayList = instance.getParticipantList();
-        assertEquals(participantArrayList, instance.getParticipantList());
-        assertEquals(participantArrayList.get(1), instance.getParticipantList().get(1));
-        assertEquals(participantArrayList.get(1).getLogin(), "meep");
-        assertEquals(participantArrayList.get(0), instance.getParticipantList().get(0));
+        ArrayList<Participant> participantArrayList = new ArrayList<Participant>();
+        participantArrayList.add(new Participant("oi"));
+        participantArrayList.add(new Participant("meep"));
+        assertEquals(participantArrayList.get(0).getLogin(), instance.getParticipantList().get(0).getLogin());
     }
 
     // testSearchParticipant goes into removeParticipants?? - alex

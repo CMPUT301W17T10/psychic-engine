@@ -8,7 +8,7 @@ import java.util.Date;
  * Created by jyuen1 on 2/27/17.
  */
 
-public class MoodEvent {
+public class MoodEvent extends ModelFrame{
     private Mood mood;
     private String trigger;
     private SocialSetting socialSetting;
