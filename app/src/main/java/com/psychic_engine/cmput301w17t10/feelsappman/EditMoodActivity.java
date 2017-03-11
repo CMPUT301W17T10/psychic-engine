@@ -27,6 +27,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Boolean.TRUE;
+
 /**
  * Created by jyuen1 on 3/7/2017.
  */
@@ -116,18 +118,24 @@ public class EditMoodActivity extends AppCompatActivity{
         // get the trigger from the trigger edit text
         String trigger = triggerEditText.getText().toString();
 
-        //Taken from http://stackoverflow.com/questions/26865787/get-bitmap-from-imageview-in-android-l
-        //March 10, 2017
-        //gets drawable from imageview and converts drawable to bitmap
-        BitmapDrawable drawable = (BitmapDrawable) photoImageView.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
+        Photograph photo = null;
+        boolean photoTooLarge = TRUE;
 
+        if (photoImageView != null) {
+            //Taken from http://stackoverflow.com/questions/26865787/get-bitmap-from-imageview-in-android-l
+            //March 10, 2017
+            //gets drawable from imageview and converts drawable to bitmap
+            BitmapDrawable drawable = (BitmapDrawable) photoImageView.getDrawable();
+            Bitmap bitmap = drawable.getBitmap();
 
-        Photograph photo = new Photograph(bitmap); // TODO get photo from imageView but not sure what type it is, could be some primitive type and convert to Photograph type in the controller
+            photo = new Photograph(bitmap);
+            photoTooLarge = photo.getLimitSize();
+        }
+
         Location location = null; // TODO get location from location box - need to know how to use GOOGLE MAPS first
 
         //TODO call this explicitly like this or through notifyObservers()
-        //if (photo.getLimitSize()) {
+        //if (photoTooLarge) {
         //EditMoodController.updateMoodEventList(moodEventPosition, moodString, socialSettingString, trigger, photo, location);
         //} else {
                 //Toast.makeText(CreateMoodActivity.this,

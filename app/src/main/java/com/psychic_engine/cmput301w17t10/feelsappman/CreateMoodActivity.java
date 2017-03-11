@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.psychic_engine.cmput301w17t10.feelsappman.R.id.imageView;
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 
 /**
  * Created by jyuen1 on 3/6/17.
@@ -48,6 +50,7 @@ public class CreateMoodActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        photoImageView = (ImageView) findViewById(R.id.imageView);
         setContentView(R.layout.activity_create_mood);
 
         isStoragePermissionGranted();
@@ -102,17 +105,25 @@ public class CreateMoodActivity extends AppCompatActivity {
         // get the trigger from the trigger edit text
         String trigger = triggerEditText.getText().toString();
 
-        //Taken from http://stackoverflow.com/questions/26865787/get-bitmap-from-imageview-in-android-l
-        //March 10, 2017
-        //gets drawable from imageview and converts drawable to bitmap
-        BitmapDrawable drawable = (BitmapDrawable) photoImageView.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
+        //initially sets photo to null
+        Photograph photo = null;
+        boolean photoTooLarge = TRUE;
 
-        Photograph photo = new Photograph(bitmap);
+        if (photoImageView != null) {
+            //Taken from http://stackoverflow.com/questions/26865787/get-bitmap-from-imageview-in-android-l
+            //March 10, 2017
+            //gets drawable from imageview and converts drawable to bitmap
+            BitmapDrawable drawable = (BitmapDrawable) photoImageView.getDrawable();
+            Bitmap bitmap = drawable.getBitmap();
+
+            photo = new Photograph(bitmap);
+            photoTooLarge = photo.getLimitSize();
+        }
+
         Location location = null; // TODO get location from location box - need to know how to use GOOGLE MAPS first
 
         //TODO call this explicitly like this or through notifyObservers()
-        if (photo.getLimitSize()) {
+        if (photoTooLarge) {
             boolean success = CreateMoodController.updateMoodEventList(moodString, socialSettingString, trigger, photo, location);
 
             if (!success)
