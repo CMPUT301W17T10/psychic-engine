@@ -121,7 +121,7 @@ public class ParticipantSingleton {
 
     /**
      * Method to remove a participant from the storage. Not really called at the moment unless
-     * the user would like to delete their account.
+     * the user would like to delete their account. Temporarily out of service until later use.
      */
     /*
     public Boolean removeParticipant() {

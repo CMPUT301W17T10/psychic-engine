@@ -2,6 +2,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.robotium.solo.Solo;
@@ -18,6 +19,11 @@ public class CreateMoodActivityTest extends ActivityInstrumentationTestCase2<Cre
 
     public CreateMoodActivityTest() {
         super(com.psychic_engine.cmput301w17t10.feelsappman.CreateMoodActivity.class);
+        Participant selfParticipant = new Participant("alex");
+        ParticipantSingleton.getInstance().setSelfParticipant(selfParticipant);
+        if (ParticipantSingleton.getInstance().getSelfParticipant().getMoodList() != null) {
+            ParticipantSingleton.getInstance().getSelfParticipant().getMoodList().clear();
+        }
     }
 
     public void setUp() throws Exception {
@@ -54,16 +60,10 @@ public class CreateMoodActivityTest extends ActivityInstrumentationTestCase2<Cre
         // TODO Create tests for location and photograph when we know how they work
 
         // Click on create button
-        solo.clickOnButton("Create");
-        System.out.println("--------------- Create should add above");
+        solo.clickOnText("Create");
         Participant selfParticipant = ParticipantSingleton.getInstance().getSelfParticipant();
-
-        // Test if size of moodList is 1
-        ArrayList<MoodEvent> moodEventList = selfParticipant.getMoodList();
-        assertTrue("size of mood list is not 1", moodEventList.size() == 1);
-
         // Test if moodEvent contains the correct data
-        MoodEvent moodEvent = moodEventList.get(0);
+        MoodEvent moodEvent = selfParticipant.getMoodList().get(0);
         assertTrue("mood event does not contain correct mood state", moodEvent.getMood().getMood() == MoodState.HAPPY);
         assertTrue("mood event does not contain correct mood color",moodEvent.getMood().getColor() == MoodColor.GREEN);
         // assertTrue("mood event does not contain correct mood icon", moodEvent.getMood().getIcon() == "happyicon.png"); TODO when working icon

@@ -25,19 +25,28 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-// created by Alex Dong | March 6, 2017
+// created by Alex Dong | March 6, 2017 | Comments by Alex Dong
 
+/**
+ * LoginActivity is the login page of the app, and the first activity that will run upon opening
+ * the app. The person using the app will be able to sign up and log in here. A username will need
+ * to be given in order to log in so long it already exists (ie. signed up before). Names that have
+ * not been taken will need to be signed up before logging on. Names that have been taken will not
+ * be able to sign up (unique name). Upon logging in, the person will be directed to their news feed
+ * (ie. profile screen).
+ * @see SelfNewsFeedActvity
+ * @see ParticipantSingleton
+ * @see Participant
+ */
 public class LoginActivity extends AppCompatActivity {
-    // View has a controller
-    // Controller has a model
-    // Model implement Abstract observable
-/*
- Temporarily have a file that would save the participant names that have signed up
- loadFromFile()
- saveFromFile()
- ArrayList<Participant> participants
-  */
 
+    /**
+     * FILENAME will be the current file the app will store the names with. Later on, a remote
+     * server will be used to save these names through elastic search. A participant singleton is
+     * used to store the participant information. It is only currently used to store all names
+     * that have registered in the app and setting the self participant to the person's name
+     * @see ParticipantSingleton
+     */
     private static final String FILENAME = "file.sav";
     private EditText participantEditText;
     private Button loginButton;
@@ -52,16 +61,22 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.loginButton);
         signupButton = (Button) findViewById(R.id.signupButton);
         participantEditText = (EditText) findViewById(R.id.nameEditText);
+
+        /**
+         * A login button action is used to pull the name from the EditText given in the activity.
+         * The program will then check that the username has been taken already (ie. stored) as well
+         * as searching the list of participants to set as the self participant. The system will then
+         * direct the user to their own profile page. If the name does not exist (ie. not stored),
+         * then the program will prompt the user that the name does not exist and they should sign up.
+         * @see SelfNewsFeedActvity
+         */
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             String participantName = participantEditText.getText().toString();
             if (ParticipantSingleton.participantNameTaken(participantName)) {
-                Log.d("Searching", "Searching for "+participantName);
                 Participant self = instance.searchParticipant(participantName);
                 instance.setSelfParticipant(self);
                 Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActvity.class);
-                //intent.putExtra("location",location);
-                //intent.putExtra("realname",realname);
                 Toast.makeText(LoginActivity.this, "Welcome "+ instance.getSelfParticipant().getLogin(), Toast.LENGTH_SHORT).show();
                 startActivity(intent);
             }
@@ -74,6 +89,14 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // signup button does not take participant to a signup activity (UML) - alex
+        /**
+         * The signup button action will cause the system to store the name that was given in the
+         * EditText and thus be "registered" into the system. The system would then be able to store
+         * all of the detail os that specific participant upon logging in. Upon successful addition,
+         * the system will prompt that the participant name has been added and the user would be
+         * able to log in under that name. The system will also be able to prompt the user whether
+         * or not the entry was valid or not (ie. empty text).
+         */
         signupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             setResult(RESULT_OK);
@@ -96,6 +119,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Setting the instance up such that if was no instance to begin with (ie. first time starting),
+     * then the program will call loadFromFile to get the instance that was previously saved, thus
+     * acquiring the details from the previous execution.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -107,6 +135,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     // TODO: GSON does not properly load files. Will crash the application sometimes
     // TODO: Temporary Solution: Clear data on your disk before running the program
+
+    /**
+     * This method will extract the details from the FILENAME from JSON to the participant singleton.
+     * Upon successful execution of the method, the instance that is current in the running program
+     * will be set as the previous instance that was saved upon exit.
+     */
     private void loadFromFile() {
         try {
             FileInputStream fis = openFileInput(FILENAME);
@@ -125,7 +159,11 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
-    // TODO: Does not crash with onPause() override method, but will not saveInFile some
+
+    /**
+     * Method to save the instance for future use upon destruction of the activity. The singleton
+     * instance will contain all of the participants activity (moods, signing up, etc.)
+     */
     private void saveInFile() {
         try {
             FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
@@ -141,11 +179,21 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * When the program is on pause (leaving or idling activity), the saveInFile() method will run,
+     * thus saving all the changes that have been made.
+     */
     @Override
     protected void onPause() {
         super.onPause();
         saveInFile();
     }
+
+    /**
+     * Similar to the onPause() method, upon destruction by closing the app, the saveInFile()
+     * method will run so that when the app opens again, it can obtain all of the information that
+     * was saved.
+     */
     @Override
     protected void onStop() {
         super.onStop();

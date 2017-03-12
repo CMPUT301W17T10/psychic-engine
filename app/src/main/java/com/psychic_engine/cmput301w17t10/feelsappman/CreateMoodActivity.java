@@ -33,8 +33,16 @@ import static java.lang.Boolean.TRUE;
 
 /**
  * Created by jyuen1 on 3/6/17.
+ * Comments by Alex Dong on 3/12/17.
  */
 
+/**
+ * CreateMoodActivity will be similar to the EditMoodActivity in such a way that the format will be
+ * the same. However, one will be able to edit previously created events and one will only be able
+ * to create new ones. The participant will be able to enter a variety of options where the mood
+ * state is mandatory for entry, while others are optional.
+ * @see EditMoodActivity
+ */
 public class CreateMoodActivity extends AppCompatActivity {
     private static final String defaultTriggerMsg = "20 chars or 3 words.";
     private static int RESULT_LOAD_IMAGE = 1;
@@ -48,6 +56,10 @@ public class CreateMoodActivity extends AppCompatActivity {
     private Button createButton;
     private Button cancelButton;
 
+    /**
+     * Calls upon the methods to initialize the UI needed.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +81,13 @@ public class CreateMoodActivity extends AppCompatActivity {
     }
     //Taken from http://stackoverflow.com/questions/33162152/storage-permission-error-in-marshmallow/41221852#41221852
     //March 10, 2017
+
+    /**
+     * Method to detect whether or not reading from the phone storage is enabled or disabled. Upon
+     * earlier versions of the SDK, permission is automatically granted
+     * @return true if SDK < 23 or participant permits
+     * @return false if participant denies and SDK > 23
+     */
     public boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -97,6 +116,13 @@ public class CreateMoodActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Main method to call whenever the participant was to create their mood event after setting
+     * their options. The system will obtain all of the information (null or not), and then save
+     * the mood event into the participants own arrays of mood events. Depending on the options,
+     * the participant will be able to save it as a picture, which will have required a prompt to
+     * access the external storage.
+     */
     void createMoodEvent() {
         // get the mood from the mood spinner
         String moodString = moodSpinner.getSelectedItem().toString();
@@ -142,6 +168,9 @@ public class CreateMoodActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Setup method to create the spinners in the UI
+     */
     void setUpSpinners() {
         // Spinner elements
         moodSpinner = (Spinner) findViewById(R.id.moodDropDown);
@@ -178,6 +207,9 @@ public class CreateMoodActivity extends AppCompatActivity {
         socialSettingSpinner.setAdapter(socialSettingSpinnerAdapter);
     }
 
+    /**
+     * Setup method for the trigger EditText category
+     */
     void setUpTrigger() {
 
         triggerEditText = (EditText) findViewById(R.id.trigger);
@@ -210,6 +242,9 @@ public class CreateMoodActivity extends AppCompatActivity {
         */
     }
 
+    /**
+     * Setup method the browse button, being able to select pictures from the phone storage.
+     */
     void setUpBrowse() {
         // Taken from http://stackoverflow.com/questions/21072034/image-browse-button-in-android-activity
         // on 03-06-17
@@ -227,6 +262,13 @@ public class CreateMoodActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Upon execution, the activity will be able to display the photo that the participant selected
+     * so long the size is within limit.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     // displayed the browsed image
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -249,6 +291,10 @@ public class CreateMoodActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Setup method for the create button, which will issue a command to create the mood event on
+     * click.
+     */
     void setUpCreate() {
         createButton = (Button) findViewById(R.id.create);
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -259,6 +305,10 @@ public class CreateMoodActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Setup method for the cancel button, which will issue a command to close the addition of a
+     * mood event if the paticipant ever changes their mind.
+     */
     void setUpCancel() {
         cancelButton = (Button) findViewById(R.id.cancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
