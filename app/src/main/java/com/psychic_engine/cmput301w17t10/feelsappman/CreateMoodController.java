@@ -43,7 +43,7 @@ public class CreateMoodController {
             trigger = "";
 
         MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
-        ParticipantSingleton.getInstance().getSelfParticipant().getMoodList().add(moodEvent);
+        ParticipantSingleton.getInstance().getSelfParticipant().addMoodEvent(moodEvent);
         return true;
     }
 
