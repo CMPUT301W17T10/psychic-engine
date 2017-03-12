@@ -52,7 +52,6 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
     private Button signupButton;
     private ParticipantSingleton instance;
-    private ParticipantController participantController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

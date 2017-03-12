@@ -15,7 +15,7 @@ import android.view.ViewGroup;
  * Fragment class to display the tab in the profile's UI. This tab will display a list of past
  * mood events that their followers made.
  */
-public class HistoryTab extends Fragment {
+public class HistoryTabFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

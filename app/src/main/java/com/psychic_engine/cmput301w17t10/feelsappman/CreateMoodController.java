@@ -2,6 +2,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -11,11 +12,14 @@ import android.widget.Toast;
 
 public class CreateMoodController {
 
-    static boolean updateMoodEventList(String moodString, String socialSettingString, String trigger, Photograph photo, Location location) {
+    public CreateMoodController () {
+    }
 
-        Mood mood = null;
-        SocialSetting socialSetting = null;
-
+    public boolean updateMoodEventList(String moodString, String socialSettingString, String trigger, Photograph photo, Location location) {
+        Log.d("TAG","-----------------------------------------------------");
+        Mood mood;
+        SocialSetting socialSetting;
+        Log.d("Mood String", moodString);
         switch(moodString) {        // TODO refactor this - inside MoodState enum class?
             case "Sad": mood = new Mood(MoodState.SAD); break;
             case "Happy": mood = new Mood(MoodState.HAPPY); break;
@@ -41,9 +45,9 @@ public class CreateMoodController {
         String defaultTriggerMsg = "20 chars or 3 words.";
         if (trigger.equals(defaultTriggerMsg))
             trigger = "";
-
         MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
-        ParticipantSingleton.getInstance().getSelfParticipant().addMoodEvent(moodEvent);
+        Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
+        participant.addMoodEvent(moodEvent);
         return true;
     }
 

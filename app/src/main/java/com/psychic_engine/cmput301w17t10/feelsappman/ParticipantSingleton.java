@@ -104,7 +104,6 @@ public class ParticipantSingleton {
      * @return true if successful
      * @return false if unsuccessful
      */
-    // TODO: participantList.size() does not return properly ??? - alex
     public Boolean addParticipant(String participantName) {
         try {
             if (participantName.equals("")){

@@ -1,5 +1,7 @@
 package com.psychic_engine.cmput301w17t10.feelsappman;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -85,14 +87,15 @@ public class Participant extends ModelFrame{
     }
 
     public void addMoodEvent(MoodEvent moodEvent) {
+        if (moodEvents.isEmpty()) {
+            Log.d("Empty", "MoodEvents is empty for "+ login);
+        }
         moodEvents.add(moodEvent);
+        Log.d("Success", "Successful addition of mood event");
+        Log.d("Added", this.moodEvents.get(0).getMood().getMood().toString());
     }
 
-    public void addmoodevent(MoodEvent moodEvent){
-       moodEvents.add(moodEvent);
-    }
-
-    public void addfollowers(Participant participant){
+    public void addFollowers(Participant participant){
         followers.add(participant);
     }
 }

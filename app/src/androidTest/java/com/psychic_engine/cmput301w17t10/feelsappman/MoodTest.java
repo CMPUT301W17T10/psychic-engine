@@ -6,10 +6,22 @@ import junit.framework.TestCase;
 
 /**
  * Created by jyuen1 on 2/27/17.
+ * Commented by Alex Dong on 03/12/17
+ */
+
+/**
+ * Unit tests to determine the functionality of the methods that were created in the Mood model.
+ * @see Mood
+ * @see MoodState
+ *
  */
 
 public class MoodTest extends TestCase {
 
+    /**
+     * Test the getter method to make sure that the colours that are obtained with their corresponding
+     * emotions are correct.
+     */
     public void testGetColor() {
         Mood moodHappy = new Mood(MoodState.HAPPY);
         assertEquals(moodHappy.getColor(), MoodColor.GREEN);
@@ -36,6 +48,10 @@ public class MoodTest extends TestCase {
         assertEquals(moodAnger.getColor(), MoodColor.RED);
     }
 
+    /**
+     * Test the getter method to make sure that the icons that are obtained with their corresponding
+     * emotions are correct.
+     */
     public void testGetIcon() {
         Mood moodHappy = new Mood(MoodState.HAPPY);
         //assertEquals(moodHappy.getIcon(), "happyicon.png");
@@ -62,6 +78,10 @@ public class MoodTest extends TestCase {
         //assertEquals(moodAnger.getIcon(), "angericon.png");
     }
 
+    /**
+     * Test getter method to make sure that the actual mood that is obtained corresponds to the
+     * emotions that a participant may enter
+     */
     public void testGetMood() {
         Mood moodHappy = new Mood(MoodState.HAPPY);
         assertEquals(moodHappy.getMood(), MoodState.HAPPY);
@@ -88,10 +108,17 @@ public class MoodTest extends TestCase {
         assertEquals(moodAnger.getMood(), MoodState.ANGER);
     }
 
+    /**
+     * Test the setter method to make sure that the mood that the participant wants to edit to is
+     * correct.
+     */
+
     public void testSetMood() {
         Mood mood = new Mood(MoodState.HAPPY);
         assertEquals(mood.getMood(), MoodState.HAPPY);
         mood.setMood(MoodState.ANGER);
         assertEquals(mood.getMood(), MoodState.ANGER);
     }
+
+
 }

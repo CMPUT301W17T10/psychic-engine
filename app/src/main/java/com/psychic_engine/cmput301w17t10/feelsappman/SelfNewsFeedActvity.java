@@ -2,8 +2,6 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -14,13 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 public class SelfNewsFeedActvity extends AppCompatActivity {
     private ParticipantSingleton instance;
@@ -98,14 +89,14 @@ public class SelfNewsFeedActvity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    RecentTab recentTab = new RecentTab();
-                    return recentTab;
+                    RecentTabFragment recentTabFragment = new RecentTabFragment();
+                    return recentTabFragment;
                 case 1:
-                    HistoryTab historyTab = new HistoryTab();
-                    return historyTab;
+                    HistoryTabFragment historyTabFragment = new HistoryTabFragment();
+                    return historyTabFragment;
                 case 2:
-                    SummaryTab summaryTab = new SummaryTab();
-                    return  summaryTab;
+                    SummaryTabFragment summaryTabFragment = new SummaryTabFragment();
+                    return summaryTabFragment;
                 default:
                     return null;
             }

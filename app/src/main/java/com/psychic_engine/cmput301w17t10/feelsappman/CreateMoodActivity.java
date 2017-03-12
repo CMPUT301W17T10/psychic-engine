@@ -55,7 +55,7 @@ public class CreateMoodActivity extends AppCompatActivity {
     private ImageView photoImageView;
     private Button createButton;
     private Button cancelButton;
-
+    private CreateMoodController createMoodController = new CreateMoodController();
     /**
      * Calls upon the methods to initialize the UI needed.
      * @param savedInstanceState
@@ -123,13 +123,11 @@ public class CreateMoodActivity extends AppCompatActivity {
      * the participant will be able to save it as a picture, which will have required a prompt to
      * access the external storage.
      */
-    void createMoodEvent() {
-        // get the mood from the mood spinner
+    public void createMoodEvent() {
+        Log.d("Clicked on Create", "MoodEvent should be added here");
         String moodString = moodSpinner.getSelectedItem().toString();
         String socialSettingString = moodSpinner.getSelectedItem().toString();
-        // get the trigger from the trigger edit text
         String trigger = triggerEditText.getText().toString();
-        //initially sets photo to null
         Photograph photo = null;
         boolean photoSizeUnder = TRUE;
 
@@ -148,7 +146,9 @@ public class CreateMoodActivity extends AppCompatActivity {
 
         //TODO call this explicitly like this or through notifyObservers()
         if (photoSizeUnder) {
-            boolean success = CreateMoodController.updateMoodEventList(moodString, socialSettingString, trigger, photo, location);
+            Log.d("Enter", "Entering CreateMoodController ...");
+            Log.d("MoodString", moodString);
+            boolean success = createMoodController.updateMoodEventList(moodString, socialSettingString, trigger, photo, location);
 
             if (!success) {
                 Toast.makeText(CreateMoodActivity.this,
