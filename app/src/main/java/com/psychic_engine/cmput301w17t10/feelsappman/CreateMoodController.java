@@ -45,9 +45,12 @@ public class CreateMoodController {
         String defaultTriggerMsg = "20 chars or 3 words.";
         if (trigger.equals(defaultTriggerMsg))
             trigger = "";
+        
+        // TODO: objects are passed by value so have to reset the participant (this is super awkward)
         MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         participant.addMoodEvent(moodEvent);
+        ParticipantSingleton.getInstance().setSelfParticipant(participant);
         return true;
     }
 
