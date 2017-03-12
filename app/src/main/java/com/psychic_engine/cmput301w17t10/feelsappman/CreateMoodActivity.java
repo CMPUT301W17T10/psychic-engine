@@ -105,7 +105,7 @@ public class CreateMoodActivity extends AppCompatActivity {
         String trigger = triggerEditText.getText().toString();
         //initially sets photo to null
         Photograph photo = null;
-        boolean photoTooLarge = TRUE;
+        boolean photoSizeUnder = TRUE;
 
         if (photoImageView != null) {
             //Taken from http://stackoverflow.com/questions/26865787/get-bitmap-from-imageview-in-android-l
@@ -115,13 +115,13 @@ public class CreateMoodActivity extends AppCompatActivity {
             Bitmap bitmap = drawable.getBitmap();
 
             photo = new Photograph(bitmap);
-            photoTooLarge = photo.getLimitSize();
+            photoSizeUnder = photo.getLimitSize();
         }
 
         Location location = null; // TODO get location from location box - need to know how to use GOOGLE MAPS first
 
         //TODO call this explicitly like this or through notifyObservers()
-        if (photoTooLarge) {
+        if (photoSizeUnder) {
             boolean success = CreateMoodController.updateMoodEventList(moodString, socialSettingString, trigger, photo, location);
 
             if (!success)
