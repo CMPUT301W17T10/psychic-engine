@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -70,12 +71,16 @@ public class CreateMoodActivity extends AppCompatActivity {
 
         // set up mood and social setting spinners (drop downs)
         setUpSpinners();
+
         // set up events that happen when user clicks in trigger and outside trigger
         setUpTrigger();
+
         // set up events that happen when user clicks browse button
         setUpBrowse();
+
         // set up events that happen when user clicks create button
         setUpCreate();
+
         // set up events that happen when user clicks cancel button
         setUpCancel();
     }
@@ -128,23 +133,25 @@ public class CreateMoodActivity extends AppCompatActivity {
         String moodString = moodSpinner.getSelectedItem().toString();
         String socialSettingString = socialSettingSpinner.getSelectedItem().toString();
         String trigger = triggerEditText.getText().toString();
+
         Photograph photo = null;
         boolean photoSizeUnder = TRUE;
 
-        if (photoImageView != null) {
-            //Taken from http://stackoverflow.com/questions/26865787/get-bitmap-from-imageview-in-android-l
-            //March 10, 2017
-            //gets drawable from imageview and converts drawable to bitmap
-            BitmapDrawable drawable = (BitmapDrawable) photoImageView.getDrawable();
-            Bitmap bitmap = drawable.getBitmap();
 
+        //Taken from http://stackoverflow.com/questions/26865787/get-bitmap-from-imageview-in-android-l
+        //March 10, 2017
+        //gets drawable from imageview and converts drawable to bitmap
+
+        try {
+            Bitmap bitmap = ((BitmapDrawable) photoImageView.getDrawable()).getBitmap();
             photo = new Photograph(bitmap);
             photoSizeUnder = photo.getLimitSize();
+        } catch (Exception e) {
+            // pass
         }
 
         Location location = null; // TODO get location from location box - need to know how to use GOOGLE MAPS first
 
-        //TODO call this explicitly like this or through notifyObservers()
         if (photoSizeUnder) {
             Log.d("Enter", "Entering CreateMoodController ...");
             Log.d("MoodString", moodString);
@@ -170,6 +177,7 @@ public class CreateMoodActivity extends AppCompatActivity {
         for (MoodEvent mood : ParticipantSingleton.getInstance().getSelfParticipant().getMoodList()) {
             Log.i("MoodEvent Added", "This mood event is of: " + mood.getMood().getMood());
         }
+
     }
 
     /**
@@ -218,32 +226,6 @@ public class CreateMoodActivity extends AppCompatActivity {
 
         triggerEditText = (EditText) findViewById(R.id.trigger);
         triggerEditText.setText("");
-
-        // TODO not working perfectly - requires 2 clicks after initial click
-        // TODO giving me errors in test - leaving it blank for now
-        // clear trigger edit text when user clicks in it if default msg is displayed
-        /*
-        triggerEditText = (EditText) findViewById(R.id.trigger);
-        triggerEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (triggerEditText.getText().toString().equals(defaultTriggerMsg))
-                    triggerEditText.setText("");
-            }
-        });
-
-        // reset trigger edit text message if the user clicks away from it and it is blank
-        triggerEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    // user has clicked out of triggerEditText
-                    if (triggerEditText.getText().toString().equals(""))
-                        triggerEditText.setText(defaultTriggerMsg);
-                }
-            }
-        });
-        */
     }
 
     /**

@@ -71,7 +71,9 @@ public class RecentTabFragment extends Fragment {
 
             viewmood.setText(moodEvent.getMood().toString());
             date.setText(moodEvent.getDate().toString());
-            //imageView.setImageBitmap(moodEvent.getPicture());
+            if (moodEvent.getPicture() != null) {
+                imageView.setImageBitmap(moodEvent.getPicture().getImage());
+            }
             //location.setText(moodEvent.getLocation().toString());
             saveInFile();
 
@@ -93,7 +95,8 @@ public class RecentTabFragment extends Fragment {
 
                         viewmood.setText(moodEvent.getMood().toString());
                         date.setText(moodEvent.getDate().toString());
-                        //imageView.setImageBitmap(moodEvent.getPicture());
+                        if (moodEvent.getPicture() != null)
+                            imageView.setImageBitmap(moodEvent.getPicture().getImage());
                         //location.setText(moodEvent.getLocation().toString());
 
                         saveInFile();

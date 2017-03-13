@@ -81,6 +81,7 @@ public class EditMoodActivity extends AppCompatActivity{
 
         // set up events that happen when user clicks create button
         setUpSave();
+
         // set up events that happen when user clicks cancel button
         setUpCancel();
     }
@@ -133,15 +134,12 @@ public class EditMoodActivity extends AppCompatActivity{
         Photograph photo = null;
         boolean photoSizeUnder = TRUE;
 
-        if (photoImageView != null) {
-            //Taken from http://stackoverflow.com/questions/26865787/get-bitmap-from-imageview-in-android-l
-            //March 10, 2017
-            //gets drawable from imageview and converts drawable to bitmap
-            BitmapDrawable drawable = (BitmapDrawable) photoImageView.getDrawable();
-            Bitmap bitmap = drawable.getBitmap();
-
+        try {
+            Bitmap bitmap = ((BitmapDrawable) photoImageView.getDrawable()).getBitmap();
             photo = new Photograph(bitmap);
             photoSizeUnder = photo.getLimitSize();
+        } catch (Exception e) {
+            // pass
         }
 
         Location location = null; // TODO get location from location box - need to know how to use GOOGLE MAPS first
@@ -220,11 +218,9 @@ public class EditMoodActivity extends AppCompatActivity{
      */
     void setUpImageView() {
         // display the previous image
-        //TODO - help
-        /*
         photoImageView = (ImageView) findViewById(R.id.imageView1);
-        photoImageView.setImageBitmap(moodEvent.getPicture().getImage());   // TODO requires photograph class to return the correct image
-        */
+        if (moodEvent.getPicture() != null)
+            photoImageView.setImageBitmap(moodEvent.getPicture().getImage());
     }
 
     /**
