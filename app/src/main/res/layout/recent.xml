@@ -13,10 +13,10 @@
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:text="There's No Mood Event Yet! Why Don't you add one!"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:text="Delete"
@@ -37,7 +37,7 @@
         android:layout_toStartOf="@+id/deletebutton" />
 
     <ImageView
-        android:id="@+id/image"
+        android:id="@+id/picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@mipmap/ic_launcher"
@@ -51,11 +51,10 @@
         android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="51dp"
-        android:text="Sample location"
         android:layout_above="@+id/deletebutton"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginBottom="51dp" />
 
     <TextView
         android:id="@+id/mood"
@@ -63,8 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/image"
-        android:layout_marginTop="21dp"
-        android:text="Sample Mood" />
+        android:layout_below="@+id/picture"
+        android:layout_marginTop="21dp" />
 
 </RelativeLayout>

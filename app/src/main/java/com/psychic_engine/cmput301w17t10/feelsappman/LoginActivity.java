@@ -152,6 +152,7 @@ public class LoginActivity extends AppCompatActivity {
                 instance.setInstance(instance);
             }
             else
+
                 instance = ParticipantSingleton.getInstance();
         } catch (FileNotFoundException e) {
             instance = ParticipantSingleton.getInstance();
