@@ -51,17 +51,6 @@ public class RecentTabFragment extends Fragment {
     private ImageView imageView;
     private Button delete;
     private Button edit;
-<<<<<<< HEAD
-
-
-
-
-
-
-
-
-=======
->>>>>>> f2579b8980fc3813247a094d7b96a52c49eb43c9
 
 
     @Override
@@ -100,11 +89,6 @@ public class RecentTabFragment extends Fragment {
 
 
                         moodEvent = moodEventsRecent.get(moodEventsRecent.size() - 1);
-<<<<<<< HEAD
-
-=======
->>>>>>> f2579b8980fc3813247a094d7b96a52c49eb43c9
-
 
 
                         viewmood.setText(moodEvent.getMood().toString());
