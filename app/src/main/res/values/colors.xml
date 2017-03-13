@@ -6,4 +6,18 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="gray">#888888</color>
+
+    <string-array name="moodsspinnerarray">
+        <item>None</item>
+        <item>Sad</item>
+        <item>Happy</item>
+        <item>Shame</item>
+        <item>Fear</item>
+        <item>Anger</item>
+        <item>Surprised</item>
+        <item>Disgust</item>
+        <item>Confused</item>
+    </string-array>
 </resources>
+
+

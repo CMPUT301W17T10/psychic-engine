@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 
@@ -29,6 +31,8 @@ public class HistoryTabFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         moodEventsHistory = ParticipantSingleton.getInstance().getSelfParticipant().getMoodList();
+
+
     }
 
     @Override
@@ -37,6 +41,15 @@ public class HistoryTabFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.history, container, false);
 
         moodEventsListView = (ListView) rootView.findViewById(R.id.moodEventsList);
+
+        Spinner spinner = (Spinner) rootView.findViewById(R.id.moodsspinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.moodsspinnerarray, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
 
         return rootView;
     }
