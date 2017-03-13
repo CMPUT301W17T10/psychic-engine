@@ -1,6 +1,8 @@
-/*
+
 package com.psychic_engine.cmput301w17t10.feelsappman;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.test.ActivityInstrumentationTestCase2;
 
 import junit.framework.TestCase;
@@ -10,105 +12,99 @@ import java.util.Date;
 /**
  * Created by jyuen1 on 2/27/17.
  */
-/*
-import com.psychic_engine.cmput301w17t10.feelsappman.Mood;
-import com.psychic_engine.cmput301w17t10.feelsappman.MoodEvent;
-import com.psychic_engine.cmput301w17t10.feelsappman.MoodState;
 
 public class MoodEventTest extends TestCase {
 
-    public void testGetId() {
-        MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.HAPPY));
-        moodEvent.setId(1);
-        assertEquals(moodEvent.getId(), 1);
-    }
-    
-    public void testSetId() {
-        MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.HAPPY));
-        moodEvent.setId(22);
-        assertEquals(moodEvent.getId(), 22);
-        moodEvent.setId(33);
-        assertEquals(moodEvent.getId(), 33);
-    }
-
-    public void testGetMood() {
+    public void test1_GetMood() {
         Mood mood = new Mood(MoodState.HAPPY);
-        MoodEvent moodEvent = new MoodEvent(mood);
-        assertEquals(moodEvent.getMood(), mood);
+        MoodEvent moodEvent = new MoodEvent(mood, SocialSetting.ALONE, null, null, null);
+        assertEquals(mood,moodEvent.getMood());
     }
     
-    public void testSetMood() {
-        Mood moodHappy = new Mood(MoodState.HAPPY);
-        MoodEvent moodEvent = new MoodEvent(moodHappy);
-        assertEquals(moodEvent.getMood(), moodHappy);
-        Mood moodSad = new Mood(MoodState.SAD);
-        moodEvent.setMood(moodSad);
-        assertEquals(moodEvent.getMood(), moodSad);
+    public void test2_SetMood() {
+        Mood mood = new Mood(MoodState.HAPPY);
+        Mood replaceMood = new Mood(MoodState.ANGER);
+        MoodEvent moodEvent = new MoodEvent(mood, SocialSetting.ALONE, null, null, null);
+        moodEvent.setMood(replaceMood);
+        assertEquals(moodEvent.getMood(), replaceMood);
     }
     
-    public void testGetTrigger() {
-        MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.HAPPY));
+    public void test3_GetTrigger() {
+        Mood mood = new Mood(MoodState.ANGER);
+        MoodEvent moodEvent = new MoodEvent(mood, SocialSetting.ALONE, "301", null, null);
+        assertEquals(moodEvent.getTrigger(), "301");
+    }
+    
+    public void test4_SetTrigger() {
+        String newTrigger = "sad dayz";
+        Mood mood = new Mood(MoodState.ANGER);
+        MoodEvent moodEvent = new MoodEvent(mood, SocialSetting.ALONE, "301", null, null);
         try {
-            moodEvent.setTrigger("So happy");
-            assertEquals(moodEvent.getTrigger(), "So happy");
-        } catch (triggerTooLongException e){
-            e.printStackTrace();
-        }
-    }
-    
-    public void testSetTrigger() {
-        MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.HAPPY));
-        try {
-            moodEvent.setTrigger("So happy");
-            assertEquals(moodEvent.getTrigger(), "So happy");
-            moodEvent.setTrigger("angry");
-            assertEquals(moodEvent.getTrigger(), "angry");
+            moodEvent.setTrigger(newTrigger);
         } catch (triggerTooLongException e) {
             e.printStackTrace();
         }
+        assertEquals(moodEvent.getTrigger(), newTrigger);
+
     }
 
-    public void testGetDate() {
-        MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.HAPPY));
-        //Date date = new Date(2017, 02, 28);
-        //moodEvent.setDate(date);
-        //assertTrue(equals(moodEvent.getDate(), date));
+    public void test5_GetDate() {
+        Mood mood = new Mood(MoodState.ANGER);
+        Date date = new Date();
+        MoodEvent moodEvent = new MoodEvent(mood, SocialSetting.ALONE, "301", null, null);
+        assertEquals(moodEvent.getDate(), date);
     }
         
-    public void testSetDate() {
-        MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.HAPPY));
-        //Date date = new Date(2017, 02, 28);
-        //moodEvent.setDate(date);
-        //assertTrue(equals(moodEvent.getDate(), date));
+    public void test6_SetDate() {
+        Mood mood = new Mood(MoodState.ANGER);
+        Date newDate = new Date(1000);
+        MoodEvent moodEvent = new MoodEvent(mood, SocialSetting.ALONE, "301", null, null);
+        moodEvent.setDate(newDate);
+        assertEquals(moodEvent.getDate(), newDate);
     }
 
-    public void testGetPicture() {
-        MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.HAPPY));
-        //Photograph picture = new Picture( ... )
-        //moodEvent.setPicture(picture);
-        //assertEquals(equals(moodEvent.getPicture(), picture));
-    }
-        
-    public void testSetPicture() {
-        MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.HAPPY));
-        //Photograph picture = new Picture( ... )
-        //moodEvent.setPicture(picture);
-        //assertEquals(equals(moodEvent.getPicture(), picture));
-    }
+    public void test7_GetPicture() {
+        int width = 50;
+        int length = 50;
 
-    public void testGetLocation() {
-        MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.HAPPY));
-        //Location location = new Location( ... )
-        //moodEvent.setLocation(location);
-        //assertEquals(equals(moodEvent.getLocation(), location));
+        /*
+        Taken from http://stackoverflow.com/questions/5663671/creating-an-empty-bitmap-and-drawing-though-canvas-in-android
+        Obtained at March 13, 2017 by bigstones
+         */
+        Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
+        Bitmap bmp = Bitmap.createBitmap(width, length, conf); // this creates a MUTABLE bitmap
+        Photograph photo = new Photograph(bmp);
+        Mood mood = new Mood(MoodState.ANGER);
+        MoodEvent moodEvent = new MoodEvent(mood, SocialSetting.ALONE, "301", photo, null);
+        assertEquals(moodEvent.getPicture(), photo);
+
     }
         
-    public void testSetLocation() {
-        MoodEvent moodEvent = new MoodEvent(new Mood(MoodState.HAPPY));
-        //Location location = new Location( ... )
-        //moodEvent.setLocation(location);
-        //assertEquals(equals(moodEvent.getLocation(), location));
+    public void test8_SetPicture() {
+        int width = 15;
+        int length = 15;
+        int newWidth = 10;
+        int newLength = 10;
+        Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
+        Bitmap bmp = Bitmap.createBitmap(width, length, conf); // this creates a MUTABLE bitmap
+        Photograph photo = new Photograph(bmp);
+
+        Bitmap newBMP = Bitmap.createBitmap(newWidth, newLength, conf); // this creates a MUTABLE bitmap
+        Photograph newPhoto = new Photograph(newBMP);
+
+        Mood mood = new Mood(MoodState.ANGER);
+        MoodEvent moodEvent = new MoodEvent(mood, SocialSetting.ALONE, "301", photo, null);
+        moodEvent.setPicture(newPhoto);
+        assertEquals(moodEvent.getPicture(), newPhoto);
     }
+    /*
+    TODO: Location to be done upon implementation
+    public void test9_GetLocation() {
+    }
+        
+    public void test10_SetLocation() {
+    }
+    */
 }
-*/
+
 
