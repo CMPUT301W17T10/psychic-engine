@@ -41,8 +41,6 @@ import java.io.OutputStreamWriter;
 
 public class RecentTabFragment extends Fragment {
 
-
-
     private static final String FILENAME = "file.sav";
     public ArrayList<MoodEvent> moodEventsRecent;
     private MoodEvent moodEvent;
@@ -53,6 +51,7 @@ public class RecentTabFragment extends Fragment {
     private ImageView imageView;
     private Button delete;
     private Button edit;
+<<<<<<< HEAD
 
 
 
@@ -61,6 +60,8 @@ public class RecentTabFragment extends Fragment {
 
 
 
+=======
+>>>>>>> f2579b8980fc3813247a094d7b96a52c49eb43c9
 
 
     @Override
@@ -73,16 +74,10 @@ public class RecentTabFragment extends Fragment {
         viewmood = (TextView) rootView.findViewById(R.id.mood);
         location = (TextView) rootView.findViewById(R.id.location);
         imageView = (ImageView) rootView.findViewById(R.id.picture);
-
-
-
         moodEventsRecent = ParticipantSingleton.getInstance().getSelfParticipant().getMoodList();
-
-
         if (moodEventsRecent.size()>0){
             moodEvent = moodEventsRecent.get(moodEventsRecent.size()-1);
 
-            //imageView = (ImageView) rootView.findViewById(R.id.picture);
 
             viewmood.setText(moodEvent.getMood().toString());
             date.setText(moodEvent.getDate().toString());
@@ -97,36 +92,29 @@ public class RecentTabFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-
-
-
-
                 if (moodEventsRecent.size()>0) {
                     moodEventsRecent.remove(moodEventsRecent.size() - 1);
                     ParticipantSingleton.getInstance().getSelfParticipant().setMoodList(moodEventsRecent);
-
-
-
-
-
-
 
                     if (moodEventsRecent.size() > 0) {
 
 
                         moodEvent = moodEventsRecent.get(moodEventsRecent.size() - 1);
+<<<<<<< HEAD
+
+=======
+>>>>>>> f2579b8980fc3813247a094d7b96a52c49eb43c9
 
 
-
-                        //imageView = (ImageView) rootView.findViewById(R.id.picture);
 
                         viewmood.setText(moodEvent.getMood().toString());
                         date.setText(moodEvent.getDate().toString());
-                        if (moodEvent.getPicture() != null)
+                        if (moodEvent.getPicture() != null) {
                             imageView.setImageBitmap(moodEvent.getPicture().getImage());
-                        //location.setText(moodEvent.getLocation().toString());
+                            //location.setText(moodEvent.getLocation().toString());
 
-                        saveInFile();
+                            saveInFile();
+                        }
                     } else {
                         viewmood.setText("");
                         date.setText("There's No Mood Event Yet! Why Don't you add one!");
@@ -140,8 +128,6 @@ public class RecentTabFragment extends Fragment {
                         date.setText("There's No Mood Event Yet! Why Don't you add one!");
                         location.setText("");
                         saveInFile();
-
-
 
                 }
             }
@@ -168,23 +154,7 @@ public class RecentTabFragment extends Fragment {
             }
         });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         return rootView;
-
-
     }
 
     private void loadFromFile() {
