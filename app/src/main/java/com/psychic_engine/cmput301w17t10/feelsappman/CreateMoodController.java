@@ -48,9 +48,7 @@ public class CreateMoodController {
         
         // TODO: objects are passed by value so have to reset the participant (this is super awkward)
         MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
-        Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
-        participant.addMoodEvent(moodEvent);
-        ParticipantSingleton.getInstance().setSelfParticipant(participant);
+        ParticipantSingleton.getInstance().getSelfParticipant().addMoodEvent(moodEvent);
         return true;
     }
 
