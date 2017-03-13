@@ -8,9 +8,11 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,6 +40,9 @@ import java.io.OutputStreamWriter;
 
 
 public class RecentTabFragment extends Fragment {
+
+
+
     private static final String FILENAME = "file.sav";
     public ArrayList<MoodEvent> moodEventsRecent;
     private MoodEvent moodEvent;
@@ -48,6 +53,10 @@ public class RecentTabFragment extends Fragment {
     private ImageView imageView;
     private Button delete;
     private Button edit;
+    HistoryTabFragment historyTabFragment;
+
+
+
 
 
 
@@ -63,6 +72,7 @@ public class RecentTabFragment extends Fragment {
         date = (TextView) rootView.findViewById(R.id.date);
         viewmood = (TextView) rootView.findViewById(R.id.mood);
         location = (TextView) rootView.findViewById(R.id.location);
+
 
 
         moodEventsRecent = ParticipantSingleton.getInstance().getSelfParticipant().getMoodList();
@@ -90,10 +100,20 @@ public class RecentTabFragment extends Fragment {
 
                 if (moodEventsRecent.size()>0) {
                     moodEventsRecent.remove(moodEventsRecent.size() - 1);
+                    ParticipantSingleton.getInstance().getSelfParticipant().setMoodList(moodEventsRecent);
+
+
+
+
+
+
+
                     if (moodEventsRecent.size() > 0) {
 
 
                         moodEvent = moodEventsRecent.get(moodEventsRecent.size() - 1);
+                        ParticipantSingleton.getInstance().getSelfParticipant().setMoodList(moodEventsRecent);
+
 
                         //imageView = (ImageView) rootView.findViewById(R.id.picture);
 

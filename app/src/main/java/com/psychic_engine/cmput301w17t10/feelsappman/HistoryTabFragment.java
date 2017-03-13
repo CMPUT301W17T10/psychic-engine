@@ -5,8 +5,11 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
  * Comments by Alex on 2017-03-12.
  */
 
+import android.content.Intent;
+import android.icu.text.MessagePattern;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +23,9 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.Collections;
 
+
+
+
 /**
  * Fragment class to display the tab in the profile's UI. This tab will display a list of past
  * mood events that their followers made.
@@ -32,20 +38,15 @@ public class HistoryTabFragment extends Fragment {
     private CheckBox filterWeek;
     public ArrayList<MoodEvent> moodEventsHistory;
     public ArrayAdapter<MoodEvent> adapter;
+    private Button refresh;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-        moodEventsHistory = ParticipantSingleton.getInstance().getSelfParticipant().getMoodList();
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.history, container, false);
+        moodEventsHistory = ParticipantSingleton.getInstance().getSelfParticipant().getMoodList();
+        refresh = (Button) rootView.findViewById(R.id.refresh);
 
         moodEventsListView = (ListView) rootView.findViewById(R.id.moodEventsList);
 
@@ -66,6 +67,15 @@ public class HistoryTabFragment extends Fragment {
 
                 }
 
+            }
+        });
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getActivity().getIntent();
+                getActivity().finish();
+                startActivity(intent);
             }
         });
 
@@ -101,6 +111,7 @@ public class HistoryTabFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
         adapter = new ArrayAdapter<MoodEvent>(getActivity(), R.layout.item_history, moodEventsHistory);
         moodEventsListView.setAdapter(adapter);
     }
@@ -108,6 +119,8 @@ public class HistoryTabFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+
         adapter.notifyDataSetChanged();
     }
 }

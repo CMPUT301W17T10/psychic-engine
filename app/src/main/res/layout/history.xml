@@ -97,12 +97,16 @@
         <ListView
             android:id="@+id/moodEventsList"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:scrollbars="vertical">
-        </ListView>
+            android:layout_height="260dp"
+            android:scrollbars="vertical"></ListView>
 
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Refresh" />
 
 </LinearLayout>
