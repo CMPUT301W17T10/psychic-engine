@@ -12,19 +12,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-
-
-
+import java.util.Date;
 
 /**
  * Fragment class to display the tab in the profile's UI. This tab will display a list of past
@@ -40,15 +41,17 @@ public class HistoryTabFragment extends Fragment {
     public ArrayAdapter<MoodEvent> adapter;
     private Button refresh;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.history, container, false);
+
+        //this needs to be a deep copy. not working
         moodEventsHistory = ParticipantSingleton.getInstance().getSelfParticipant().getMoodList();
-        refresh = (Button) rootView.findViewById(R.id.refresh);
 
         moodEventsListView = (ListView) rootView.findViewById(R.id.moodEventsList);
+
+        refresh = (Button) rootView.findViewById(R.id.refresh);
 
         filterDate = (CheckBox)rootView.findViewById(R.id.recentfilter);
         filterWeek = (CheckBox)rootView.findViewById(R.id.weekfilter);
@@ -64,39 +67,58 @@ public class HistoryTabFragment extends Fragment {
                     }
                 }
                 else {
-
                 }
-
             }
         });
 
+        //refresh the page
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //for setting time backwards for testing
+                /*for (MoodEvent mood : moodEventsHistory) {
+                    Date myDate = new Date();
+                    Date newDate = new Date(myDate.getTime() - 904800000L);
+                    mood.setDate(newDate);
+                }*/
+
                 Intent intent = getActivity().getIntent();
                 getActivity().finish();
                 startActivity(intent);
+
             }
         });
 
-        /*filterDate.setOnClickListener(new View.OnClickListener() {
+        filterWeek.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(filterWeek.isChecked()) {
                     if (moodEventsHistory.size() > 0) {
-                        Collections.sort(moodEventsHistory, new CustomComparator());
+                        Date myDate = new Date();
+                        Date newDate = new Date(myDate.getTime() - 604800000L);
 
+                        for (MoodEvent mood : moodEventsHistory) {
+                            if (mood.getDate().before(newDate)) {
+                                moodEventsHistory.remove(mood);
+                                Log.d("check: ", "date is NOT in range");
+                            }
+                            else {
+                                Log.d("check: ", "date is in range");
+                            }
+                            adapter.notifyDataSetChanged();
+                        }
                     }
                 }
                 else {
-
+                    Log.d("check: ", "unselected");
                 }
-
             }
-        });*/
+        });
 
+        /*
         //add
-        Spinner spinner = (Spinner) rootView.findViewById(R.id.moodsspinner);
+        final Spinner spinner = (Spinner) rootView.findViewById(R.id.moodsspinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.moodsspinnerarray, android.R.layout.simple_spinner_item);
@@ -104,6 +126,30 @@ public class HistoryTabFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String spinnerText = spinner.getSelectedItem().toString();
+                int userSelectedIndex = position;
+                Log.d("check: ", "working");
+
+                for (MoodEvent mood : moodEventsHistory) {
+                    if (mood.getMood().toString() != spinnerText) {
+                        moodEventsHistory.remove(mood);
+                        Log.d("check: ", "date is NOT in range");
+                    }
+                    else {
+                        Log.d("check: ", "date is in range");
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });*/
 
         return rootView;
     }
@@ -114,13 +160,5 @@ public class HistoryTabFragment extends Fragment {
 
         adapter = new ArrayAdapter<MoodEvent>(getActivity(), R.layout.item_history, moodEventsHistory);
         moodEventsListView.setAdapter(adapter);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-
-        adapter.notifyDataSetChanged();
     }
 }
