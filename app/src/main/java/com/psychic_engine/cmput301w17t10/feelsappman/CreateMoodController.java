@@ -66,5 +66,4 @@ public class CreateMoodController {
 
         return true;
     }
-
 }
