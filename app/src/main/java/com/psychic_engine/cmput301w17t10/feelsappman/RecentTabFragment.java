@@ -41,8 +41,6 @@ import java.io.OutputStreamWriter;
 
 public class RecentTabFragment extends Fragment {
 
-
-
     private static final String FILENAME = "file.sav";
     public ArrayList<MoodEvent> moodEventsRecent;
     private MoodEvent moodEvent;
@@ -55,14 +53,6 @@ public class RecentTabFragment extends Fragment {
     private Button edit;
     HistoryTabFragment historyTabFragment;
 
-
-
-
-
-
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
@@ -73,12 +63,7 @@ public class RecentTabFragment extends Fragment {
         viewmood = (TextView) rootView.findViewById(R.id.mood);
         location = (TextView) rootView.findViewById(R.id.location);
         imageView = (ImageView) rootView.findViewById(R.id.picture);
-
-
-
         moodEventsRecent = ParticipantSingleton.getInstance().getSelfParticipant().getMoodList();
-
-
         if (moodEventsRecent.size()>0){
             moodEvent = moodEventsRecent.get(moodEventsRecent.size()-1);
 
@@ -95,27 +80,15 @@ public class RecentTabFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-
-
-
-
                 if (moodEventsRecent.size()>0) {
                     moodEventsRecent.remove(moodEventsRecent.size() - 1);
                     ParticipantSingleton.getInstance().getSelfParticipant().setMoodList(moodEventsRecent);
-
-
-
-
-
-
 
                     if (moodEventsRecent.size() > 0) {
 
 
                         moodEvent = moodEventsRecent.get(moodEventsRecent.size() - 1);
                         ParticipantSingleton.getInstance().getSelfParticipant().setMoodList(moodEventsRecent);
-
-
                         //imageView = (ImageView) rootView.findViewById(R.id.picture);
 
                         viewmood.setText(moodEvent.getMood().toString());
@@ -136,8 +109,6 @@ public class RecentTabFragment extends Fragment {
                         date.setText("There's No Mood Event Yet! Why Don't you add one!");
                         location.setText("");
                         saveInFile();
-
-
 
                 }
             }
@@ -164,23 +135,7 @@ public class RecentTabFragment extends Fragment {
             }
         });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         return rootView;
-
-
     }
 
     private void loadFromFile() {

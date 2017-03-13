@@ -60,14 +60,13 @@ public class ParticipantSingleton {
          try {
              for (Participant storedParticipant : instance.getParticipantList()) {
                  if (participant.getLogin().equals(storedParticipant.getLogin())) {
-                     Log.i("setSelfParticipantPrint", storedParticipant.getLogin());
-                     selfParticipant = participant;
+                     this.selfParticipant = participant;
                      return true;
                  }
              }
              return false;
          } catch (Throwable e) {
-             selfParticipant = null;
+             this.selfParticipant = null;
              return false;
          }
     }
