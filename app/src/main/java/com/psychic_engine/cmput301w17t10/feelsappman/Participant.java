@@ -95,6 +95,11 @@ public class Participant extends ModelFrame{
         Log.d("Added", this.moodEvents.get(0).getMood().getMood().toString());
     }
 
+    public void setMoodList(ArrayList<MoodEvent> moodList)
+    {
+        this.moodEvents = moodList;
+    }
+
     public void addFollowers(Participant participant){
         followers.add(participant);
     }
