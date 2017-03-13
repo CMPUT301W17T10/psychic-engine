@@ -51,7 +51,7 @@ public class RecentTabFragment extends Fragment {
     private ImageView imageView;
     private Button delete;
     private Button edit;
-    HistoryTabFragment historyTabFragment;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,7 +67,6 @@ public class RecentTabFragment extends Fragment {
         if (moodEventsRecent.size()>0){
             moodEvent = moodEventsRecent.get(moodEventsRecent.size()-1);
 
-            //imageView = (ImageView) rootView.findViewById(R.id.picture);
 
             viewmood.setText(moodEvent.getMood().toString());
             date.setText(moodEvent.getDate().toString());
@@ -90,16 +89,17 @@ public class RecentTabFragment extends Fragment {
 
 
                         moodEvent = moodEventsRecent.get(moodEventsRecent.size() - 1);
-                        ParticipantSingleton.getInstance().getSelfParticipant().setMoodList(moodEventsRecent);
-                        //imageView = (ImageView) rootView.findViewById(R.id.picture);
+
+
 
                         viewmood.setText(moodEvent.getMood().toString());
                         date.setText(moodEvent.getDate().toString());
-                        if (moodEvent.getPicture() != null)
+                        if (moodEvent.getPicture() != null) {
                             imageView.setImageBitmap(moodEvent.getPicture().getImage());
-                        //location.setText(moodEvent.getLocation().toString());
+                            //location.setText(moodEvent.getLocation().toString());
 
-                        saveInFile();
+                            saveInFile();
+                        }
                     } else {
                         viewmood.setText("");
                         date.setText("There's No Mood Event Yet! Why Don't you add one!");
