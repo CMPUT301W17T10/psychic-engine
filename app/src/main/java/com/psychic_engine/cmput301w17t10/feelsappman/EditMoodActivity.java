@@ -70,8 +70,11 @@ public class EditMoodActivity extends AppCompatActivity{
         // set up mood and social setting spinners (drop downs)
         setUpSpinners();
 
-        // set up events that happen when user clicks in trigger and outside trigger
+        // set up events that happen when user clicks in trigger
         setUpTrigger();
+
+        // set up events that happen when user clicks in location
+        setUpLocation();
 
         // set up the currently displayed picture
         setUpImageView();
@@ -142,7 +145,7 @@ public class EditMoodActivity extends AppCompatActivity{
             // pass
         }
 
-        Location location = null; // TODO get location from location box - need to know how to use GOOGLE MAPS first
+        String location = locationEditText.getText().toString(); // TODO change location type in part 5
 
         if (photoSizeUnder) {
             EditMoodController.updateMoodEventList(moodEventPosition, moodString, socialSettingString, trigger, photo, location);
@@ -170,7 +173,7 @@ public class EditMoodActivity extends AppCompatActivity{
         }
 
         List<String> socialSettingCategories = new ArrayList<String>();
-        socialSettingCategories.add("");    // default option
+        socialSettingCategories.add("Select a social setting");    // default option
         SocialSetting[] socialSettings = SocialSetting.values();
         for (SocialSetting socialSetting : socialSettings) {
             socialSettingCategories.add(socialSetting.toString());
@@ -213,6 +216,14 @@ public class EditMoodActivity extends AppCompatActivity{
         triggerEditText.setText(moodEvent.getTrigger());
     }
 
+    /**
+     * Initializes location edit text widget
+     */
+    void setUpLocation() {
+        // display the previous location
+        locationEditText = (EditText) findViewById(R.id.location1);
+        locationEditText.setText(moodEvent.getLocation());
+    }
     /**
      * Initializes photo image view widget
      */

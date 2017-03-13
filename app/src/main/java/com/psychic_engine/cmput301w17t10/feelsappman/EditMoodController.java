@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class EditMoodController {
 
-    static void updateMoodEventList(int moodEventPosition, String moodString, String socialSettingString, String trigger, Photograph photo, Location location) {
+    static void updateMoodEventList(int moodEventPosition, String moodString, String socialSettingString, String trigger, Photograph photo, String location) {
 
         Mood mood = null;
         SocialSetting socialSetting = null;

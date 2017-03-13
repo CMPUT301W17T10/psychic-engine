@@ -53,7 +53,7 @@ public class RecentTabFragment extends Fragment {
     private ImageView imageView;
     private Button delete;
     private Button edit;
-    HistoryTabFragment historyTabFragment;
+
 
 
 
@@ -115,7 +115,7 @@ public class RecentTabFragment extends Fragment {
 
 
                         moodEvent = moodEventsRecent.get(moodEventsRecent.size() - 1);
-                        ParticipantSingleton.getInstance().getSelfParticipant().setMoodList(moodEventsRecent);
+
 
 
                         //imageView = (ImageView) rootView.findViewById(R.id.picture);
@@ -131,6 +131,7 @@ public class RecentTabFragment extends Fragment {
                         viewmood.setText("");
                         date.setText("There's No Mood Event Yet! Why Don't you add one!");
                         location.setText("");
+                        imageView.setImageBitmap(null);
                         saveInFile();
                     }
                 }

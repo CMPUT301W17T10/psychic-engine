@@ -58,7 +58,7 @@ public class ViewMoodEventActivity extends AppCompatActivity{
         dateTime.setText(moodEvent.getDate().toString());
         if (moodEvent.getPicture() != null)
             photo.setImageBitmap(moodEvent.getPicture().getImage());
-        //location
+        location.setText(moodEvent.getLocation());
         icon.setText(moodEvent.getMood().getColor().toString());
         trigger.setText(moodEvent.getTrigger());
         if (moodEvent.getSocialSetting() != null)

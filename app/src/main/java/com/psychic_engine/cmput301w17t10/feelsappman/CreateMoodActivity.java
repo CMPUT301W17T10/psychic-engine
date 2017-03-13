@@ -78,6 +78,9 @@ public class CreateMoodActivity extends AppCompatActivity {
         // set up events that happen when user clicks browse button
         setUpBrowse();
 
+        // set up events that happen when user clicks location button
+        setUpLocation();
+
         // set up events that happen when user clicks create button
         setUpCreate();
 
@@ -150,7 +153,7 @@ public class CreateMoodActivity extends AppCompatActivity {
             // pass
         }
 
-        Location location = null; // TODO get location from location box - need to know how to use GOOGLE MAPS first
+        String location = locationEditText.getText().toString(); // TODO tentative, location type will change in part 5
 
         if (photoSizeUnder) {
             Log.d("Enter", "Entering CreateMoodController ...");
@@ -189,14 +192,14 @@ public class CreateMoodActivity extends AppCompatActivity {
         socialSettingSpinner = (Spinner) findViewById(R.id.socialSettingDropDown);
         // Spinner drop down elements
         List<String> moodCategories = new ArrayList<String>();
-        moodCategories.add("");     // default option
+        moodCategories.add("Select a mood");     // default option
         MoodState[] moodStates = MoodState.values();
         for (MoodState moodState : moodStates) {
             moodCategories.add(moodState.toString());
         }
 
         List<String> socialSettingCategories = new ArrayList<String>();
-        socialSettingCategories.add("");    // default option
+        socialSettingCategories.add("Select a social setting");    // default option
         SocialSetting[] socialSettings = SocialSetting.values();
         for (SocialSetting socialSetting : socialSettings) {
             socialSettingCategories.add(socialSetting.toString());
@@ -226,6 +229,14 @@ public class CreateMoodActivity extends AppCompatActivity {
 
         triggerEditText = (EditText) findViewById(R.id.trigger);
         triggerEditText.setText("");
+    }
+
+    /**
+     * Setup method for the location EditText (TEMPORARY) category
+     */
+    void setUpLocation() {
+        locationEditText = (EditText) findViewById(R.id.location);
+        locationEditText.setText("");
     }
 
     /**

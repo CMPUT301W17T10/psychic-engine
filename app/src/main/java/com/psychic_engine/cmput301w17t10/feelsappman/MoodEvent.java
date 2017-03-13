@@ -22,8 +22,9 @@ public class MoodEvent extends ModelFrame{
     private SocialSetting socialSetting;
     private Date date;
     private Photograph picture;
-    private Location location;
+    private String location;
 
+    // string array and split
     /**
      * Depending on the input that the system receives, each field aside from the mood and the date,
      * can be set to null (not inputted). Features such as picture and location require prior
@@ -35,7 +36,7 @@ public class MoodEvent extends ModelFrame{
      * @param picture
      * @param location
      */
-    public MoodEvent(Mood mood, SocialSetting socialSetting, String trigger, Photograph picture, Location location) {
+    public MoodEvent(Mood mood, SocialSetting socialSetting, String trigger, Photograph picture, String location) {
         this.mood = mood;
         this.socialSetting = socialSetting;
         this.date = new Date();
@@ -84,7 +85,7 @@ public class MoodEvent extends ModelFrame{
      * @see Location
      * @return location as a Location class
      */
-    public Location getLocation() { return this.location; }
+    public String getLocation() { return this.location; }
 
     /**
      * Setter method to set the mood to the parameter. Used when editing the mood event
@@ -134,7 +135,7 @@ public class MoodEvent extends ModelFrame{
      * along with the current mood event.
      * @param location
      */
-    public void setLocation(Location location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
