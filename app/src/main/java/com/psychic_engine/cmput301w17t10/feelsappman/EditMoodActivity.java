@@ -33,6 +33,9 @@ import static java.lang.Boolean.TRUE;
  * Created by jyuen1 on 3/7/2017.
  */
 
+/**
+ * This class allows the user to edit mood events.
+ */
 public class EditMoodActivity extends AppCompatActivity{
     private static final String defaultTriggerMsg = "20 chars or 3 words.";
     private static int RESULT_LOAD_IMAGE = 1;
@@ -49,6 +52,10 @@ public class EditMoodActivity extends AppCompatActivity{
     private MoodEvent moodEvent;    // the moodEvent to be edited
     private int moodEventPosition;
 
+    /**
+     * Called on activity creation.  Initializes widgets and class variables.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +90,12 @@ public class EditMoodActivity extends AppCompatActivity{
         setUpCancel();
     }
 
+    /**
+     * Method to detect whether or not reading from the phone storage is enabled or disabled. Upon
+     * earlier versions of the SDK, permission is automatically granted
+     * @return true if SDK < 23 or participant permits
+     * @return false if participant denies and SDK > 23
+     */
     //Taken from http://stackoverflow.com/questions/33162152/storage-permission-error-in-marshmallow/41221852#41221852
     //March 10, 2017
     public boolean isStoragePermissionGranted() {
@@ -108,6 +121,10 @@ public class EditMoodActivity extends AppCompatActivity{
         }
     }
 
+    /**
+     * Retrieves information set in widgets and calls EditMoodController to register changes.
+     * @see EditMoodController
+     */
     void saveMoodEvent() {
         // get the mood from the mood spinner
         String moodString = moodSpinner.getSelectedItem().toString();
@@ -145,6 +162,9 @@ public class EditMoodActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
+    /**
+     * Initializes and adds categories to spinners.
+     */
     void setUpSpinners() {
         // Spinner elements
         moodSpinner = (Spinner) findViewById(R.id.moodDropDown1);
@@ -188,18 +208,28 @@ public class EditMoodActivity extends AppCompatActivity{
 
     }
 
+    /**
+     * Initializes trigger edit text widget
+     */
     void setUpTrigger() {
         // display the previous trigger
         triggerEditText = (EditText) findViewById(R.id.trigger1);
         triggerEditText.setText(moodEvent.getTrigger());
     }
 
+    /**
+     * Initializes photo image view widget
+     */
     void setUpImageView() {
         // display the previous image
         photoImageView = (ImageView) findViewById(R.id.imageView1);
         photoImageView.setImageBitmap(moodEvent.getPicture().getImage());   // TODO requires photograph class to return the correct image
     }
 
+    /**
+     * Initializes the browse button.  Launches an activity that allows the user to select 
+     * an image from their photo album to set as the mood event image.
+     */
     void setUpBrowse() {
         // Taken from http://stackoverflow.com/questions/21072034/image-browse-button-in-android-activity
         // on 03-06-17
@@ -216,7 +246,12 @@ public class EditMoodActivity extends AppCompatActivity{
         });
     }
 
-    // displayed the browsed image
+    /**
+     * Display the browsed image in photoImageView
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -237,6 +272,9 @@ public class EditMoodActivity extends AppCompatActivity{
         }
     }
 
+    /**
+     * Initializes the save button.   
+     */
     void setUpSave() {
         createButton = (Button) findViewById(R.id.save);
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -247,6 +285,9 @@ public class EditMoodActivity extends AppCompatActivity{
         });
     }
 
+    /**
+     * Initializes the cancel button.  
+     */
     void setUpCancel() {
         cancelButton = (Button) findViewById(R.id.cancel1);
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -257,3 +298,4 @@ public class EditMoodActivity extends AppCompatActivity{
         });
     }
 }
+
