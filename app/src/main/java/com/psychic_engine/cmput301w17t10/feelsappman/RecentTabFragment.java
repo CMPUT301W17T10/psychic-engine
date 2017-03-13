@@ -86,8 +86,8 @@ public class RecentTabFragment extends Fragment {
             public void onClick(View v) {
 
                 if (moodEventsRecent.size()>0) {
-                    moodEventsRecent.remove(mostRecentIndex);
-                    ParticipantSingleton.getInstance().getSelfParticipant().setMoodList(moodEventsRecent);
+                    ParticipantSingleton.getInstance().getSelfParticipant().removeMoodEvent(mostRecentIndex);
+
 
                     if (moodEventsRecent.size() > 0) {
 

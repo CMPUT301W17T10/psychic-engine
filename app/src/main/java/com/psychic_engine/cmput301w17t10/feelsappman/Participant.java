@@ -3,6 +3,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by adong on 2/27/17.
@@ -125,6 +126,25 @@ public class Participant extends ModelFrame{
         moodEvents.add(moodEvent);
         Log.d("Success", "Successful addition of mood event");
         Log.d("Added", this.moodEvents.get(0).getMood().getMood().toString());
+    }
+
+    public void removeMoodEvent(int index) {
+        moodEvents.remove(index);
+
+        if (moodEvents.size() == 0) {
+            mostRecentMoodEvent = null;
+            mostRecentMoodEventIndex = -1;
+        }
+        else {
+            Date earliestDate = moodEvents.get(0).getDate();
+            for (int i = 0; i < moodEvents.size(); i++) {
+                if (moodEvents.get(i).getDate().after(earliestDate)) {
+                    mostRecentMoodEventIndex = i;
+                    mostRecentMoodEvent = moodEvents.get(mostRecentMoodEventIndex);
+                }
+
+            }
+        }
     }
 
     public void setMoodList(ArrayList<MoodEvent> moodList)
