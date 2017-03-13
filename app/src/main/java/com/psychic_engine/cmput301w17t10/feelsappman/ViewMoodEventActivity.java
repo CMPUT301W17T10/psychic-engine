@@ -24,6 +24,10 @@ public class ViewMoodEventActivity extends AppCompatActivity{
     private TextView trigger;
     private ImageView socialIcon;
 
+    ParticipantSingleton instance;
+    int moodEventPosition;
+    MoodEvent moodEvent;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,15 +41,20 @@ public class ViewMoodEventActivity extends AppCompatActivity{
         trigger = (TextView) findViewById(R.id.me_trigger);
         socialIcon = (ImageView) findViewById(R.id.me_social);
 
-        Participant self = ParticipantSingleton.getInstance().getSelfParticipant();
-        MoodEvent moodEvent = null;
 
+        moodEventPosition = getIntent().getExtras().getInt("moodEventPosition");
+        instance = ParticipantSingleton.getInstance();
+        Participant self = instance.getSelfParticipant();
+
+        MoodEvent moodEvent = null;
         try {
             ArrayList<MoodEvent> moodEventList = self.getMoodList();
-            moodEvent = moodEventList.get(moodEventList.size() - 1);    // TODO: get appropriate mood later, right now gets the most recent image
+            moodEvent = moodEventList.get(moodEventPosition);    // TODO: get appropriate mood later, right now gets the most recent image
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
         }
+
+        //TODO - tomorrow ill make it display color in text (just to satisfy reqs for now), icon in text, and other stuff
         name.setText(self.getLogin());
         dateTime.setText(moodEvent.getDate().toString());
         //photo

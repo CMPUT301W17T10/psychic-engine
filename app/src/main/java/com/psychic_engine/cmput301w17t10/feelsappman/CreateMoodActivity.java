@@ -126,7 +126,7 @@ public class CreateMoodActivity extends AppCompatActivity {
     public void createMoodEvent() {
         Log.d("Clicked on Create", "MoodEvent should be added here");
         String moodString = moodSpinner.getSelectedItem().toString();
-        String socialSettingString = moodSpinner.getSelectedItem().toString();
+        String socialSettingString = socialSettingSpinner.getSelectedItem().toString();
         String trigger = triggerEditText.getText().toString();
         Photograph photo = null;
         boolean photoSizeUnder = TRUE;

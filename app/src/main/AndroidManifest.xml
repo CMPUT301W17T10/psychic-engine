@@ -28,6 +28,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name=".EditMoodActivity"
+            android:label="EditMoodActivity">
+            <intent-filter>
+                <action android:name="com.psychic_engine.cmput301w17t10.feelsappman.EditMoodActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".ViewMoodEventActivity"

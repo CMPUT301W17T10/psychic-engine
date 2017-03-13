@@ -72,6 +72,7 @@ public class RecentTabFragment extends Fragment {
         date = (TextView) rootView.findViewById(R.id.date);
         viewmood = (TextView) rootView.findViewById(R.id.mood);
         location = (TextView) rootView.findViewById(R.id.location);
+        imageView = (ImageView) rootView.findViewById(R.id.picture);
 
 
 
@@ -146,7 +147,19 @@ public class RecentTabFragment extends Fragment {
             public void onClick(View v) {
                 if (moodEventsRecent.size() > 0) {
                     Intent intent = new Intent(getActivity(), EditMoodActivity.class);
-                    getActivity().startActivity(intent);
+                    intent.putExtra("moodEventPosition", moodEventsRecent.size() - 1);
+                    startActivity(intent);
+                }
+            }
+        });
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (moodEventsRecent.size() > 0) {
+                    Intent intent = new Intent(getActivity(), ViewMoodEventActivity.class);
+                    intent.putExtra("moodEventPosition", moodEventsRecent.size() - 1);
+                    startActivity(intent);
                 }
             }
         });
