@@ -92,4 +92,8 @@ public class Mood {
                 icon = null;
         }
     }
+    @Override
+    public String toString(){
+        return mood.toString();
+    }
 }
