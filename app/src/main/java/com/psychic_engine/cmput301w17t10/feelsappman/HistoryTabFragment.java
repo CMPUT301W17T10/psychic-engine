@@ -37,7 +37,9 @@ public class HistoryTabFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        moodEventsHistory = ParticipantSingleton.getInstance().getSelfParticipant().getMoodList();
+        for (MoodEvent mood : ParticipantSingleton.getInstance().getSelfParticipant().getMoodList()) {
+            moodEventsHistory.add(mood);
+        }
     }
 
     @Override
