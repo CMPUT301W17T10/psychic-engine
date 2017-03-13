@@ -28,10 +28,23 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ViewMoodEventActivity"
+            android:label="ViewMoodEventActivity">
+            <intent-filter>
+                <action android:name="com.psychic_engine.cmput301w17t10.feelsappman.ViewMoodEventActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".SelfNewsFeedActvity"
             android:label="@string/title_activity_self_news_feed_actvity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme">
+
+        </activity>
     </application>
 
 </manifest>
