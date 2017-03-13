@@ -339,4 +339,16 @@ public class CreateMoodActivity extends AppCompatActivity {
             throw new RuntimeException();
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveInFile();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        saveInFile();
+    }
 }

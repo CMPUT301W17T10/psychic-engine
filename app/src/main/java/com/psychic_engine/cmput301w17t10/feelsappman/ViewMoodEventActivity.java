@@ -3,6 +3,9 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +26,7 @@ public class ViewMoodEventActivity extends AppCompatActivity{
     private TextView icon;          // Temporary for now to meet requirements until we have icons for mood
     private TextView trigger;
     private TextView socialIcon;    // Temporary for now to meet requirements until we have icon for social setting
+    private ImageButton returnButton;
 
     ParticipantSingleton instance;
     int moodEventPosition;
@@ -40,7 +44,7 @@ public class ViewMoodEventActivity extends AppCompatActivity{
         icon = (TextView) findViewById(R.id.me_icon);
         trigger = (TextView) findViewById(R.id.me_trigger);
         socialIcon = (TextView) findViewById(R.id.me_social);
-
+        returnButton = (ImageButton) findViewById(R.id.me_return);
 
         moodEventPosition = getIntent().getExtras().getInt("moodEventPosition");
         instance = ParticipantSingleton.getInstance();
@@ -63,6 +67,13 @@ public class ViewMoodEventActivity extends AppCompatActivity{
         trigger.setText(moodEvent.getTrigger());
         if (moodEvent.getSocialSetting() != null)
             socialIcon.setText(moodEvent.getSocialSetting().toString());
+
+        returnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 }
