@@ -10,20 +10,42 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 /**
  * Fragment class to display the tab in the profile's UI. This tab will display a list of past
  * mood events that their followers made.
  */
 public class HistoryTabFragment extends Fragment {
+    private ListView moodEventsListView;
+    public ArrayList<MoodEvent> moodEventsHistory;
+    public ArrayAdapter<MoodEvent> adapter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        moodEventsHistory = ParticipantSingleton.getInstance().getSelfParticipant().getMoodList();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.history, container, false);
 
+        moodEventsListView = (ListView) rootView.findViewById(R.id.moodEventsList);
+
         return rootView;
+    }
 
-
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        adapter = new ArrayAdapter<MoodEvent>(getActivity(), R.layout.item_history, moodEventsHistory);
+        moodEventsListView.setAdapter(adapter);
     }
 }

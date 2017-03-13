@@ -137,4 +137,8 @@ public class MoodEvent extends ModelFrame{
     public void setLocation(Location location) {
         this.location = location;
     }
+
+    public String toString(){
+        return "I feel "+ this.mood.getMood().toString() + " | " + this.getDate() ;
+    }
 }
