@@ -99,9 +99,6 @@ public class Participant extends ModelFrame{
     {
         this.moodEvents = moodList;
     }
-
-    public void addFollowers(Participant participant){
-        followers.add(participant);
-    }
 }
+
 
