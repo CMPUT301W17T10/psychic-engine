@@ -20,9 +20,9 @@ public class ViewMoodEventActivity extends AppCompatActivity{
     private TextView dateTime;
     private ImageView photo;
     private TextView location;
-    private ImageView icon;
+    private TextView icon;          // Temporary for now to meet requirements until we have icons for mood
     private TextView trigger;
-    private ImageView socialIcon;
+    private TextView socialIcon;    // Temporary for now to meet requirements until we have icon for social setting
 
     ParticipantSingleton instance;
     int moodEventPosition;
@@ -37,9 +37,9 @@ public class ViewMoodEventActivity extends AppCompatActivity{
         dateTime = (TextView) findViewById(R.id.me_date_time);
         photo = (ImageView) findViewById(R.id.me_photo);
         location = (TextView) findViewById(R.id.me_location);
-        icon = (ImageView) findViewById(R.id.me_icon);
+        icon = (TextView) findViewById(R.id.me_icon);
         trigger = (TextView) findViewById(R.id.me_trigger);
-        socialIcon = (ImageView) findViewById(R.id.me_social);
+        socialIcon = (TextView) findViewById(R.id.me_social);
 
 
         moodEventPosition = getIntent().getExtras().getInt("moodEventPosition");
@@ -54,14 +54,15 @@ public class ViewMoodEventActivity extends AppCompatActivity{
             e.printStackTrace();
         }
 
-        //TODO - tomorrow ill make it display color in text (just to satisfy reqs for now), icon in text, and other stuff
         name.setText(self.getLogin());
         dateTime.setText(moodEvent.getDate().toString());
-        //photo
+        if (moodEvent.getPicture() != null)
+            photo.setImageBitmap(moodEvent.getPicture().getImage());
         //location
-        //icon
+        icon.setText(moodEvent.getMood().getColor().toString());
         trigger.setText(moodEvent.getTrigger());
-        //socialIcon
+        if (moodEvent.getSocialSetting() != null)
+            socialIcon.setText(moodEvent.getSocialSetting().toString());
 
     }
 }

@@ -48,11 +48,10 @@
         android:text="Browse" />
 
     <ImageView
+        android:id="@+id/imageView1"
         android:layout_width="match_parent"
         android:layout_height="215dp"
-        app:srcCompat="@mipmap/ic_launcher"
-        android:id="@+id/imageView1"
-        android:layout_weight="1.03" />
+        android:layout_weight="0.03" />
 
     <LinearLayout
         android:orientation="horizontal"

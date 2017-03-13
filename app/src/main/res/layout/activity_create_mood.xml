@@ -24,19 +24,19 @@
 
     <EditText
         android:id="@+id/trigger"
-        android:hint="@string/trigger_cause"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="@string/trigger_cause"
         android:inputType="textPersonName"
-        android:maxLength="20"
-        android:text="@string/comment_constraint" />
+        android:maxLength="20" />
 
     <EditText
         android:id="@+id/location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="@string/add_location"
         android:inputType="textPersonName" />
 
     <Button
@@ -46,11 +46,10 @@
         android:text="@string/browse" />
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="215dp"
-        app:srcCompat="@mipmap/ic_launcher"
         android:id="@+id/imageView"
-        android:layout_weight="1.11" />
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:layout_weight="0.11" />
 
     <LinearLayout
         android:orientation="horizontal"
