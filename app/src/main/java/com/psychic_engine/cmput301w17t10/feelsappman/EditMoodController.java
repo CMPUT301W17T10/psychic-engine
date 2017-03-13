@@ -10,7 +10,6 @@ import java.util.Date;
 
 public class EditMoodController {
 
-    /*
     static void updateMoodEventList(int moodEventPosition, String moodString, String socialSettingString, String trigger, Photograph photo, Location location) {
 
         Mood mood = null;
@@ -39,11 +38,9 @@ public class EditMoodController {
         if (trigger.equals(defaultTriggerMsg))
             trigger = "";
 
-        MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, location, photo);
+        MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
 
         // replace old moodEvent with new one
-        participant.setMood(moodEventPosition, moodEvent);
+        ParticipantSingleton.getInstance().getSelfParticipant().setMoodEvent(moodEventPosition, moodEvent);
     }
-    */
-
 }
