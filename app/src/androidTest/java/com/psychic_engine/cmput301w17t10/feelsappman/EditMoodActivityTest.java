@@ -14,6 +14,11 @@ import com.robotium.solo.Solo;
  * Created by jyuen1 on 3/12/2017.
  */
 
+/**
+ * EditMoodActivity Test tests the EditMoodActivity UI to ensure proper functionality. The first
+ * few methods will be for initialization of the UI test.
+ * @see EditMoodActivity
+ */
 public class EditMoodActivityTest  extends ActivityInstrumentationTestCase2<EditMoodActivity> {
     private Solo solo;
 
@@ -29,6 +34,11 @@ public class EditMoodActivityTest  extends ActivityInstrumentationTestCase2<Edit
         Activity activity = getActivity();
     }
 
+    /**
+     * Mood spinner will determine which mood has been selected. The test ensures that the mood
+     * is selected correctly corresponding to what the spinner has selected.
+     * @see Mood
+     */
     public void testMoodSpinner() {
         solo.assertCurrentActivity("Wrong Activity", EditMoodActivity.class);
         // Select mood spinner item Sad
@@ -57,6 +67,11 @@ public class EditMoodActivityTest  extends ActivityInstrumentationTestCase2<Edit
         assertTrue("mood spinner item Confused is not selected", solo.isSpinnerTextSelected(0, "Confused"));
     }
 
+    /**
+     * Test the social setting selector in the spinner. The test will ensure that the values will
+     * correspond to whatever the spinner has selected.
+     * @see SocialSetting
+     */
     public void testSocialSettingSpinner() {
         solo.assertCurrentActivity("Wrong Activity", EditMoodActivity.class);
         // Select social setting spinner item Alone
@@ -73,6 +88,11 @@ public class EditMoodActivityTest  extends ActivityInstrumentationTestCase2<Edit
         assertTrue("social setting spinner item Crowd is not selected", solo.isSpinnerTextSelected(1, "Crowd"));
     }
 
+    /**
+     * Tests the trigger EditText to ensure that the input that the participant has entered
+     * is correct. This test does not test whether or not the text is short enough (3 words and <
+     * 20 characters long)
+     */
     public void testTriggerEditText() {
         solo.assertCurrentActivity("Wrong Activity", EditMoodActivity.class);
         // Enter trigger as Happy :)
@@ -80,11 +100,19 @@ public class EditMoodActivityTest  extends ActivityInstrumentationTestCase2<Edit
         assertTrue("trigger edit text does not say \"Happy :)\"", solo.searchText("Happy :)"));
     }
 
+    /*
     public void testLocationEditText() {
         solo.assertCurrentActivity("Wrong Activity", EditMoodActivity.class);
         // TODO part 5
     }
+    */
 
+    /**
+     * Tests the image view that displays the picture that the participant decides to upload. The
+     * bitmap is compared to the other bitmap through the bytes.
+     * @see Bitmap
+     * @see Photograph
+     */
     public void testPhotoImageView() {
         solo.assertCurrentActivity("Wrong Activity", EditMoodActivity.class);
         ImageView photo = (ImageView) solo.getView(R.id.imageView);
@@ -94,12 +122,20 @@ public class EditMoodActivityTest  extends ActivityInstrumentationTestCase2<Edit
         assertEquals(actualBitmap, photoBitmap);
     }
 
+    /**
+     * Tests the browse button to ensure that the the participant is not stuck in the activity.
+     */
     public void testBrowseButton() {
         solo.assertCurrentActivity("Wrong Activity", EditMoodActivity.class);
         solo.clickOnText("Browse");
         // TODO part 5
     }
 
+    /**
+     * Tests the save button to ensure that the mood events that the participant has requested
+     * to edit has been saved. The participant will also be sent back to their profile upon
+     * completion.
+     */
     public void testSaveButton() {
         solo.assertCurrentActivity("Wrong Activity", EditMoodActivity.class);
         // Enter test mood as Sad

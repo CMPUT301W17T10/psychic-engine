@@ -16,7 +16,7 @@ public class EditMoodController {
     static boolean updateMoodEventList(int moodEventPosition, String moodString, String socialSettingString, String trigger, Photograph photo, Location location) {
         try {
             Mood mood = null;
-            SocialSetting socialSetting = null;
+            SocialSetting socialSetting;
 
             switch (moodString) {        // TODO refactor this - inside MoodState enum class?
                 case "Sad":
