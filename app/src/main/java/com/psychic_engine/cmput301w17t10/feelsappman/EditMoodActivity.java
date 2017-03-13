@@ -47,6 +47,7 @@ public class EditMoodActivity extends AppCompatActivity{
     private Button cancelButton;
 
     private MoodEvent moodEvent;    // the moodEvent to be edited
+    private int moodEventPosition;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,13 +57,17 @@ public class EditMoodActivity extends AppCompatActivity{
         isStoragePermissionGranted();
 
         // TODO initialize moodEvent - how are we passing it in via intent, global, index in array? or something else?
-        /*
-        Bundle extras = getIntent().getExtras();
-        Participant participant = ParticipantSingleton.getCurrentUser();
-        // singleton has an array of all participants?  login sets current user?
-        int moodEventPosition = extras.getInt(CallingActivity.EXTRA_MOODEVENT_POSITION);
+
+        /* Sender side:
+            Intent myIntent = new Intent(CallingActivity.class, EditMoodActivity.class);
+            myIntent.putExtra("moodEventPosition", intValue);
+            startActivity(myIntent);
+            */
+        Intent intent = getIntent();
+        moodEventPosition = intent.getIntExtra("moodEventPosition", 0);
+        Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         moodEvent = participant.getMoodList().get(moodEventPosition);
-        */
+
 
         // set up mood and social setting spinners (drop downs)
         setUpSpinners();
@@ -84,17 +89,13 @@ public class EditMoodActivity extends AppCompatActivity{
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
-
                 return true;
             } else {
-
-
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                 return false;
             }
         }
         else { //permission is automatically granted on sdk<23 upon installation
-
             return true;
         }
     }
@@ -103,7 +104,6 @@ public class EditMoodActivity extends AppCompatActivity{
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
-
             //resume tasks needing this permission
         }
     }
@@ -134,14 +134,15 @@ public class EditMoodActivity extends AppCompatActivity{
 
         Location location = null; // TODO get location from location box - need to know how to use GOOGLE MAPS first
 
-        //TODO call this explicitly like this or through notifyObservers()
-        //if (photoSizeUnder) {
-        //EditMoodController.updateMoodEventList(moodEventPosition, moodString, socialSettingString, trigger, photo, location);
-        //} else {
-                //Toast.makeText(CreateMoodActivity.this,
-                //"Photo size is too large! (Max 65536 bytes)",
-                //Toast.LENGTH_LONG).show();
-            //}
+        if (photoSizeUnder) {
+            EditMoodController.updateMoodEventList(moodEventPosition, moodString, socialSettingString, trigger, photo, location);
+        } else {
+            Toast.makeText(EditMoodActivity.this,
+                    "Photo size is too large! (Max 65536 bytes)",
+                    Toast.LENGTH_LONG).show();
+        }
+        Intent intent = new Intent(EditMoodActivity.this, SelfNewsFeedActvity.class);
+        startActivity(intent);
     }
 
     void setUpSpinners() {
@@ -191,30 +192,6 @@ public class EditMoodActivity extends AppCompatActivity{
         // display the previous trigger
         triggerEditText = (EditText) findViewById(R.id.trigger1);
         triggerEditText.setText(moodEvent.getTrigger());
-        if (triggerEditText.getText().equals(""))
-            triggerEditText.setText(defaultTriggerMsg);
-
-        // TODO not working perfectly - requires 2 clicks after initial click
-        // clear trigger edit text when user clicks in it if default msg is displayed
-        triggerEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (triggerEditText.getText().toString().equals(defaultTriggerMsg))
-                    triggerEditText.setText("");
-            }
-        });
-
-        // reset trigger edit text message if the user clicks away from it and it is blank
-        triggerEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    // user has clicked out of triggerEditText
-                    if (triggerEditText.getText().toString().equals(""))
-                        triggerEditText.setText(defaultTriggerMsg);
-                }
-            }
-        });
     }
 
     void setUpImageView() {
