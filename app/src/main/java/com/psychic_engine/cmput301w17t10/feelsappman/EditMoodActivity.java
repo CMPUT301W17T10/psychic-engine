@@ -63,27 +63,22 @@ public class EditMoodActivity extends AppCompatActivity{
 
         isStoragePermissionGranted();
 
-        // TODO initialize moodEvent - how are we passing it in via intent, global, index in array? or something else?
-
-        /* Sender side:
-            Intent myIntent = new Intent(CallingActivity.class, EditMoodActivity.class);
-            myIntent.putExtra("moodEventPosition", intValue);
-            startActivity(myIntent);
-            */
-        Intent intent = getIntent();
-        moodEventPosition = intent.getIntExtra("moodEventPosition", 0);
+        moodEventPosition = getIntent().getExtras().getInt("moodEventPosition");
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         moodEvent = participant.getMoodList().get(moodEventPosition);
 
-
         // set up mood and social setting spinners (drop downs)
         setUpSpinners();
+
         // set up events that happen when user clicks in trigger and outside trigger
         setUpTrigger();
+
         // set up the currently displayed picture
         setUpImageView();
+
         // set up events that happen when user clicks browse button
         setUpBrowse();
+
         // set up events that happen when user clicks create button
         setUpSave();
         // set up events that happen when user clicks cancel button
@@ -199,13 +194,16 @@ public class EditMoodActivity extends AppCompatActivity{
         moodSpinner.setAdapter(moodSpinnerAdapter);
         socialSettingSpinner.setAdapter(socialSettingSpinnerAdapter);
 
+
         // set the previous mood
         moodSpinner.setSelection(moodSpinnerAdapter.getPosition(
-                moodEvent.getMood().toString()));
+                moodEvent.getMood().getMood().toString()));
         // set the previous social setting
-        socialSettingSpinner.setSelection(socialSettingSpinnerAdapter.getPosition(
-                moodEvent.getSocialSetting().toString()));
-
+        if (moodEvent.getSocialSetting() != null)
+            socialSettingSpinner.setSelection(socialSettingSpinnerAdapter.getPosition(
+                    moodEvent.getSocialSetting().toString()));
+        else
+            socialSettingSpinner.setSelection(0);
     }
 
     /**
@@ -222,8 +220,11 @@ public class EditMoodActivity extends AppCompatActivity{
      */
     void setUpImageView() {
         // display the previous image
+        //TODO - help
+        /*
         photoImageView = (ImageView) findViewById(R.id.imageView1);
         photoImageView.setImageBitmap(moodEvent.getPicture().getImage());   // TODO requires photograph class to return the correct image
+        */
     }
 
     /**
@@ -233,7 +234,7 @@ public class EditMoodActivity extends AppCompatActivity{
     void setUpBrowse() {
         // Taken from http://stackoverflow.com/questions/21072034/image-browse-button-in-android-activity
         // on 03-06-17
-        browseButton = (Button) findViewById(R.id.browse);
+        browseButton = (Button) findViewById(R.id.browse1);
         browseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
