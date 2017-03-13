@@ -1,6 +1,7 @@
 package com.psychic_engine.cmput301w17t10.feelsappman;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -24,6 +25,13 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +45,7 @@ import static java.lang.Boolean.TRUE;
  * This class allows the user to edit mood events.
  */
 public class EditMoodActivity extends AppCompatActivity{
-    private static final String defaultTriggerMsg = "20 chars or 3 words.";
+    private static final String FILENAME = "file.sav";
     private static int RESULT_LOAD_IMAGE = 1;
 
     private Spinner moodSpinner;
@@ -70,8 +78,11 @@ public class EditMoodActivity extends AppCompatActivity{
         // set up mood and social setting spinners (drop downs)
         setUpSpinners();
 
-        // set up events that happen when user clicks in trigger and outside trigger
+        // set up events that happen when user clicks in trigger
         setUpTrigger();
+
+        // set up events that happen when user clicks in location
+        setUpLocation();
 
         // set up the currently displayed picture
         setUpImageView();
@@ -142,7 +153,7 @@ public class EditMoodActivity extends AppCompatActivity{
             // pass
         }
 
-        Location location = null; // TODO get location from location box - need to know how to use GOOGLE MAPS first
+        String location = locationEditText.getText().toString(); // TODO change location type in part 5
 
         if (photoSizeUnder) {
             EditMoodController.updateMoodEventList(moodEventPosition, moodString, socialSettingString, trigger, photo, location);
@@ -151,6 +162,8 @@ public class EditMoodActivity extends AppCompatActivity{
                     "Photo size is too large! (Max 65536 bytes)",
                     Toast.LENGTH_LONG).show();
         }
+
+        saveInFile();
         Intent intent = new Intent(EditMoodActivity.this, SelfNewsFeedActvity.class);
         startActivity(intent);
     }
@@ -170,7 +183,7 @@ public class EditMoodActivity extends AppCompatActivity{
         }
 
         List<String> socialSettingCategories = new ArrayList<String>();
-        socialSettingCategories.add("");    // default option
+        socialSettingCategories.add("Select a social setting");    // default option
         SocialSetting[] socialSettings = SocialSetting.values();
         for (SocialSetting socialSetting : socialSettings) {
             socialSettingCategories.add(socialSetting.toString());
@@ -213,6 +226,14 @@ public class EditMoodActivity extends AppCompatActivity{
         triggerEditText.setText(moodEvent.getTrigger());
     }
 
+    /**
+     * Initializes location edit text widget
+     */
+    void setUpLocation() {
+        // display the previous location
+        locationEditText = (EditText) findViewById(R.id.location1);
+        locationEditText.setText(moodEvent.getLocation());
+    }
     /**
      * Initializes photo image view widget
      */
@@ -293,6 +314,33 @@ public class EditMoodActivity extends AppCompatActivity{
                 finish();
             }
         });
+    }
+
+    private void saveInFile() {
+        try {
+            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+            Gson gson = new Gson();
+            gson.toJson(ParticipantSingleton.getInstance(), out);
+            out.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException();
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveInFile();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        saveInFile();
     }
 }
 

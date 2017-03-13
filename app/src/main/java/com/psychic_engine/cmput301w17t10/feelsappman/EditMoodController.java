@@ -13,6 +13,7 @@ public class EditMoodController {
     public EditMoodController() {
 
     }
+
     static boolean updateMoodEventList(int moodEventPosition, String moodString, String socialSettingString, String trigger, Photograph photo, Location location) {
         try {
             Mood mood = null;
@@ -62,16 +63,14 @@ public class EditMoodController {
                     socialSetting = null;
             }
 
-            String defaultTriggerMsg = "20 chars or 3 words.";
-            if (trigger.equals(defaultTriggerMsg))
-                trigger = "";
 
-            MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
+            MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, null);
 
             // replace old moodEvent with new one
             ParticipantSingleton.getInstance().getSelfParticipant().setMoodEvent(moodEventPosition, moodEvent);
             return true;
-        } catch (Throwable e) {
+        }
+        catch (Throwable e) {
             return false;
         }
     }
