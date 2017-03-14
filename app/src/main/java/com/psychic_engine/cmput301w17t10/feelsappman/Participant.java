@@ -3,6 +3,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by adong on 2/27/17.
@@ -15,11 +16,13 @@ import java.util.ArrayList;
  * @see LoginActivity
  */
 public class Participant extends ModelFrame{
-    public String login;
-    public ArrayList<MoodEvent> moodEvents;
-    public ArrayList<Participant> followers;
-    public ArrayList<Participant> following;
-    public ArrayList<Participant> pendingRequests;
+    private String login;
+    private MoodEvent mostRecentMoodEvent;
+    private int mostRecentMoodEventIndex;
+    private ArrayList<MoodEvent> moodEvents;
+    private ArrayList<Participant> followers;
+    private ArrayList<Participant> following;
+    private ArrayList<Participant> pendingRequests;
 
 
     /**
@@ -76,23 +79,72 @@ public class Participant extends ModelFrame{
     }
 
     /**
+     * Getter for mostRecentMoodEvent
+     * @return
+     */
+    public MoodEvent getMostRecentMoodEvent() { return this.mostRecentMoodEvent; }
+
+    /**
+     * Getter for mostRecentMoodEventIndex
+     * @return
+     */
+    public int getMostRecentMoodEventIndex() { return this.mostRecentMoodEventIndex; }
+
+    /**
      * replace old mood event with new mood event at index. Currently out of service until further
      * notice. Most likely be issued into the controller class instead if any.
      * @param index
      * @param moodEvent
      */
-
     public void setMoodEvent(int index, MoodEvent moodEvent) {
-        moodEvents.set(index, moodEvent);
+        if (mostRecentMoodEvent == null) {
+            mostRecentMoodEvent = moodEvent;
+            mostRecentMoodEventIndex = index;
+        }
+        else if (moodEvent.getDate().after(mostRecentMoodEvent.getDate())) {
+            mostRecentMoodEvent = moodEvent;
+            mostRecentMoodEventIndex = index;
+        }
+
+        moodEvents.set(index, this.mostRecentMoodEvent);
     }
 
     public void addMoodEvent(MoodEvent moodEvent) {
         if (moodEvents.isEmpty()) {
             Log.d("Empty", "MoodEvents is empty for "+ login);
         }
+
+        if (mostRecentMoodEvent == null) {
+            mostRecentMoodEvent = moodEvent;
+            mostRecentMoodEventIndex = moodEvents.size();
+        }
+        else if (moodEvent.getDate().after(mostRecentMoodEvent.getDate())) {
+            mostRecentMoodEvent = moodEvent;
+            mostRecentMoodEventIndex = moodEvents.size();
+        }
+
         moodEvents.add(moodEvent);
         Log.d("Success", "Successful addition of mood event");
         Log.d("Added", this.moodEvents.get(0).getMood().getMood().toString());
+    }
+
+    public void removeMoodEvent(int index) {
+        moodEvents.remove(index);
+
+        if (moodEvents.size() == 0) {
+            mostRecentMoodEvent = null;
+            mostRecentMoodEventIndex = -1;
+        }
+        else {
+            Date earliestDate = moodEvents.get(0).getDate();
+            for (int i = 0; i < moodEvents.size(); i++) {
+                if (moodEvents.get(i).getDate().after(earliestDate)) {
+                    mostRecentMoodEventIndex = i;
+                    mostRecentMoodEvent = moodEvents.get(mostRecentMoodEventIndex);
+                }
+
+            }
+        }
     }
 
     public void setMoodList(ArrayList<MoodEvent> moodList)

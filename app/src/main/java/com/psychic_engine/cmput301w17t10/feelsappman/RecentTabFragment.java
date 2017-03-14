@@ -51,6 +51,7 @@ public class RecentTabFragment extends Fragment {
     private ImageView imageView;
     private Button delete;
     private Button edit;
+    private int mostRecentIndex;
 
 
     @Override
@@ -64,8 +65,11 @@ public class RecentTabFragment extends Fragment {
         location = (TextView) rootView.findViewById(R.id.location);
         imageView = (ImageView) rootView.findViewById(R.id.picture);
         moodEventsRecent = ParticipantSingleton.getInstance().getSelfParticipant().getMoodList();
+        mostRecentIndex = ParticipantSingleton.getInstance().getSelfParticipant().getMostRecentMoodEventIndex();
+
+
         if (moodEventsRecent.size()>0){
-            moodEvent = moodEventsRecent.get(moodEventsRecent.size()-1);
+            moodEvent = moodEventsRecent.get(mostRecentIndex);
 
 
             viewmood.setText(moodEvent.getMood().toString());
@@ -74,7 +78,7 @@ public class RecentTabFragment extends Fragment {
                 imageView.setImageBitmap(moodEvent.getPicture().getImage());
             }
             //location.setText(moodEvent.getLocation().toString());
-            saveInFile();
+            //saveInFile();
 
         }
         delete.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +88,7 @@ public class RecentTabFragment extends Fragment {
                 if (moodEventsRecent.size()>0) {
                     moodEventsRecent.remove(moodEventsRecent.size() - 1);
                     ParticipantSingleton.getInstance().getSelfParticipant().setMoodList(moodEventsRecent);
+
 
                     if (moodEventsRecent.size() > 0) {
 
@@ -121,7 +126,7 @@ public class RecentTabFragment extends Fragment {
             public void onClick(View v) {
                 if (moodEventsRecent.size() > 0) {
                     Intent intent = new Intent(getActivity(), EditMoodActivity.class);
-                    intent.putExtra("moodEventPosition", moodEventsRecent.size() - 1);
+                    intent.putExtra("moodEventPosition", mostRecentIndex);
                     startActivity(intent);
                 }
             }
@@ -132,7 +137,7 @@ public class RecentTabFragment extends Fragment {
             public void onClick(View v) {
                 if (moodEventsRecent.size() > 0) {
                     Intent intent = new Intent(getActivity(), ViewMoodEventActivity.class);
-                    intent.putExtra("moodEventPosition", moodEventsRecent.size() - 1);
+                    intent.putExtra("moodEventPosition", mostRecentIndex);
                     startActivity(intent);
                 }
             }
