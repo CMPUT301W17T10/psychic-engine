@@ -1,5 +1,6 @@
 package com.psychic_engine.cmput301w17t10.feelsappman;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -50,8 +51,25 @@ public class SelfNewsFeedActvity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-    }
 
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mSectionsPagerAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,10 +94,12 @@ public class SelfNewsFeedActvity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
-
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -100,9 +120,6 @@ public class SelfNewsFeedActvity extends AppCompatActivity {
                 default:
                     return null;
             }
-
-
-
         }
 
         @Override

@@ -78,7 +78,7 @@ public class RecentTabFragment extends Fragment {
                 imageView.setImageBitmap(moodEvent.getPicture().getImage());
             }
             //location.setText(moodEvent.getLocation().toString());
-            saveInFile();
+            //saveInFile();
 
         }
         delete.setOnClickListener(new View.OnClickListener() {
@@ -86,13 +86,14 @@ public class RecentTabFragment extends Fragment {
             public void onClick(View v) {
 
                 if (moodEventsRecent.size()>0) {
-                    ParticipantSingleton.getInstance().getSelfParticipant().removeMoodEvent(mostRecentIndex);
+                    moodEventsRecent.remove(moodEventsRecent.size() - 1);
+                    ParticipantSingleton.getInstance().getSelfParticipant().setMoodList(moodEventsRecent);
 
 
                     if (moodEventsRecent.size() > 0) {
 
 
-                        moodEvent = moodEventsRecent.get(mostRecentIndex);
+                        moodEvent = moodEventsRecent.get(moodEventsRecent.size() - 1);
 
 
                         viewmood.setText(moodEvent.getMood().toString());
