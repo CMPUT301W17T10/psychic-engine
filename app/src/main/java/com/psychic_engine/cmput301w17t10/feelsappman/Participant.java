@@ -36,9 +36,22 @@ public class Participant extends ModelFrame{
         this.pendingRequests = new ArrayList<Participant>();
     }
 
+    //TODO: Potentially unique ID ???
     /**
-     *
+     * Getter method to get the ID that was set by the elastic search server
      */
+    public String getID() {
+        return this.id;
+    }
+
+    //TODO: Potentially unique ID ???
+    /**
+     * Setter method to set the ID that was given in the elastic search server
+     */
+    public void setID(String id) {
+        this.id = id;
+    }
+
     /**
      * Getter method to get the login
      * @return
