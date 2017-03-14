@@ -14,7 +14,7 @@ public class EditMoodController {
 
     }
 
-    static boolean updateMoodEventList(int moodEventPosition, String moodString, String socialSettingString, String trigger, Photograph photo, Location location) {
+    static boolean updateMoodEventList(int moodEventPosition, String moodString, String socialSettingString, String trigger, Photograph photo, String location) {
         try {
             Mood mood = null;
             SocialSetting socialSetting;
@@ -63,8 +63,7 @@ public class EditMoodController {
                     socialSetting = null;
             }
 
-
-            MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, null);
+            MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
 
             // replace old moodEvent with new one
             ParticipantSingleton.getInstance().getSelfParticipant().setMoodEvent(moodEventPosition, moodEvent);
