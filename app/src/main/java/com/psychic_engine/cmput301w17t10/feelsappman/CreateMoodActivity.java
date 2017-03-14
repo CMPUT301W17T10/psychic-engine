@@ -189,7 +189,6 @@ public class CreateMoodActivity extends AppCompatActivity {
         for (MoodEvent mood : ParticipantSingleton.getInstance().getSelfParticipant().getMoodList()) {
             Log.i("MoodEvent Added", "This mood event is of: " + mood.getMood().getMood());
         }
-
     }
 
     /**
