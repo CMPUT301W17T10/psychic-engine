@@ -79,7 +79,7 @@ public class ElasticSearchParticipantController {
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
-                    Participant selfParticipant = result.
+                    Participant selfParticipant;
                 }
 
             } catch (Exception e) {

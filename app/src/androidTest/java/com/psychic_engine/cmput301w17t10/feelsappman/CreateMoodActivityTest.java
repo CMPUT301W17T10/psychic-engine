@@ -18,6 +18,11 @@ import java.util.ArrayList;
  * Created by jyuen1 on 3/8/17.
  */
 
+/**
+ * CreateMoodActivity Test tests the CreateMoodActivity UI to ensure proper functionality. The first
+ * few methods will be for initialization of the UI test
+ * @see CreateMoodActivity
+ */
 public class CreateMoodActivityTest extends ActivityInstrumentationTestCase2<CreateMoodActivity> {
 
     private Solo solo;
@@ -34,6 +39,13 @@ public class CreateMoodActivityTest extends ActivityInstrumentationTestCase2<Cre
         Activity activity = getActivity();
     }
 
+    /**
+     * Multiple options are selected to make sure that the spinner returns the correct values. Cycles
+     * through each option. As more emotions are added, more assertions will be required to test
+     * those emotions. The activity should also be CreateMoodActivity
+     * @see CreateMoodActivity
+     * @see Mood
+     **/
     public void testMoodSpinner() {
         solo.assertCurrentActivity("Wrong Activity", CreateMoodActivity.class);
         // Select mood spinner item Sad
@@ -62,6 +74,13 @@ public class CreateMoodActivityTest extends ActivityInstrumentationTestCase2<Cre
         assertTrue("mood spinner item Confused is not selected", solo.isSpinnerTextSelected(0, "Confused"));
     }
 
+    /**
+     * Similar to the mood spinner, the test cycles through the available options to ensure proper
+     * functionality (ie. obtaining the right social setting). We will first need to ensure we are
+     * at the proper activity (CreateMoodActivity)
+     * @see CreateMoodActivity
+     * @see SocialSetting
+     */
     public void testSocialSettingSpinner() {
         solo.assertCurrentActivity("Wrong Activity", CreateMoodActivity.class);
         // Select social setting spinner item Alone
@@ -78,18 +97,26 @@ public class CreateMoodActivityTest extends ActivityInstrumentationTestCase2<Cre
         assertTrue("social setting spinner item Crowd is not selected", solo.isSpinnerTextSelected(1, "Crowd"));
     }
 
+    /**
+     * Test the functionality of the trigger EditText to ensure proper input.
+     */
     public void testTriggerEditText() {
         solo.assertCurrentActivity("Wrong Activity", CreateMoodActivity.class);
         // Enter trigger as Happy :)
         solo.enterText((EditText) solo.getView(R.id.trigger), "Happy :)");
         assertTrue("trigger edit text does not say \"Happy :)\"", solo.searchText("Happy :)"));
     }
-
+    /*
     public void testLocationEditText() {
         solo.assertCurrentActivity("Wrong Activity", CreateMoodActivity.class);
         // TODO part 5
     }
+    */
 
+    /**
+     * Test to determine that the bitmap view is displaying the correct image that the participant
+     * intends on viewing, after getting the image from the file.
+     */
     public void testPhotoImageView() {
         solo.assertCurrentActivity("Wrong Activity", CreateMoodActivity.class);
         ImageView photo = (ImageView) solo.getView(R.id.imageView);
@@ -99,12 +126,21 @@ public class CreateMoodActivityTest extends ActivityInstrumentationTestCase2<Cre
         assertEquals(actualBitmap, photoBitmap);
     }
 
+    /**
+     * Tests the Browse button to ensure that the participant is sent to the file explorer
+     */
     public void testBrowseButton() {
         solo.assertCurrentActivity("Wrong Activity", CreateMoodActivity.class);
         solo.clickOnText("Browse");
         // TODO part 5
     }
 
+    /**
+     * Test the create button to ensure that when you click on the button, you will be sent to
+     * the SelfNewsFeedActivity upon completion. If it does not create the mood properly, then either
+     * the app will crash or you will not be sent to the SelfNewsFeedActivity.
+     * @see SelfNewsFeedActvity
+     */
     public void testCreateButton() {
         solo.assertCurrentActivity("Wrong Activity", CreateMoodActivity.class);
         // Enter test mood as Sad
@@ -119,6 +155,7 @@ public class CreateMoodActivityTest extends ActivityInstrumentationTestCase2<Cre
         solo.assertCurrentActivity("Wrong Activity", SelfNewsFeedActvity.class);
     }
 
+    // close activity
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();
     }
