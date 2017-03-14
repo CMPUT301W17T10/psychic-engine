@@ -3,7 +3,7 @@
     package="com.psychic_engine.cmput301w17t10.feelsappman">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

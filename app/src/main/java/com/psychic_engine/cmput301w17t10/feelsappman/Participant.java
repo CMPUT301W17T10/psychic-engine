@@ -15,12 +15,12 @@ import java.util.ArrayList;
  * @see LoginActivity
  */
 public class Participant extends ModelFrame{
-    public String login;
-    public ArrayList<MoodEvent> moodEvents;
-    public ArrayList<Participant> followers;
-    public ArrayList<Participant> following;
-    public ArrayList<Participant> pendingRequests;
-
+    private String login;
+    private ArrayList<MoodEvent> moodEvents;
+    private ArrayList<Participant> followers;
+    private ArrayList<Participant> following;
+    private ArrayList<Participant> pendingRequests;
+    private String id;
 
     /**
      * Everytime the participant is initialized, we will save their name into the system. Since
@@ -36,6 +36,9 @@ public class Participant extends ModelFrame{
         this.pendingRequests = new ArrayList<Participant>();
     }
 
+    /**
+     *
+     */
     /**
      * Getter method to get the login
      * @return
