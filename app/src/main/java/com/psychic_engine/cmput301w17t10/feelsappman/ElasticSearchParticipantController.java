@@ -2,6 +2,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
@@ -79,7 +80,7 @@ public class ElasticSearchParticipantController {
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
-                    Participant selfParticipant;
+                    Participant selfParticipant = result.getSourceAsObject(Participant.class);
                 }
 
             } catch (Exception e) {
