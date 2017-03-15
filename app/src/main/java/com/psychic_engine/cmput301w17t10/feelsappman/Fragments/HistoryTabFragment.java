@@ -128,11 +128,11 @@ public class HistoryTabFragment extends Fragment {
 
     private void filter() {
         filteredMoodList.clear();
+        
+        // Check which filters have been selected
+        checkFilterSelected();
 
         for (MoodEvent moodEvent : unfilteredMoodList) {
-
-            // Check which filters have been selected
-            checkFilterSelected();
 
             satisfiesMood = true;
             satisfiesDate = true;
