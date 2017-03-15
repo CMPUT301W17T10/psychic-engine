@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.LoginActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ModelFrame;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -97,19 +99,26 @@ public class Participant extends ModelFrame {
      * replace old mood event with new mood event at index. Currently out of service until further
      * notice. Most likely be issued into the controller class instead if any.
      * @param index
-     * @param moodEvent
+     * @param mood
+     * @param socialSetting
+     * @param trigger
+     * @param photo
+     * @param location
+     * @return
      */
-    public void setMoodEvent(int index, MoodEvent moodEvent) {
-        if (mostRecentMoodEvent == null) {
-            mostRecentMoodEvent = moodEvent;
-            mostRecentMoodEventIndex = index;
+    public boolean setMoodEvent(int index, Mood mood, SocialSetting socialSetting, String trigger, Photograph photo, String location) {
+        moodEvents.get(index).setMood(mood);
+        moodEvents.get(index).setDate(new Date());
+        moodEvents.get(index).setSocialSetting(socialSetting);
+        try {
+            moodEvents.get(index).setTrigger(trigger);
+        } catch (TriggerTooLongException e) {
+            return false;
         }
-        else if (moodEvent.getDate().after(mostRecentMoodEvent.getDate())) {
-            mostRecentMoodEvent = moodEvent;
-            mostRecentMoodEventIndex = index;
-        }
+        moodEvents.get(index).setPicture(photo);
+        moodEvents.get(index).setLocation(location);
 
-        moodEvents.set(index, this.mostRecentMoodEvent);
+        return true;
     }
 
     public void addMoodEvent(MoodEvent moodEvent) {
