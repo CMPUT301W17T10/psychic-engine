@@ -43,6 +43,7 @@ public class HistoryTabFragment extends Fragment {
     private Boolean reasonFilterSelected;
     private String spinnerText;
     public ArrayList<MoodEvent> moodEventsHistory;
+    public ArrayList<MoodEvent> temporaryList;
     public ArrayAdapter<MoodEvent> adapter;
 
     @Override
@@ -52,6 +53,7 @@ public class HistoryTabFragment extends Fragment {
 
         //load events list
         moodEventsHistory = new ArrayList<MoodEvent>();
+        temporaryList = new ArrayList<MoodEvent>();
         reloadList();
 
         //initialize clickables
@@ -121,58 +123,56 @@ public class HistoryTabFragment extends Fragment {
             public void onClick(View v) {
                 //reload the list first
                 reloadList();
+                temporaryList.clear();
 
-                //applies date filter
-                if (dateFilterSelected) {
-                    if (moodEventsHistory.size() > 0) {
-                        Collections.sort(moodEventsHistory, new CustomComparator());
-                    }
-                }
+                Date myDate = new Date();
+                Date newDate = new Date(myDate.getTime() - 604800000L);
 
-                //applies week filter
-                if (weekFilterSelected) {
-
-                    Date myDate = new Date();
-                    Date newDate = new Date(myDate.getTime() - 604800000L);
-
-                    for (MoodEvent mood : moodEventsHistory) {
-                        if (moodEventsHistory.size() > 0) {
-                            if (mood.getDate().before(newDate)) {
-                                moodEventsHistory.remove(mood);
-                            }
-                        }
-                    }
-                }
-
-                //applies mood filter
-                if (moodFilterSelected) {
-                    for (MoodEvent mood : moodEventsHistory) {
-                        if (moodEventsHistory.size() > 0) {
-                            if (!mood.getMood().toString().equals(spinnerText)) {
-                                    moodEventsHistory.remove(mood);
-                            }
-                        }
-                    }
-                }
-
-                //check if reason filter is selected and apply
                 if (filterReason.getText().length() != 0) {
                     reasonFilterSelected = true;
                 } else {
                     reasonFilterSelected = false;
                 }
 
-                if (reasonFilterSelected) {
-                    for (MoodEvent mood : moodEventsHistory) {
+                for (MoodEvent mood : moodEventsHistory) {
+
+                    if (weekFilterSelected) {
                         if (moodEventsHistory.size() > 0) {
-                            if (!mood.getTrigger().toLowerCase().contains(filterReason.getText())) {
-                                moodEventsHistory.remove(mood);
+                            if (mood.getDate().before(newDate) && !temporaryList.contains(mood)) {
+                                temporaryList.add(mood);
+                            }
+                        }
+                    }
+
+                    if (moodFilterSelected) {
+                        if (moodEventsHistory.size() > 0) {
+                            if (!mood.getMood().toString().equals(spinnerText) && !temporaryList.contains(mood)) {
+                                temporaryList.add(mood);
+                            }
+                        }
+                    }
+
+                    if (reasonFilterSelected) {
+                        if (moodEventsHistory.size() > 0) {
+                            if (!mood.getTrigger().toLowerCase().contains(filterReason.getText()) && !temporaryList.contains(mood)) {
+                                temporaryList.add(mood);
                             }
                         }
                     }
                 }
 
-                //update the listview
+                for (MoodEvent mood : temporaryList) {
+                    if (temporaryList.size() > 0 && moodEventsHistory.size() > 0) {
+                        moodEventsHistory.remove(mood);
+                    }
+                }
+
+                if (dateFilterSelected) {
+                    if (moodEventsHistory.size() > 0) {
+                        Collections.sort(moodEventsHistory, new CustomComparator());
+                    }
+                }
+
                 adapter.notifyDataSetChanged();
             }
         });
