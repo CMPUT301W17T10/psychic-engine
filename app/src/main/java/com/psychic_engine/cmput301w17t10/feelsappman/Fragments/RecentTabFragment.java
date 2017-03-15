@@ -141,25 +141,6 @@ public class RecentTabFragment extends Fragment {
         return rootView;
     }
 
-    private void loadFromFile() {
-        try {
-            FileInputStream fis = getActivity().openFileInput(FILENAME);
-            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-            Gson gson = new Gson();
-            // Took from https://google-gson.googlecode.com/svn/trunk/gson/docs/javadocs/com/google/gson/Gson.html Jan-21-2016
-            Type type = new TypeToken<ParticipantSingleton>() {}.getType();
-            instance = gson.fromJson(in, type);
-            if (instance != null) {
-                instance.setInstance(instance);
-            }
-            else
-                instance = ParticipantSingleton.getInstance();
-        } catch (FileNotFoundException e) {
-            instance = ParticipantSingleton.getInstance();
-        }
-
-    }
-
     /**
      * Method to save the instance for future use upon destruction of the activity. The singleton
      * instance will contain all of the participants activity (moods, signing up, etc.)
@@ -179,13 +160,6 @@ public class RecentTabFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        loadFromFile();
-
-    }
     @Override
     public void onStop() {
         super.onStop();
