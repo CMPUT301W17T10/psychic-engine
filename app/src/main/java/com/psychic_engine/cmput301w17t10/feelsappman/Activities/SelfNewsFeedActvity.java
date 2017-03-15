@@ -1,6 +1,5 @@
-package com.psychic_engine.cmput301w17t10.feelsappman;
+package com.psychic_engine.cmput301w17t10.feelsappman.Activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +12,12 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.HistoryTabFragment;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
+import com.psychic_engine.cmput301w17t10.feelsappman.R;
+import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.RecentTabFragment;
+import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.SummaryTabFragment;
 
 public class SelfNewsFeedActvity extends AppCompatActivity {
     private ParticipantSingleton instance;

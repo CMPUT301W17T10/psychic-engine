@@ -4,15 +4,17 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.test.espresso.core.deps.guava.io.Resources;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.CreateMoodActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.SelfNewsFeedActvity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.robotium.solo.Solo;
-
-import java.util.ArrayList;
 
 /**
  * Created by jyuen1 on 3/8/17.
@@ -28,7 +30,7 @@ public class CreateMoodActivityTest extends ActivityInstrumentationTestCase2<Cre
     private Solo solo;
 
     public CreateMoodActivityTest() {
-        super(com.psychic_engine.cmput301w17t10.feelsappman.CreateMoodActivity.class);
+        super(CreateMoodActivity.class);
     }
 
     public void setUp() throws Exception {

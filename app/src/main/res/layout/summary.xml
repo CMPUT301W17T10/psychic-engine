@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.psychic_engine.cmput301w17t10.feelsappman.SelfNewsFeedActvity">
+    tools:context="com.psychic_engine.cmput301w17t10.feelsappman.Activities.SelfNewsFeedActvity">
 
     <TextView
         android:id="@+id/date"

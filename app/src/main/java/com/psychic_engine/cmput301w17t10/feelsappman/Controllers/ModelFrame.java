@@ -1,4 +1,4 @@
-package com.psychic_engine.cmput301w17t10.feelsappman;
+package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 
 import java.util.ArrayList;
 

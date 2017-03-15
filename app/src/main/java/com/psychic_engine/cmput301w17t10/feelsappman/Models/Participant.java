@@ -1,6 +1,9 @@
-package com.psychic_engine.cmput301w17t10.feelsappman;
+package com.psychic_engine.cmput301w17t10.feelsappman.Models;
 
 import android.util.Log;
+
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.LoginActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ModelFrame;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +18,7 @@ import java.util.Date;
  * Currently the last three are out of service until later development.
  * @see LoginActivity
  */
-public class Participant extends ModelFrame{
+public class Participant extends ModelFrame {
     private String login;
     private MoodEvent mostRecentMoodEvent;
     private int mostRecentMoodEventIndex;

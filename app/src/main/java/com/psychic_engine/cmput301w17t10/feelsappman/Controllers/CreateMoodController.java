@@ -1,32 +1,13 @@
-package com.psychic_engine.cmput301w17t10.feelsappman;
+package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 
-import android.content.Context;
-import android.location.Location;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Spinner;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
-
-import com.google.gson.Gson;
-
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 
 /**
  * Created by jyuen1 on 3/7/17.
@@ -34,7 +15,7 @@ import java.io.OutputStreamWriter;
 
 public class CreateMoodController {
 
-    public boolean updateMoodEventList(String moodString, String socialSettingString, String trigger, Photograph photo, String location) {
+    public static boolean updateMoodEventList(String moodString, String socialSettingString, String trigger, Photograph photo, String location) {
         Log.d("TAG","-----------------------------------------------------");
         Mood mood;
         SocialSetting socialSetting;

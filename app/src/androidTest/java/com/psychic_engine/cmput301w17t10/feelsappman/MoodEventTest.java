@@ -2,8 +2,13 @@
 package com.psychic_engine.cmput301w17t10.feelsappman;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.test.ActivityInstrumentationTestCase2;
+
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 
 import junit.framework.TestCase;
 
@@ -60,7 +65,7 @@ public class MoodEventTest extends TestCase {
         MoodEvent moodEvent = new MoodEvent(mood, SocialSetting.ALONE, "301", null, null);
         try {
             moodEvent.setTrigger(newTrigger);
-        } catch (triggerTooLongException e) {
+        } catch (TriggerTooLongException e) {
             e.printStackTrace();
         }
         assertEquals(moodEvent.getTrigger(), newTrigger);

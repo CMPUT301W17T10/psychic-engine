@@ -1,4 +1,4 @@
-package com.psychic_engine.cmput301w17t10.feelsappman;
+package com.psychic_engine.cmput301w17t10.feelsappman.Fragments;
 
 /**
  *  Created by Hussain Khan
@@ -11,7 +11,6 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+
+import com.psychic_engine.cmput301w17t10.feelsappman.Comparators.CustomComparator;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
+import com.psychic_engine.cmput301w17t10.feelsappman.R;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;

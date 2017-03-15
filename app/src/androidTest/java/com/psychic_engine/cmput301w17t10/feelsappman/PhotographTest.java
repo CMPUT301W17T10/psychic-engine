@@ -4,7 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.test.ActivityInstrumentationTestCase2;
-import android.widget.ImageView;
+
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.SelfNewsFeedActvity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 
 import java.io.File;
 

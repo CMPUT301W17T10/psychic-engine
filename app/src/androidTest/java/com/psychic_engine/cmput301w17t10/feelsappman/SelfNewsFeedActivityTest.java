@@ -3,6 +3,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.robotium.solo.Solo;
 
 /**

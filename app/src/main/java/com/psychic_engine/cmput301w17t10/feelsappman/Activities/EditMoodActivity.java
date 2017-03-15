@@ -1,4 +1,4 @@
-package com.psychic_engine.cmput301w17t10.feelsappman;
+package com.psychic_engine.cmput301w17t10.feelsappman.Activities;
 
 import android.Manifest;
 import android.content.Context;
@@ -8,8 +8,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +24,14 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.EditMoodController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
+import com.psychic_engine.cmput301w17t10.feelsappman.R;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;

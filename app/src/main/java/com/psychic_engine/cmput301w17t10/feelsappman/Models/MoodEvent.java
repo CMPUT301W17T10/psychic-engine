@@ -1,6 +1,10 @@
-package com.psychic_engine.cmput301w17t10.feelsappman;
+package com.psychic_engine.cmput301w17t10.feelsappman.Models;
 
 import android.location.Location;
+
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ModelFrame;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 
 import java.util.Date;
 
@@ -16,7 +20,7 @@ import java.util.Date;
  * @see SocialSetting
  * @see Photograph
  */
-public class MoodEvent extends ModelFrame{
+public class MoodEvent extends ModelFrame {
     private Mood mood;
     private String trigger;
     private SocialSetting socialSetting;
@@ -106,9 +110,9 @@ public class MoodEvent extends ModelFrame{
      * simple and short, and thus must be less than 20 character and 3 words long. Failure to meet
      * these requirements will cause the system to reject the edit/add request for the mood event.
      * @param trigger
-     * @throws triggerTooLongException
+     * @throws TriggerTooLongException
      */
-    public void setTrigger(String trigger) throws triggerTooLongException {
+    public void setTrigger(String trigger) throws TriggerTooLongException {
         this.trigger = trigger;
     }
 

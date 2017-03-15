@@ -1,4 +1,4 @@
-package com.psychic_engine.cmput301w17t10.feelsappman;
+package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 
 /**
  * Created by adong on 3/9/17.
