@@ -34,7 +34,7 @@ import java.io.OutputStreamWriter;
 
 public class CreateMoodController {
 
-    public boolean updateMoodEventList(String moodString, String socialSettingString, String trigger, Photograph photo, String location) {
+    public static boolean updateMoodEventList(String moodString, String socialSettingString, String trigger, Photograph photo, String location) {
         Log.d("TAG","-----------------------------------------------------");
         Mood mood;
         SocialSetting socialSetting;

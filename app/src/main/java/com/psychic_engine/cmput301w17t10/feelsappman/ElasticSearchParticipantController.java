@@ -2,7 +2,6 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
@@ -84,8 +83,9 @@ public class ElasticSearchParticipantController {
                 }
 
             } catch (Exception e) {
-                Log.i("Error", "Elasticsearch attempt failed!")
+                Log.i("Error", "Elasticsearch attempt failed!");
             }
+            return participantList;
         }
     }
     public static void verifySettings() {

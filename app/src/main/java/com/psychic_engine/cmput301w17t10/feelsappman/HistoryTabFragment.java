@@ -66,11 +66,7 @@ public class HistoryTabFragment extends Fragment {
         filterDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (filterDate.isChecked()) {
-                    dateFilterSelected = true;
-                } else {
-                    dateFilterSelected = false;
-                }
+                dateFilterSelected = filterDate.isChecked();
             }
         });
 
@@ -78,11 +74,7 @@ public class HistoryTabFragment extends Fragment {
         filterWeek.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(filterWeek.isChecked()) {
-                    weekFilterSelected = true;
-                } else {
-                    weekFilterSelected = false;
-                }
+                weekFilterSelected = filterWeek.isChecked();
             }
         });
 
@@ -97,12 +89,7 @@ public class HistoryTabFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 spinnerText = spinner.getItemAtPosition(position).toString();
-                if (spinnerText.equals("None")){
-                    moodFilterSelected = false;
-                }
-                else {
-                    moodFilterSelected = true;
-                }
+                moodFilterSelected = !spinnerText.equals("None");
             }
 
             @Override
@@ -151,11 +138,7 @@ public class HistoryTabFragment extends Fragment {
                 }
 
                 //check if reason filter is selected and apply
-                if (filterReason.getText().length() != 0) {
-                    reasonFilterSelected = true;
-                } else {
-                    reasonFilterSelected = false;
-                }
+                reasonFilterSelected = filterReason.getText().length() != 0;
 
                 if (reasonFilterSelected) {
                     for (MoodEvent mood : moodEventsHistory) {
