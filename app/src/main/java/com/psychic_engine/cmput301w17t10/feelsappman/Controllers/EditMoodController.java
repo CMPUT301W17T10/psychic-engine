@@ -62,8 +62,6 @@ public class EditMoodController {
                 socialSetting = null;
         }
 
-        MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
-
         // replace old moodEvent with new one
         if (ParticipantSingleton.getInstance().getSelfParticipant().setMoodEvent(
                 moodEventPosition, mood, socialSetting, trigger, photo, location))
