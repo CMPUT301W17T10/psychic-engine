@@ -2,6 +2,14 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 
 import android.util.Log;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.CreateMoodController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
+
 import junit.framework.TestCase;
 
 /**

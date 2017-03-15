@@ -1,4 +1,4 @@
-package com.psychic_engine.cmput301w17t10.feelsappman;
+package com.psychic_engine.cmput301w17t10.feelsappman.Activities;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
@@ -12,6 +12,12 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.HistoryTabFragment;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
+import com.psychic_engine.cmput301w17t10.feelsappman.R;
+import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.RecentTabFragment;
+import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.SummaryTabFragment;
 
 public class SelfNewsFeedActvity extends AppCompatActivity {
     private ParticipantSingleton instance;
@@ -50,8 +56,25 @@ public class SelfNewsFeedActvity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-    }
 
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mSectionsPagerAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,10 +99,12 @@ public class SelfNewsFeedActvity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
-
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -100,9 +125,6 @@ public class SelfNewsFeedActvity extends AppCompatActivity {
                 default:
                     return null;
             }
-
-
-
         }
 
         @Override

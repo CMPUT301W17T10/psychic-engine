@@ -1,12 +1,16 @@
 package com.psychic_engine.cmput301w17t10.feelsappman;
 
-import android.util.Log;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.EditMoodController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
-
-import static com.psychic_engine.cmput301w17t10.feelsappman.EditMoodController.updateMoodEventList;
 
 /**
  * Created by adong on 3/13/17.

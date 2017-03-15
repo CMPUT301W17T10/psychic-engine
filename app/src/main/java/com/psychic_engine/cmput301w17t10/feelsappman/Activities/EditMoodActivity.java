@@ -1,4 +1,4 @@
-package com.psychic_engine.cmput301w17t10.feelsappman;
+package com.psychic_engine.cmput301w17t10.feelsappman.Activities;
 
 import android.Manifest;
 import android.content.Context;
@@ -8,8 +8,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,7 +15,6 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,6 +24,14 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.EditMoodController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
+import com.psychic_engine.cmput301w17t10.feelsappman.R;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -36,23 +41,16 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.psychic_engine.cmput301w17t10.feelsappman.R.id.imageView;
-import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
 /**
- * Created by jyuen1 on 3/6/17.
- * Comments by Alex Dong on 3/12/17.
+ * Created by jyuen1 on 3/7/2017.
  */
 
 /**
- * CreateMoodActivity will be similar to the EditMoodActivity in such a way that the format will be
- * the same. However, one will be able to edit previously created events and one will only be able
- * to create new ones. The participant will be able to enter a variety of options where the mood
- * state is mandatory for entry, while others are optional.
- * @see EditMoodActivity
+ * This class allows the user to edit mood events.
  */
-public class CreateMoodActivity extends AppCompatActivity {
+public class EditMoodActivity extends AppCompatActivity{
     private static final String FILENAME = "file.sav";
     private static int RESULT_LOAD_IMAGE = 1;
 
@@ -64,39 +62,46 @@ public class CreateMoodActivity extends AppCompatActivity {
     private ImageView photoImageView;
     private Button createButton;
     private Button cancelButton;
-    private CreateMoodController createMoodController = new CreateMoodController();
+
+    private MoodEvent moodEvent;    // the moodEvent to be edited
+    private int moodEventPosition;
+
     /**
-     * Calls upon the methods to initialize the UI needed.
+     * Called on activity creation.  Initializes widgets and class variables.
      * @param savedInstanceState
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        photoImageView = (ImageView) findViewById(R.id.imageView);
-        setContentView(R.layout.activity_create_mood);
+        setContentView(R.layout.activity_edit_mood);
 
         isStoragePermissionGranted();
+
+        moodEventPosition = getIntent().getExtras().getInt("moodEventPosition");
+        Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
+        moodEvent = participant.getMoodList().get(moodEventPosition);
 
         // set up mood and social setting spinners (drop downs)
         setUpSpinners();
 
-        // set up events that happen when user clicks in trigger and outside trigger
+        // set up events that happen when user clicks in trigger
         setUpTrigger();
+
+        // set up events that happen when user clicks in location
+        setUpLocation();
+
+        // set up the currently displayed picture
+        setUpImageView();
 
         // set up events that happen when user clicks browse button
         setUpBrowse();
 
-        // set up events that happen when user clicks location button
-        setUpLocation();
-
         // set up events that happen when user clicks create button
-        setUpCreate();
+        setUpSave();
 
         // set up events that happen when user clicks cancel button
         setUpCancel();
     }
-    //Taken from http://stackoverflow.com/questions/33162152/storage-permission-error-in-marshmallow/41221852#41221852
-    //March 10, 2017
 
     /**
      * Method to detect whether or not reading from the phone storage is enabled or disabled. Upon
@@ -104,21 +109,19 @@ public class CreateMoodActivity extends AppCompatActivity {
      * @return true if SDK < 23 or participant permits
      * @return false if participant denies and SDK > 23
      */
+    //Taken from http://stackoverflow.com/questions/33162152/storage-permission-error-in-marshmallow/41221852#41221852
+    //March 10, 2017
     public boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
-
                 return true;
             } else {
-
-
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                 return false;
             }
         }
         else { //permission is automatically granted on sdk<23 upon installation
-
             return true;
         }
     }
@@ -127,31 +130,26 @@ public class CreateMoodActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
-
             //resume tasks needing this permission
         }
     }
 
     /**
-     * Main method to call whenever the participant was to create their mood event after setting
-     * their options. The system will obtain all of the information (null or not), and then save
-     * the mood event into the participants own arrays of mood events. Depending on the options,
-     * the participant will be able to save it as a picture, which will have required a prompt to
-     * access the external storage.
+     * Retrieves information set in widgets and calls EditMoodController to register changes.
+     * @see EditMoodController
      */
-    public void createMoodEvent() {
-        Log.d("Clicked on Create", "MoodEvent should be added here");
+    void saveMoodEvent() {
+        // get the mood from the mood spinner
         String moodString = moodSpinner.getSelectedItem().toString();
+
+        // get the social setting from the social setting spinner
         String socialSettingString = socialSettingSpinner.getSelectedItem().toString();
+
+        // get the trigger from the trigger edit text
         String trigger = triggerEditText.getText().toString();
 
         Photograph photo = null;
         boolean photoSizeUnder = TRUE;
-
-
-        //Taken from http://stackoverflow.com/questions/26865787/get-bitmap-from-imageview-in-android-l
-        //March 10, 2017
-        //gets drawable from imageview and converts drawable to bitmap
 
         try {
             Bitmap bitmap = ((BitmapDrawable) photoImageView.getDrawable()).getBitmap();
@@ -161,47 +159,30 @@ public class CreateMoodActivity extends AppCompatActivity {
             // pass
         }
 
-        String location = locationEditText.getText().toString(); // TODO tentative, location type will change in part 5
+        String location = locationEditText.getText().toString(); // TODO change location type in part 5
 
         if (photoSizeUnder) {
-            Log.d("Enter", "Entering CreateMoodController ...");
-            Log.d("MoodString", moodString);
-            boolean success = createMoodController.updateMoodEventList(moodString, socialSettingString, trigger, photo, location);
-
-            if (!success) {
-                Toast.makeText(CreateMoodActivity.this,
-                        "Please specify a mood.",
-                        Toast.LENGTH_LONG).show();
-            } else {
-                saveInFile();
-                Intent intent = new Intent(CreateMoodActivity.this, SelfNewsFeedActvity.class);
-                startActivity(intent);
-            }
-
+            EditMoodController.updateMoodEventList(moodEventPosition, moodString, socialSettingString, trigger, photo, location);
         } else {
-            Toast.makeText(CreateMoodActivity.this,
+            Toast.makeText(EditMoodActivity.this,
                     "Photo size is too large! (Max 65536 bytes)",
                     Toast.LENGTH_LONG).show();
         }
-        //TODO: MoodEvent list for selfParticipant needs to save
-        //TODO: MoodEvent list resets on app termination and reopen
-        //TODO: Maybe try to get the bring in saveInFile on a superclass and keep on all activities
-        for (MoodEvent mood : ParticipantSingleton.getInstance().getSelfParticipant().getMoodList()) {
-            Log.i("MoodEvent Added", "This mood event is of: " + mood.getMood().getMood());
-        }
 
+        saveInFile();
+        Intent intent = new Intent(EditMoodActivity.this, SelfNewsFeedActvity.class);
+        startActivity(intent);
     }
 
     /**
-     * Setup method to create the spinners in the UI
+     * Initializes and adds categories to spinners.
      */
     void setUpSpinners() {
         // Spinner elements
-        moodSpinner = (Spinner) findViewById(R.id.moodDropDown);
-        socialSettingSpinner = (Spinner) findViewById(R.id.socialSettingDropDown);
+        moodSpinner = (Spinner) findViewById(R.id.moodDropDown1);
+        socialSettingSpinner = (Spinner) findViewById(R.id.socialSettingDropDown1);
         // Spinner drop down elements
         List<String> moodCategories = new ArrayList<String>();
-        moodCategories.add("Select a mood");     // default option
         MoodState[] moodStates = MoodState.values();
         for (MoodState moodState : moodStates) {
             moodCategories.add(moodState.toString());
@@ -229,36 +210,57 @@ public class CreateMoodActivity extends AppCompatActivity {
         // Attaching adapter to spinner
         moodSpinner.setAdapter(moodSpinnerAdapter);
         socialSettingSpinner.setAdapter(socialSettingSpinnerAdapter);
+
+
+        // set the previous mood
+        moodSpinner.setSelection(moodSpinnerAdapter.getPosition(
+                moodEvent.getMood().getMood().toString()));
+        // set the previous social setting
+        if (moodEvent.getSocialSetting() != null)
+            socialSettingSpinner.setSelection(socialSettingSpinnerAdapter.getPosition(
+                    moodEvent.getSocialSetting().toString()));
+        else
+            socialSettingSpinner.setSelection(0);
     }
 
     /**
-     * Setup method for the trigger EditText category
+     * Initializes trigger edit text widget
      */
     void setUpTrigger() {
-
-        triggerEditText = (EditText) findViewById(R.id.trigger);
-        triggerEditText.setText("");
+        // display the previous trigger
+        triggerEditText = (EditText) findViewById(R.id.trigger1);
+        triggerEditText.setText(moodEvent.getTrigger());
     }
 
     /**
-     * Setup method for the location EditText (TEMPORARY) category
+     * Initializes location edit text widget
      */
     void setUpLocation() {
-        locationEditText = (EditText) findViewById(R.id.location);
-        locationEditText.setText("");
+        // display the previous location
+        locationEditText = (EditText) findViewById(R.id.location1);
+        locationEditText.setText(moodEvent.getLocation());
+    }
+    /**
+     * Initializes photo image view widget
+     */
+    void setUpImageView() {
+        // display the previous image
+        photoImageView = (ImageView) findViewById(R.id.imageView1);
+        if (moodEvent.getPicture() != null)
+            photoImageView.setImageBitmap(moodEvent.getPicture().getImage());
     }
 
     /**
-     * Setup method the browse button, being able to select pictures from the phone storage.
+     * Initializes the browse button.  Launches an activity that allows the user to select 
+     * an image from their photo album to set as the mood event image.
      */
     void setUpBrowse() {
         // Taken from http://stackoverflow.com/questions/21072034/image-browse-button-in-android-activity
         // on 03-06-17
-        browseButton = (Button) findViewById(R.id.browse);
+        browseButton = (Button) findViewById(R.id.browse1);
         browseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent i = new Intent(
                         Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -269,13 +271,11 @@ public class CreateMoodActivity extends AppCompatActivity {
     }
 
     /**
-     * Upon execution, the activity will be able to display the photo that the participant selected
-     * so long the size is within limit.
+     * Display the browsed image in photoImageView
      * @param requestCode
      * @param resultCode
      * @param data
      */
-    // displayed the browsed image
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -292,31 +292,28 @@ public class CreateMoodActivity extends AppCompatActivity {
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
 
-            photoImageView = (ImageView) findViewById(imageView);
             photoImageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
         }
     }
 
     /**
-     * Setup method for the create button, which will issue a command to create the mood event on
-     * click.
+     * Initializes the save button.   
      */
-    void setUpCreate() {
-        createButton = (Button) findViewById(R.id.create);
+    void setUpSave() {
+        createButton = (Button) findViewById(R.id.save);
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createMoodEvent();
+                saveMoodEvent();
             }
         });
     }
 
     /**
-     * Setup method for the cancel button, which will issue a command to close the addition of a
-     * mood event if the paticipant ever changes their mind.
+     * Initializes the cancel button.  
      */
     void setUpCancel() {
-        cancelButton = (Button) findViewById(R.id.cancel);
+        cancelButton = (Button) findViewById(R.id.cancel1);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -352,3 +349,4 @@ public class CreateMoodActivity extends AppCompatActivity {
         saveInFile();
     }
 }
+

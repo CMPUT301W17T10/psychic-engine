@@ -1,16 +1,20 @@
-package com.psychic_engine.cmput301w17t10.feelsappman;
+package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 
-import android.location.Location;
-
-import java.util.Date;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 
 /**
- * Created by Jen on 3/8/2017.
+ * Created by jyuen1 on 3/8/2017.
  */
 
 public class EditMoodController {
 
-    static boolean updateMoodEventList(int moodEventPosition, String moodString, String socialSettingString, String trigger, Photograph photo, String location) {
+    public static boolean updateMoodEventList(int moodEventPosition, String moodString, String socialSettingString, String trigger, Photograph photo, String location) {
+
         Mood mood = null;
         SocialSetting socialSetting;
 
@@ -58,11 +62,11 @@ public class EditMoodController {
                 socialSetting = null;
         }
 
-
-        MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, null);
+        MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
 
         // replace old moodEvent with new one
         ParticipantSingleton.getInstance().getSelfParticipant().setMoodEvent(moodEventPosition, moodEvent);
         return true;
+
     }
 }

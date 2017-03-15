@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".LoginActivity">
+        <activity android:name=".Activities.LoginActivity">
             <supports-screens android:anyDensity="true"/>
             <intent-filter>
             <action android:name="android.intent.action.MAIN" />
@@ -20,7 +20,7 @@
         </activity>
 
         <activity
-            android:name=".CreateMoodActivity"
+            android:name=".Activities.CreateMoodActivity"
             android:label="CreateMoodActivity">
             <intent-filter>
                 <action android:name="com.psychic_engine.cmput301w17t10.feelsappman.CreateMoodActivity" />
@@ -30,7 +30,7 @@
         </activity>
         
         <activity
-            android:name=".EditMoodActivity"
+            android:name=".Activities.EditMoodActivity"
             android:label="EditMoodActivity">
             <intent-filter>
                 <action android:name="com.psychic_engine.cmput301w17t10.feelsappman.EditMoodActivity" />
@@ -40,7 +40,7 @@
         </activity>
 
         <activity
-            android:name=".ViewMoodEventActivity"
+            android:name=".Activities.ViewMoodEventActivity"
             android:label="ViewMoodEventActivity">
             <intent-filter>
                 <action android:name="com.psychic_engine.cmput301w17t10.feelsappman.ViewMoodEventActivity" />
@@ -50,7 +50,7 @@
         </activity>
 
         <activity
-            android:name=".SelfNewsFeedActvity"
+            android:name=".Activities.SelfNewsFeedActvity"
             android:label="@string/title_activity_self_news_feed_actvity"
             android:theme="@style/AppTheme">
 

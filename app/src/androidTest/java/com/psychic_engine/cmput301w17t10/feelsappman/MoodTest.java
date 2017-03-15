@@ -1,6 +1,8 @@
 package com.psychic_engine.cmput301w17t10.feelsappman;
 
-import android.test.ActivityInstrumentationTestCase2;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodColor;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 
 import junit.framework.TestCase;
 

@@ -1,26 +1,26 @@
-package com.psychic_engine.cmput301w17t10.feelsappman;
+package com.psychic_engine.cmput301w17t10.feelsappman.Fragments;
 
 /**
  * Created by jordi on 2017-03-09.
  */
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import org.w3c.dom.Text;
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.EditMoodActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.ViewMoodEventActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
+import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -32,11 +32,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Date;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 
 
 public class RecentTabFragment extends Fragment {
@@ -78,7 +73,7 @@ public class RecentTabFragment extends Fragment {
                 imageView.setImageBitmap(moodEvent.getPicture().getImage());
             }
             //location.setText(moodEvent.getLocation().toString());
-            saveInFile();
+            //saveInFile();
 
         }
         delete.setOnClickListener(new View.OnClickListener() {
@@ -86,13 +81,14 @@ public class RecentTabFragment extends Fragment {
             public void onClick(View v) {
 
                 if (moodEventsRecent.size()>0) {
-                    ParticipantSingleton.getInstance().getSelfParticipant().removeMoodEvent(mostRecentIndex);
+                    moodEventsRecent.remove(moodEventsRecent.size() - 1);
+                    ParticipantSingleton.getInstance().getSelfParticipant().setMoodList(moodEventsRecent);
 
 
                     if (moodEventsRecent.size() > 0) {
 
 
-                        moodEvent = moodEventsRecent.get(mostRecentIndex);
+                        moodEvent = moodEventsRecent.get(moodEventsRecent.size() - 1);
 
 
                         viewmood.setText(moodEvent.getMood().toString());

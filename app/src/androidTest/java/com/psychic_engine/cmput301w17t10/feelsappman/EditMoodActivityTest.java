@@ -8,6 +8,13 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.EditMoodActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.SelfNewsFeedActvity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 import com.robotium.solo.Solo;
 
 /**
@@ -23,7 +30,7 @@ public class EditMoodActivityTest  extends ActivityInstrumentationTestCase2<Edit
     private Solo solo;
 
     public EditMoodActivityTest() {
-        super(com.psychic_engine.cmput301w17t10.feelsappman.EditMoodActivity.class);
+        super(EditMoodActivity.class);
     }
 
     public void setUp() throws Exception {
