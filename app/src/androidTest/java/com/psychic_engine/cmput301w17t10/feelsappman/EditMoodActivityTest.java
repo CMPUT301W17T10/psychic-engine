@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.EditMoodActivity;
-import com.psychic_engine.cmput301w17t10.feelsappman.Activities.SelfNewsFeedActvity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.SelfNewsFeedActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
@@ -154,7 +154,7 @@ public class EditMoodActivityTest  extends ActivityInstrumentationTestCase2<Edit
         ParticipantSingleton.getInstance().setSelfParticipant(self);
         // Press create button
         solo.clickOnText("Save");
-        solo.assertCurrentActivity("Wrong Activity", SelfNewsFeedActvity.class);
+        solo.assertCurrentActivity("Wrong Activity", SelfNewsFeedActivity.class);
     }
 
     public void tearDown() throws Exception {

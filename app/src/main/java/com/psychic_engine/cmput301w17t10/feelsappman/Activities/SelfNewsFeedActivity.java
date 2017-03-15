@@ -13,13 +13,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
 import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.HistoryTabFragment;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.RecentTabFragment;
 import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.SummaryTabFragment;
 
-public class SelfNewsFeedActvity extends AppCompatActivity {
+public class SelfNewsFeedActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -92,7 +93,7 @@ public class SelfNewsFeedActvity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
-            Intent intent = new Intent(SelfNewsFeedActvity.this,CreateMoodActivity.class);
+            Intent intent = new Intent(SelfNewsFeedActivity.this,CreateMoodActivity.class);
             startActivity(intent);
         }
 
@@ -146,4 +147,17 @@ public class SelfNewsFeedActvity extends AppCompatActivity {
             return null;
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        FileManager.saveInFile(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        FileManager.saveInFile(this);
+    }
+
 }

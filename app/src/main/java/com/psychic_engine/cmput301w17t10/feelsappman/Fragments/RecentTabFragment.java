@@ -36,7 +36,6 @@ import java.util.ArrayList;
 
 public class RecentTabFragment extends Fragment {
 
-    private static final String FILENAME = "file.sav";
     public ArrayList<MoodEvent> moodEventsRecent;
     private MoodEvent moodEvent;
     private TextView date;
@@ -96,22 +95,18 @@ public class RecentTabFragment extends Fragment {
                         if (moodEvent.getPicture() != null) {
                             imageView.setImageBitmap(moodEvent.getPicture().getImage());
                             //location.setText(moodEvent.getLocation().toString());
-
-                            saveInFile();
                         }
                     } else {
                         viewmood.setText("");
                         date.setText("There's No Mood Event Yet! Why Don't you add one!");
                         location.setText("");
                         imageView.setImageBitmap(null);
-                        saveInFile();
                     }
                 }
                  else {
                         viewmood.setText("");
                         date.setText("There's No Mood Event Yet! Why Don't you add one!");
                         location.setText("");
-                        saveInFile();
 
                 }
             }
@@ -141,28 +136,4 @@ public class RecentTabFragment extends Fragment {
         return rootView;
     }
 
-    /**
-     * Method to save the instance for future use upon destruction of the activity. The singleton
-     * instance will contain all of the participants activity (moods, signing up, etc.)
-     */
-    private void saveInFile() {
-        try {
-            FileOutputStream fos = getActivity().openFileOutput(FILENAME, Context.MODE_PRIVATE);
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
-            Gson gson = new Gson();
-            gson.toJson(ParticipantSingleton.getInstance(), out);
-            out.flush();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException();
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        saveInFile();
-    }
 }

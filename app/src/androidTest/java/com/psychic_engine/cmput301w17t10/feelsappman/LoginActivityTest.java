@@ -6,7 +6,7 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.LoginActivity;
-import com.psychic_engine.cmput301w17t10.feelsappman.Activities.SelfNewsFeedActvity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.SelfNewsFeedActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.robotium.solo.Solo;
@@ -122,7 +122,7 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
      * Input: TestParticipant11 (already signed up in the system)
      * The system will bring the user to the SelfNewsFeedActivity where their personal profile is
      * shown.
-     * @see SelfNewsFeedActvity
+     * @see SelfNewsFeedActivity
      */
     public void test6_LoginWithStoredName() {
         solo.clearEditText((EditText) solo.getView(R.id.nameEditText));
@@ -133,7 +133,7 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         }
         solo.clickOnText("Login");
         solo.searchText("Welcome TestParticipant11");
-        solo.assertCurrentActivity("Did not pass login activity", SelfNewsFeedActvity.class);
+        solo.assertCurrentActivity("Did not pass login activity", SelfNewsFeedActivity.class);
     }
 
     /**
