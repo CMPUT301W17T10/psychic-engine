@@ -14,7 +14,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -124,7 +127,29 @@ public class HistoryTabFragment extends Fragment {
         return rootView;
     }
 
+    // Taken from https://developer.android.com/guide/topics/ui/menus.html
+    // on 3/17/17
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.menu_edit_delete, menu);
+    }
 
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.edit:
+                //EditMoodEventController.editMood(info.id);
+                return true;
+            case R.id.delete:
+                //DeleteMoodEventController.editMood(info.id);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
 
     private void filter() {
         filteredMoodList.clear();

@@ -19,5 +19,7 @@
     <string name="listviewbutton_text">List View</string>
     <string name="filterbutton_text">Filter</string>
     <string name="mapbutton_text">Map</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
 </resources>

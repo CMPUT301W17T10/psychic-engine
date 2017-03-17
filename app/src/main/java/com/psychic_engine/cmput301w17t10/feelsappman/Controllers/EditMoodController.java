@@ -3,6 +3,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
@@ -15,6 +16,7 @@ public class EditMoodController {
 
     public static boolean updateMoodEventList(int moodEventPosition, String moodString, String socialSettingString, String trigger, Photograph photo, String location) {
 
+        Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         Mood mood = null;
         SocialSetting socialSetting;
 
@@ -63,11 +65,7 @@ public class EditMoodController {
         }
 
         // replace old moodEvent with new one
-        if (ParticipantSingleton.getInstance().getSelfParticipant().setMoodEvent(
-                moodEventPosition, mood, socialSetting, trigger, photo, location))
-            return true;
-        else
-            return false;
-
+        return participant.setMoodEvent(
+                moodEventPosition, mood, socialSetting, trigger, photo, location);
     }
 }

@@ -21,6 +21,7 @@ import java.util.Date;
  * @see Photograph
  */
 public class MoodEvent extends ModelFrame {
+    private int id;
     private Mood mood;
     private String trigger;
     private SocialSetting socialSetting;
@@ -48,6 +49,12 @@ public class MoodEvent extends ModelFrame {
         this.picture = picture;
         this.location = location;
     }
+
+    /**
+     * Getter for id
+     * @return
+     */
+    public int getId() { return this.id; }
 
     /**
      * Getter method to return the mood that was set in the mood event.
@@ -91,6 +98,11 @@ public class MoodEvent extends ModelFrame {
      */
     public String getLocation() { return this.location; }
 
+    /**
+     * Setter for id
+     * @param id
+     */
+    public void setId(int id) { this.id = id; }
     /**
      * Setter method to set the mood to the parameter. Used when editing the mood event
      * @param mood
