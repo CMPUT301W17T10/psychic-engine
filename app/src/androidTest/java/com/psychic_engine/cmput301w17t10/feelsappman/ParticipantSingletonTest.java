@@ -1,13 +1,11 @@
 package com.psychic_engine.cmput301w17t10.feelsappman;
 
-import android.icu.text.MessagePattern;
-import android.os.Debug;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 
-import junit.framework.TestCase;
-
-import org.junit.Before;
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.LoginActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 
 import java.util.ArrayList;
 

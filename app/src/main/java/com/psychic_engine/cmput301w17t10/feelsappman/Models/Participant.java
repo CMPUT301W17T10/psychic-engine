@@ -1,6 +1,11 @@
-package com.psychic_engine.cmput301w17t10.feelsappman;
+package com.psychic_engine.cmput301w17t10.feelsappman.Models;
 
 import android.util.Log;
+
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.LoginActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ModelFrame;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,6 +20,7 @@ import java.util.Date;
  * Currently the last three are out of service until later development.
  * @see LoginActivity
  */
+<<<<<<< HEAD:app/src/main/java/com/psychic_engine/cmput301w17t10/feelsappman/Participant.java
 public class Participant extends ModelFrame{
     public String login;
     public MoodEvent mostRecentMoodEvent;
@@ -24,6 +30,17 @@ public class Participant extends ModelFrame{
     public ArrayList<Participant> following;
     public ArrayList<Participant> pendingRequests;
     public String id;
+=======
+public class Participant extends ModelFrame {
+    private String login;
+    private MoodEvent mostRecentMoodEvent;
+    private int mostRecentMoodEventIndex;
+    private ArrayList<MoodEvent> moodEvents;
+    private ArrayList<Participant> followers;
+    private ArrayList<Participant> following;
+    private ArrayList<Participant> pendingRequests;
+
+>>>>>>> d9a41a44d482f9408b09bc7e53d27af2f014b32f:app/src/main/java/com/psychic_engine/cmput301w17t10/feelsappman/Models/Participant.java
 
     /**
      * Everytime the participant is initialized, we will save their name into the system. Since
@@ -110,19 +127,26 @@ public class Participant extends ModelFrame{
      * replace old mood event with new mood event at index. Currently out of service until further
      * notice. Most likely be issued into the controller class instead if any.
      * @param index
-     * @param moodEvent
+     * @param mood
+     * @param socialSetting
+     * @param trigger
+     * @param photo
+     * @param location
+     * @return
      */
-    public void setMoodEvent(int index, MoodEvent moodEvent) {
-        if (mostRecentMoodEvent == null) {
-            mostRecentMoodEvent = moodEvent;
-            mostRecentMoodEventIndex = index;
+    public boolean setMoodEvent(int index, Mood mood, SocialSetting socialSetting, String trigger, Photograph photo, String location) {
+        moodEvents.get(index).setMood(mood);
+        moodEvents.get(index).setDate(new Date());
+        moodEvents.get(index).setSocialSetting(socialSetting);
+        try {
+            moodEvents.get(index).setTrigger(trigger);
+        } catch (TriggerTooLongException e) {
+            return false;
         }
-        else if (moodEvent.getDate().after(mostRecentMoodEvent.getDate())) {
-            mostRecentMoodEvent = moodEvent;
-            mostRecentMoodEventIndex = index;
-        }
+        moodEvents.get(index).setPicture(photo);
+        moodEvents.get(index).setLocation(location);
 
-        moodEvents.set(index, this.mostRecentMoodEvent);
+        return true;
     }
 
     public void addMoodEvent(MoodEvent moodEvent) {

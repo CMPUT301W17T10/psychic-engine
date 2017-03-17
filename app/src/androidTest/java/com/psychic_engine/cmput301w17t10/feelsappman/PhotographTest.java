@@ -4,7 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.test.ActivityInstrumentationTestCase2;
-import android.widget.ImageView;
+
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.SelfNewsFeedActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 
 import java.io.File;
 
@@ -16,7 +18,7 @@ public class PhotographTest extends ActivityInstrumentationTestCase2 {
 
         //TODO Temporary activity to be the added
         public PhotographTest() {
-            super(SelfNewsFeedActvity.class);
+            super(SelfNewsFeedActivity.class);
         }
 
         public void testSetImage() {
