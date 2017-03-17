@@ -33,9 +33,9 @@ public class ViewMoodEventActivity extends AppCompatActivity{
     private TextView socialIcon;    // Temporary for now to meet requirements until we have icon for social setting
     private ImageButton returnButton;
 
-    ParticipantSingleton instance;
-    int moodEventPosition;
-    MoodEvent moodEvent;
+    private Participant participant;
+    private String moodEventId;
+    private MoodEvent moodEvent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,27 +51,18 @@ public class ViewMoodEventActivity extends AppCompatActivity{
         socialIcon = (TextView) findViewById(R.id.me_social);
         returnButton = (ImageButton) findViewById(R.id.me_return);
 
-        moodEventPosition = getIntent().getExtras().getInt("moodEventPosition");
-        instance = ParticipantSingleton.getInstance();
-        Participant self = instance.getSelfParticipant();
+        moodEventId = getIntent().getExtras().getString("moodEventId");
+        moodEvent = null;
+        participant = ParticipantSingleton.getInstance().getSelfParticipant();
 
-        MoodEvent moodEvent = null;
-        try {
-            ArrayList<MoodEvent> moodEventList = self.getMoodList();
-            moodEvent = moodEventList.get(moodEventPosition);    // TODO: get appropriate mood later, right now gets the most recent image
-        } catch (IndexOutOfBoundsException e) {
-            e.printStackTrace();
+        for (MoodEvent m : participant.getMoodList()) {
+            if (moodEventId.equals(m.getId()))
+                moodEvent = m;
         }
 
-        name.setText(self.getLogin());
-        dateTime.setText(moodEvent.getDate().toString());
-        if (moodEvent.getPicture() != null)
-            photo.setImageBitmap(moodEvent.getPicture().getImage());
-        location.setText(moodEvent.getLocation());
-        icon.setText(moodEvent.getMood().getColor().toString());
-        trigger.setText(moodEvent.getTrigger());
-        if (moodEvent.getSocialSetting() != null)
-            socialIcon.setText(moodEvent.getSocialSetting().toString());
+        if (moodEvent != null) {
+            display();
+        }
 
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +73,19 @@ public class ViewMoodEventActivity extends AppCompatActivity{
 
     }
 
+    private void display() {
+        // TODO: temporarily using strings for colors etc. until we have the images
+        // TODO: change the background color as appropriate to the mood
+        name.setText(participant.getLogin());
+        dateTime.setText(moodEvent.getDate().toString());
+        if (moodEvent.getPicture() != null)
+            photo.setImageBitmap(moodEvent.getPicture().getImage());
+        location.setText(moodEvent.getLocation());
+        icon.setText(moodEvent.getMood().getColor().toString());
+        trigger.setText(moodEvent.getTrigger());
+        if (moodEvent.getSocialSetting() != null)
+            socialIcon.setText(moodEvent.getSocialSetting().toString());
+    }
 
     @Override
     protected void onPause() {

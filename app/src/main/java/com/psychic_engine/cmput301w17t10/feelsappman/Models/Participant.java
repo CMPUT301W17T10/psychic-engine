@@ -23,7 +23,6 @@ import java.util.Date;
 public class Participant extends ModelFrame {
     private String login;
     private MoodEvent mostRecentMoodEvent;
-    private int mostRecentMoodEventIndex;
     private ArrayList<MoodEvent> moodEvents;
     private ArrayList<Participant> followers;
     private ArrayList<Participant> following;
@@ -89,50 +88,21 @@ public class Participant extends ModelFrame {
      */
     public MoodEvent getMostRecentMoodEvent() { return this.mostRecentMoodEvent; }
 
-    /**
-     * Getter for mostRecentMoodEventIndex
-     * @return
-     */
-    public int getMostRecentMoodEventIndex() { return this.mostRecentMoodEventIndex; }
 
     /**
-     * replace old mood event with new mood event at index. Currently out of service until further
-     * notice. Most likely be issued into the controller class instead if any.
-     * @param index
-     * @param mood
-     * @param socialSetting
-     * @param trigger
-     * @param photo
-     * @param location
-     * @return
+     * Adds a new mood event to the mood event list
+     * @param moodEvent
      */
-    public boolean setMoodEvent(int index, Mood mood, SocialSetting socialSetting, String trigger, Photograph photo, String location) {
-        moodEvents.get(index).setMood(mood);
-        moodEvents.get(index).setDate(new Date());
-        moodEvents.get(index).setSocialSetting(socialSetting);
-        try {
-            moodEvents.get(index).setTrigger(trigger);
-        } catch (TriggerTooLongException e) {
-            return false;
-        }
-        moodEvents.get(index).setPicture(photo);
-        moodEvents.get(index).setLocation(location);
-
-        return true;
-    }
-
     public void addMoodEvent(MoodEvent moodEvent) {
         if (moodEvents.isEmpty()) {
             Log.d("Empty", "MoodEvents is empty for "+ login);
         }
 
+        // update most recent mood event
         if (mostRecentMoodEvent == null) {
             mostRecentMoodEvent = moodEvent;
-            mostRecentMoodEventIndex = moodEvents.size();
-        }
-        else if (moodEvent.getDate().after(mostRecentMoodEvent.getDate())) {
+        } else if (moodEvent.getDate().after(mostRecentMoodEvent.getDate())) {
             mostRecentMoodEvent = moodEvent;
-            mostRecentMoodEventIndex = moodEvents.size();
         }
 
         moodEvents.add(moodEvent);
@@ -140,28 +110,13 @@ public class Participant extends ModelFrame {
         Log.d("Added", this.moodEvents.get(0).getMood().getMood().toString());
     }
 
-    public void removeMoodEvent(int index) {
-        moodEvents.remove(index);
 
-        if (moodEvents.size() == 0) {
-            mostRecentMoodEvent = null;
-            mostRecentMoodEventIndex = -1;
-        }
-        else {
-            Date earliestDate = moodEvents.get(0).getDate();
-            for (int i = 0; i < moodEvents.size(); i++) {
-                if (moodEvents.get(i).getDate().after(earliestDate)) {
-                    mostRecentMoodEventIndex = i;
-                    mostRecentMoodEvent = moodEvents.get(mostRecentMoodEventIndex);
-                }
-
-            }
-        }
-    }
-
-    public void setMoodList(ArrayList<MoodEvent> moodList)
-    {
-        this.moodEvents = moodList;
+    /**
+     * Set the most recent mood event
+     * @param moodEvent
+     */
+    public void setMostRecentMoodEvent(MoodEvent moodEvent) {
+        this.mostRecentMoodEvent = moodEvent;
     }
 }
 

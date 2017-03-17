@@ -5,6 +5,7 @@ import android.util.Log;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
@@ -20,15 +21,31 @@ public class CreateMoodController {
         Mood mood;
         SocialSetting socialSetting;
         Log.d("Mood String", moodString);
-        switch(moodString) {        // TODO refactor this - inside MoodState enum class?
-            case "Sad": mood = new Mood(MoodState.SAD); break;
-            case "Happy": mood = new Mood(MoodState.HAPPY); break;
-            case "Shame": mood = new Mood(MoodState.SHAME); break;
-            case "Fear": mood = new Mood(MoodState.FEAR); break;
-            case "Anger": mood = new Mood(MoodState.ANGER); break;
-            case "Surprised": mood = new Mood(MoodState.SURPRISED); break;
-            case "Disgust": mood = new Mood(MoodState.DISGUST); break;
-            case "Confused": mood = new Mood(MoodState.CONFUSED); break;
+        switch(moodString) {
+            case "Sad":
+                mood = new Mood(MoodState.SAD);
+                break;
+            case "Happy":
+                mood = new Mood(MoodState.HAPPY);
+                break;
+            case "Shame":
+                mood = new Mood(MoodState.SHAME);
+                break;
+            case "Fear":
+                mood = new Mood(MoodState.FEAR);
+                break;
+            case "Anger":
+                mood = new Mood(MoodState.ANGER);
+                break;
+            case "Surprised":
+                mood = new Mood(MoodState.SURPRISED);
+                break;
+            case "Disgust":
+                mood = new Mood(MoodState.DISGUST);
+                break;
+            case "Confused":
+                mood = new Mood(MoodState.CONFUSED);
+                break;
             default:
                 return false;
         }
@@ -51,7 +68,8 @@ public class CreateMoodController {
         }
 
         MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
-        ParticipantSingleton.getInstance().getSelfParticipant().addMoodEvent(moodEvent);
+        Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
+        participant.addMoodEvent(moodEvent);
 
         return true;
     }

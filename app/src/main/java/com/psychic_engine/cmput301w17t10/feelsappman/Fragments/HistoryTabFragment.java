@@ -9,11 +9,9 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Fragments;
  *  Mood Event
  */
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -28,19 +26,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.google.gson.Gson;
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.EditMoodActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Comparators.CustomComparator;
-import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.DeleteMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -114,21 +107,20 @@ public class HistoryTabFragment extends Fragment {
 
 
         // enable edit and delete options on long click of a list item
-        moodEventsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-                return false;
-            }
-        });
-
+        registerForContextMenu(moodEventsListView);
 
         return rootView;
     }
 
     // Taken from https://developer.android.com/guide/topics/ui/menus.html
     // on 3/17/17
+
+    /**
+     * Called when the participant long clicks on a mood event in the list
+     * @param menu
+     * @param v
+     * @param menuInfo
+     */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -136,15 +128,25 @@ public class HistoryTabFragment extends Fragment {
         inflater.inflate(R.menu.menu_edit_delete, menu);
     }
 
+    /**
+     * Called when the participants selects an item in the context menu
+     * @param item
+     * @return
+     */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.edit:
-                //EditMoodEventController.editMood(info.id);
+                Intent intent = new Intent(getActivity(), EditMoodActivity.class);
+                intent.putExtra("moodEventId", filteredMoodList.get(info.position).getId());
+                startActivity(intent);
                 return true;
             case R.id.delete:
-                //DeleteMoodEventController.editMood(info.id);
+                MoodEvent moodEventToBeRemoved = filteredMoodList.get(info.position);
+                DeleteMoodController.remove(moodEventToBeRemoved);
+                filteredMoodList.remove(moodEventToBeRemoved);
+                adapter.notifyDataSetChanged();
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -189,7 +191,6 @@ public class HistoryTabFragment extends Fragment {
             Collections.sort(filteredMoodList, new CustomComparator());
 
     }
-
 
 
     private void checkFilterSelected() {
