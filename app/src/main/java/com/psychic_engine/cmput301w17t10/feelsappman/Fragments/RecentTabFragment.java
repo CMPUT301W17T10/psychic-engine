@@ -49,7 +49,6 @@ public class RecentTabFragment extends Fragment {
         moodEvent = participant.getMostRecentMoodEvent();
 
         // Refresh display
-        clear();
         display();
 
 
@@ -60,10 +59,7 @@ public class RecentTabFragment extends Fragment {
                 if (moodEvent != null) {
                     DeleteMoodController.remove(moodEvent);
 
-                    // refresh the display
-                    clear();
-
-                    // display the next most recent mood
+                    // refresh display
                     display();
                 }
             }
@@ -94,12 +90,6 @@ public class RecentTabFragment extends Fragment {
         return rootView;
     }
 
-    private void clear() {
-        viewmood.setText("");
-        date.setText("There's No Mood Event Yet! Why Don't you add one!");
-        location.setText("");
-        imageView.setImageBitmap(null);
-    }
 
     private void display() {
         moodEvent = participant.getMostRecentMoodEvent();
@@ -111,6 +101,11 @@ public class RecentTabFragment extends Fragment {
                 imageView.setImageBitmap(moodEvent.getPicture().getImage());
             }
             location.setText(moodEvent.getLocation().toString());
-        }
+        } else {
+            viewmood.setText("");
+            date.setText("There's No Mood Event Yet! Why Don't you add one!");
+            location.setText("");
+            imageView.setImageBitmap(null);
+        }        
     }
 }
