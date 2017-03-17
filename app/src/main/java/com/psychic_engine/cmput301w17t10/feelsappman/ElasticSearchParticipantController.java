@@ -3,6 +3,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
@@ -88,6 +89,7 @@ public class ElasticSearchParticipantController {
             return participantList;
         }
     }
+    
     public static void verifySettings() {
         if (client == null) {
             DroidClientConfig.Builder builder = new DroidClientConfig.Builder

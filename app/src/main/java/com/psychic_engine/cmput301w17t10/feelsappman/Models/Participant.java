@@ -20,7 +20,6 @@ import java.util.Date;
  * Currently the last three are out of service until later development.
  * @see LoginActivity
  */
-<<<<<<< HEAD:app/src/main/java/com/psychic_engine/cmput301w17t10/feelsappman/Participant.java
 public class Participant extends ModelFrame{
     public String login;
     public MoodEvent mostRecentMoodEvent;
@@ -30,17 +29,6 @@ public class Participant extends ModelFrame{
     public ArrayList<Participant> following;
     public ArrayList<Participant> pendingRequests;
     public String id;
-=======
-public class Participant extends ModelFrame {
-    private String login;
-    private MoodEvent mostRecentMoodEvent;
-    private int mostRecentMoodEventIndex;
-    private ArrayList<MoodEvent> moodEvents;
-    private ArrayList<Participant> followers;
-    private ArrayList<Participant> following;
-    private ArrayList<Participant> pendingRequests;
-
->>>>>>> d9a41a44d482f9408b09bc7e53d27af2f014b32f:app/src/main/java/com/psychic_engine/cmput301w17t10/feelsappman/Models/Participant.java
 
     /**
      * Everytime the participant is initialized, we will save their name into the system. Since

@@ -7,6 +7,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 
 import java.util.Date;
 
