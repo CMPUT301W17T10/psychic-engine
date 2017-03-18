@@ -71,6 +71,9 @@ public class CreateMoodController {
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         participant.addMoodEvent(moodEvent);
 
+        // update most recent mood event
+        participant.setMostRecentMoodEvent(moodEvent);
+
         return true;
     }
 }

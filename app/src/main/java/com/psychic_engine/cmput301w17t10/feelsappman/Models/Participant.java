@@ -94,20 +94,7 @@ public class Participant extends ModelFrame {
      * @param moodEvent
      */
     public void addMoodEvent(MoodEvent moodEvent) {
-        if (moodEvents.isEmpty()) {
-            Log.d("Empty", "MoodEvents is empty for "+ login);
-        }
-
-        // update most recent mood event
-        if (mostRecentMoodEvent == null) {
-            mostRecentMoodEvent = moodEvent;
-        } else if (moodEvent.getDate().after(mostRecentMoodEvent.getDate())) {
-            mostRecentMoodEvent = moodEvent;
-        }
-
         moodEvents.add(moodEvent);
-        Log.d("Success", "Successful addition of mood event");
-        Log.d("Added", this.moodEvents.get(0).getMood().getMood().toString());
     }
 
 
