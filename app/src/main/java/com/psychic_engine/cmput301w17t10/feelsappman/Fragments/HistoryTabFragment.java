@@ -155,7 +155,7 @@ public class HistoryTabFragment extends Fragment {
 
     private void filter() {
         filteredMoodList.clear();
-        
+
         // Check which filters have been selected
         checkFilterSelected();
 
@@ -217,6 +217,10 @@ public class HistoryTabFragment extends Fragment {
 
         adapter = new ArrayAdapter<MoodEvent>(getActivity(), R.layout.item_history, filteredMoodList);
         moodEventsListView.setAdapter(adapter);
+
+        // initial filter according to users last settings
+        filter();
+        adapter.notifyDataSetChanged();
     }
 
 }
