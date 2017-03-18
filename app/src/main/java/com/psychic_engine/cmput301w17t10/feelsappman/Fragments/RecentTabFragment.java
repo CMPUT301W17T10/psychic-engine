@@ -4,6 +4,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Fragments;
  * Created by jordi on 2017-03-09.
  */
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
+import static android.graphics.Color.parseColor;
 
 
 public class RecentTabFragment extends Fragment {
@@ -48,9 +50,6 @@ public class RecentTabFragment extends Fragment {
         participant = ParticipantSingleton.getInstance().getSelfParticipant();
         moodEvent = participant.getMostRecentMoodEvent();
 
-        // Refresh display
-        display();
-
 
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,22 +67,14 @@ public class RecentTabFragment extends Fragment {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (moodEvent != null) {
-                    Intent intent = new Intent(getActivity(), EditMoodActivity.class);
-                    intent.putExtra("moodEventId", moodEvent.getId());
-                    startActivity(intent);
-                }
+                editMood();
             }
         });
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (moodEvent != null) {
-                    Intent intent = new Intent(getActivity(), ViewMoodEventActivity.class);
-                    intent.putExtra("moodEventId", moodEvent.getId());
-                    startActivity(intent);
-                }
+                viewMood();
             }
         });
 
@@ -95,6 +86,8 @@ public class RecentTabFragment extends Fragment {
         moodEvent = participant.getMostRecentMoodEvent();
 
         if (moodEvent != null) {
+            int color = parseColor(moodEvent.getMood().getColor().getBGColor());
+            this.getView().setBackgroundColor(color);
             viewmood.setText(moodEvent.getMood().toString());
             date.setText(moodEvent.getDate().toString());
             if (moodEvent.getPicture() != null) {
@@ -102,10 +95,42 @@ public class RecentTabFragment extends Fragment {
             }
             location.setText(moodEvent.getLocation().toString());
         } else {
+            this.getView().setBackgroundColor(Color.BLACK);
             viewmood.setText("");
             date.setText("There's No Mood Event Yet! Why Don't you add one!");
             location.setText("");
             imageView.setImageBitmap(null);
-        }        
+        }
+    }
+
+    /**
+     * Launch the edit mood event activity
+     * passing it the id of the mood event to be edited as extras
+     */
+    private void editMood() {
+        if (moodEvent != null) {
+            Intent intent = new Intent(getActivity(), EditMoodActivity.class);
+            intent.putExtra("moodEventId", moodEvent.getId());
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * Launch the view mood event activity
+     * passing it the id of the mood event to be viewed as extras
+     */
+    private void viewMood() {
+        if (moodEvent != null) {
+            Intent intent = new Intent(getActivity(), ViewMoodEventActivity.class);
+            intent.putExtra("moodEventId", moodEvent.getId());
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Refresh display
+        display();
     }
 }

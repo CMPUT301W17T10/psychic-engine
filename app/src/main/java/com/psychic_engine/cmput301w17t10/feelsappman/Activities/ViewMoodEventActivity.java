@@ -16,6 +16,8 @@ import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
 import java.util.ArrayList;
 
+import static android.graphics.Color.parseColor;
+
 /**
  * Created by jyuen1 on 3/12/2017.
  */
@@ -74,8 +76,8 @@ public class ViewMoodEventActivity extends AppCompatActivity{
     }
 
     private void display() {
-        // TODO: temporarily using strings for colors etc. until we have the images
-        // TODO: change the background color as appropriate to the mood
+        int color = parseColor(moodEvent.getMood().getColor().getBGColor());
+        getWindow().getDecorView().setBackgroundColor(color);
         name.setText(participant.getLogin());
         dateTime.setText(moodEvent.getDate().toString());
         if (moodEvent.getPicture() != null)
