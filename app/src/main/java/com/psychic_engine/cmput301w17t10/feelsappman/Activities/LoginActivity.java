@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
@@ -56,7 +57,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         loginButton = (Button) findViewById(R.id.loginButton);
         signupButton = (Button) findViewById(R.id.signupButton);
         participantEditText = (EditText) findViewById(R.id.nameEditText);
@@ -106,6 +106,10 @@ public class LoginActivity extends AppCompatActivity {
             }
             else {
                 if (ParticipantSingleton.getInstance().addParticipant(participantName)) {
+                    Participant newParticipant = new Participant("testUser1");
+                    ElasticParticipantController.AddParticipantTask addParticipantTask
+                     = new ElasticParticipantController.AddParticipantTask();
+                    addParticipantTask.execute(newParticipant);
                     Toast.makeText(LoginActivity.this, participantName
                             +" has been added!", Toast.LENGTH_SHORT).show();
                 }

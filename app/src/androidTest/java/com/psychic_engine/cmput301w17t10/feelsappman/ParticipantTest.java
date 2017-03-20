@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 /**
  * Created by jspun on 2/27/17.
  */
-
+/*
 public class ParticipantTest extends TestCase{
 
     public void testGetLogin() {
@@ -67,7 +67,7 @@ public class ParticipantTest extends TestCase{
         assertTrue(a.moodEvents.contains(replaceMoodEvent));
     }
     // Not really required for the Participant model
-    /*
+
     public void testSetMoodEvent() {
         Participant a = new Participant("first");
         Mood mood = new Mood(MoodState.ANGER);
@@ -79,5 +79,7 @@ public class ParticipantTest extends TestCase{
         a.setMoodEvent(0, replaceMoodEvent);
         assertEquals(a.moodEvents.get(0), replaceMoodEvent);
     }
-    */
+
 }
+*/
+
