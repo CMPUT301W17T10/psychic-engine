@@ -2,7 +2,6 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.searchly.jestdroid.DroidClientConfig;
@@ -55,6 +54,7 @@ public class ElasticParticipantController {
             return null;
         }
     }
+
 
     public static void verifySettings() {
         if (client == null) {

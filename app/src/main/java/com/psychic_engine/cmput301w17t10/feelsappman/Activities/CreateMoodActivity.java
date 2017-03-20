@@ -1,7 +1,6 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Activities;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -24,8 +23,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.CreateMoodController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
@@ -33,11 +32,6 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +51,6 @@ import static java.lang.Boolean.TRUE;
  * @see EditMoodActivity
  */
 public class CreateMoodActivity extends AppCompatActivity {
-    private static final String FILENAME = "file.sav";
     private static int RESULT_LOAD_IMAGE = 1;
 
     private Spinner moodSpinner;
@@ -177,8 +170,7 @@ public class CreateMoodActivity extends AppCompatActivity {
                         "Please specify a mood.",
                         Toast.LENGTH_LONG).show();
             } else {
-                saveInFile();
-                Intent intent = new Intent(CreateMoodActivity.this, SelfNewsFeedActvity.class);
+                Intent intent = new Intent(CreateMoodActivity.this, SelfNewsFeedActivity.class);
                 startActivity(intent);
             }
 
@@ -328,30 +320,18 @@ public class CreateMoodActivity extends AppCompatActivity {
         });
     }
 
-    private void saveInFile() {
-        try {
-            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
-            Gson gson = new Gson();
-            gson.toJson(ParticipantSingleton.getInstance(), out);
-            out.flush();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException();
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
-    }
+
 
     @Override
     protected void onPause() {
         super.onPause();
-        saveInFile();
+        FileManager.saveInFile(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        saveInFile();
+        FileManager.saveInFile(this);
     }
+
 }
