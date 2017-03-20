@@ -20,9 +20,7 @@ import io.searchbox.core.SearchResult;
  * Created by adong on 2017-03-13.
  */
 
-public class ElasticParticipantController {
-    private static JestDroidClient client;
-
+public class ElasticParticipantController extends ElasticController {
     // Function to save new participants
     public static class AddParticipantTask extends AsyncTask<Participant, Void, Void>  {
 
@@ -33,7 +31,7 @@ public class ElasticParticipantController {
 
             // Index for each participant
             for (Participant participant : participants) {
-                Index index = new Index.Builder(participant).index("w17t10")
+                Index index = new Index.Builder(participant).index("cmput301w17t10")
                         .type("participant").build();
 
                 // Attempt to create an index for the new participants to store into the server
@@ -41,6 +39,7 @@ public class ElasticParticipantController {
                     DocumentResult result = client.execute(index);
                     // Upon successful execution of index creation, attempt to save id to participant
                     if (result.isSucceeded()) {
+
                         participant.setID(result.getId());
                         Log.i("Success", "Elasticsearch was able to add the new participant");
                     }
@@ -55,15 +54,4 @@ public class ElasticParticipantController {
         }
     }
 
-
-    public static void verifySettings() {
-        if (client == null) {
-            DroidClientConfig.Builder builder = new DroidClientConfig.Builder
-                    ("http://cmput301.softwareprocess.es:8080");
-            DroidClientConfig config = builder.build();
-            JestClientFactory factory = new JestClientFactory();
-            factory.setDroidClientConfig(config);
-            client = (JestDroidClient) factory.getObject();
-        }
-    }
 }

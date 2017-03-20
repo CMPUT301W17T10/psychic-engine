@@ -43,6 +43,7 @@ public class Participant extends ModelFrame{
         this.followers = new ArrayList<Participant>();
         this.following = new ArrayList<Participant>();
         this.pendingRequests = new ArrayList<Participant>();
+        this.id = null;
     }
 
     //TODO: Potentially unique ID ???

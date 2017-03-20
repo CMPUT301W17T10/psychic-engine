@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * Created by Jen on 3/8/2017.
  */
-
+/*
 public class EditMoodController {
 
     static boolean updateMoodEventList(int moodEventPosition, String moodString, String socialSettingString, String trigger, Photograph photo, String location) {
@@ -77,3 +77,4 @@ public class EditMoodController {
         }
     }
 }
+*/

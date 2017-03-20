@@ -3,11 +3,13 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
@@ -91,11 +93,15 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 String participantName = participantEditText.getText().toString();
+                Participant newParticipant = new Participant(participantName);
                 if (ParticipantSingleton.participantNameTaken(participantName)) {
                     Toast.makeText(LoginActivity.this, "The username is already taken",
                             Toast.LENGTH_SHORT).show();
                 } else {
                     if (ParticipantSingleton.getInstance().addParticipant(participantName)) {
+                        ElasticParticipantController.AddParticipantTask addParticipantTask = new
+                                ElasticParticipantController.AddParticipantTask();
+                        addParticipantTask.execute(newParticipant);
                         Toast.makeText(LoginActivity.this, participantName
                                 + " has been added!", Toast.LENGTH_SHORT).show();
                     } else {
