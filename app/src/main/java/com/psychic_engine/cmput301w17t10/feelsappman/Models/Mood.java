@@ -83,7 +83,7 @@ public class Mood {
                 //icon = "surprisedicon.png";
                 break;
             case DISGUST:
-                color = MoodColor.LIGHTGREEN;
+                color = MoodColor.LIME;
                 //icon = "disgusticon.png";
                 break;
             case CONFUSED:

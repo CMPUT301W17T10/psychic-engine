@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.EditMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
@@ -57,7 +58,7 @@ public class EditMoodActivity extends AppCompatActivity{
     private Button cancelButton;
 
     private MoodEvent moodEvent;    // the moodEvent to be edited
-    private int moodEventPosition;
+    private String moodEventId;
 
     /**
      * Called on activity creation.  Initializes widgets and class variables.
@@ -70,9 +71,18 @@ public class EditMoodActivity extends AppCompatActivity{
 
         isStoragePermissionGranted();
 
-        moodEventPosition = getIntent().getExtras().getInt("moodEventPosition");
+        moodEventId = getIntent().getExtras().getString("moodEventId");
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
-        moodEvent = participant.getMoodList().get(moodEventPosition);
+        // This is O(n) - can be improved to O(1) if we implement serializable on moodEvent instead
+        // would work from recent or history even if filtered
+        // since the moodEvent would be passed by reference (address)
+        // but serializable is "slow and inefficient"
+        for (MoodEvent m : participant.getMoodList()) {
+            if (m.getId().equals(moodEventId))
+                moodEvent = m;
+        }
+
+        //moodEvent = participant.getMoodList().get(moodEventPosition);
 
         // set up mood and social setting spinners (drop downs)
         setUpSpinners();
@@ -155,7 +165,14 @@ public class EditMoodActivity extends AppCompatActivity{
         String location = locationEditText.getText().toString(); // TODO change location type in part 5
 
         if (photoSizeUnder) {
-            EditMoodController.updateMoodEventList(moodEventPosition, moodString, socialSettingString, trigger, photo, location);
+            try {
+                EditMoodController.updateMoodEventList(
+                        moodEvent, moodString, socialSettingString, trigger, photo, location);
+            } catch (TriggerTooLongException e) {
+                Toast.makeText(EditMoodActivity.this,
+                        "Trigger must be 3 words and under 20 chars!",
+                        Toast.LENGTH_LONG).show();
+            }
         } else {
             Toast.makeText(EditMoodActivity.this,
                     "Photo size is too large! (Max 65536 bytes)",
