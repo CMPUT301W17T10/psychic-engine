@@ -13,7 +13,9 @@ import com.searchly.jestdroid.JestDroidClient;
  * controllers used throughout the program.
  */
 public class ElasticController {
+
     protected static JestDroidClient client;
+
     public static void verifySettings() {
         if (client == null) {
             DroidClientConfig.Builder builder = new DroidClientConfig.Builder

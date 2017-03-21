@@ -20,6 +20,7 @@ import io.searchbox.core.SearchResult;
  * Created by adong on 2017-03-13.
  */
 
+// TODO: Comments
 public class ElasticParticipantController extends ElasticController {
     // Function to save new participants
     public static class AddParticipantTask extends AsyncTask<Participant, Void, Void>  {
@@ -39,9 +40,8 @@ public class ElasticParticipantController extends ElasticController {
                     DocumentResult result = client.execute(index);
                     // Upon successful execution of index creation, attempt to save id to participant
                     if (result.isSucceeded()) {
-
                         participant.setID(result.getId());
-                        Log.i("Success", "Elasticsearch was able to add the new participant");
+                        Log.i("Success", "Participant ID: "+participant.getID());
                     }
                     else {
                         Log.i("Error", "Elasticsearch was not able to add the new participant");

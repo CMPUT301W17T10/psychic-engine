@@ -2,6 +2,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ListView;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 
@@ -14,42 +15,38 @@ import io.searchbox.core.SearchResult;
 /**
  * Created by adong on 2017-03-20.
  */
-
+// TODO: Comments
 public class ElasticSearchController extends ElasticController {
 
-    public static class SearchParticipantTask extends AsyncTask<String, Void, ArrayList<Participant>> {
+    public static class FindParticipantTask extends AsyncTask<String, Void, Participant> {
 
         @Override
-        protected ArrayList<Participant> doInBackground(String... participantsLogin) {
+        protected Participant doInBackground(String... params) {
             verifySettings();
-            ArrayList<Participant> participants = new ArrayList<Participant>();
+            Participant foundParticipant = null;
+            String query = "{\"from\" : 0, \"size\" : 1,\"query\" : {\"term\" : { \"login\" : \"" +params[0] + "\" }}}";
 
-            // TODO Build the query
-            String query = "{\n" +
-                    "    \"query\" : {\n" +
-                    "        \"term\" : { \"login\" : " + participantsLogin[0] + " }\n" +
-                    "    }\n" +
-                    "}";
-
-            Search search = new Search.Builder(query)
+            Search search = new Search.TemplateBuilder(query)
                     .addIndex("cmput301w17t10")
                     .addType("participant")
                     .build();
+
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
-                    List<SearchResult.Hit<Participant, Void>> hits = result.getHits(Participant.class);
-                    for (SearchResult.Hit results: hits) {
-                        
-                    }
-                } else {
-                    Log.i("Error", "The search query failed to find any tweets that matched");
+                    Log.i("JSON", result.getJsonObject().toString());
+                    foundParticipant = result.getSourceAsObject(Participant.class);
+                }
+                else {
+                    return null;
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                return null;
             }
-
-            return participants;
+            return foundParticipant;
         }
     }
+
 }
