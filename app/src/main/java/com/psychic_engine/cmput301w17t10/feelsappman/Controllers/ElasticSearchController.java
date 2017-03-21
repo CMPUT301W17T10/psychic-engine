@@ -24,26 +24,28 @@ public class ElasticSearchController extends ElasticController {
         protected Participant doInBackground(String... params) {
             verifySettings();
             Participant foundParticipant = null;
-            String query = "{\"from\" : 0, \"size\" : 1,\"query\" : {\"term\" : { \"login\" : \"" +params[0] + "\" }}}";
+            String query = "{\"from\" : 0, \"size\" : 1,\"query\" : {\"match\" : { \"login\" : \"" +params[0] + "\" }}}";
 
             Search search = new Search.TemplateBuilder(query)
                     .addIndex("cmput301w17t10")
                     .addType("participant")
                     .build();
 
+
             try {
+                Log.i("Attempt", "Search for " + params[0] + " Query: "+ query);
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     Log.i("JSON", result.getJsonObject().toString());
                     foundParticipant = result.getSourceAsObject(Participant.class);
                 }
                 else {
+                    Log.i("NULL", "Search returned null");
                     return null;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-                return null;
             }
             return foundParticipant;
         }

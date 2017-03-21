@@ -20,10 +20,15 @@ public class ParticipantController {
     public static boolean checkUniqueParticipant(String participantName) {
         Participant foundParticipant = null;
         ElasticSearchController.FindParticipantTask spt = new ElasticSearchController.FindParticipantTask();
-        spt.execute(participantName);
 
         try {
-            foundParticipant = spt.get();
+
+            foundParticipant = spt.execute(participantName).get();
+            if (foundParticipant == null) {
+                System.out.println(foundParticipant.getLogin() + " | " + foundParticipant.getID());
+            } else {
+                System.out.println("Participant is null on search");
+            }
         } catch (Exception e) {
             Log.i("CheckParticipantName", "Failed connection with the elastic server");
         }
