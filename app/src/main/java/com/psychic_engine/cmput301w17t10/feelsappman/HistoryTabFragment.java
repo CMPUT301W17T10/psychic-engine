@@ -1,4 +1,4 @@
-package com.psychic_engine.cmput301w17t10.feelsappman;
+//package com.psychic_engine.cmput301w17t10.feelsappman;
 
 /**
  *  Created by Hussain Khan
@@ -8,7 +8,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
  *  can apply one or more filters to search for a particular
  *  Mood Event
  */
-
+/*
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,6 +22,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
+import com.psychic_engine.cmput301w17t10.feelsappman.R;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -173,3 +178,4 @@ public class HistoryTabFragment extends Fragment {
         }
     }
 }
+*/

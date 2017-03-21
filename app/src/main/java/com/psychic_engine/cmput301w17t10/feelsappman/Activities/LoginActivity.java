@@ -3,15 +3,21 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticSearchController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ParticipantController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
+
+import java.util.concurrent.ExecutionException;
 
 // created by Alex Dong | March 6, 2017 | Comments by Alex Dong
 
@@ -46,7 +52,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         loginButton = (Button) findViewById(R.id.loginButton);
         signupButton = (Button) findViewById(R.id.signupButton);
         participantEditText = (EditText) findViewById(R.id.nameEditText);
@@ -65,17 +70,19 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String participantName = participantEditText.getText().toString();
-                if (ParticipantSingleton.participantNameTaken(participantName)) {
+                /*
+                if(ElasticSearchController.takenName(participantName)) {
                     Participant self = instance.searchParticipant(participantName);
                     instance.setSelfParticipant(self);
                     Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
-                    Toast.makeText(LoginActivity.this, "Welcome " + instance.getSelfParticipant().getLogin(), Toast.LENGTH_SHORT).show();
                     startActivity(intent);
-                } else {
+                }
+                else {
                     Toast.makeText(LoginActivity.this,
                             "This participant does not exist, please sign up"
                             , Toast.LENGTH_SHORT).show();
                 }
+                */
             }
         });
 
@@ -92,18 +99,39 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 String participantName = participantEditText.getText().toString();
-                if (ParticipantSingleton.participantNameTaken(participantName)) {
-                    Toast.makeText(LoginActivity.this, "The username is already taken",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    if (ParticipantSingleton.getInstance().addParticipant(participantName)) {
-                        Toast.makeText(LoginActivity.this, participantName
-                                + " has been added!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Input invalid, please try again",
-                                Toast.LENGTH_SHORT).show();
-                    }
+                Participant newParticipant = new Participant(participantName);
+                if (ParticipantController.checkUniqueParticipant(participantName)) {
+                    ParticipantSingleton.getInstance().addParticipant(participantName);
+                    ElasticParticipantController.AddParticipantTask addParticipantTask = new
+                            ElasticParticipantController.AddParticipantTask();
+                    addParticipantTask.execute(newParticipant);
+                    Toast.makeText(LoginActivity.this, participantName
+                            + " has been added!", Toast.LENGTH_SHORT).show();
+                    Participant self = instance.searchParticipant(participantName);
+                    // TODO: Check for new participant logged user and add him
+                    instance.setSelfParticipant(self);
+                    Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
+                    startActivity(intent);
                 }
+
+                /*
+                if (!ElasticSearchController.takenName(participantName)) {
+                    ParticipantSingleton.getInstance().addParticipant(participantName);
+                    ElasticParticipantController.AddParticipantTask addParticipantTask = new
+                            ElasticParticipantController.AddParticipantTask();
+                    addParticipantTask.execute(newParticipant);
+                    Toast.makeText(LoginActivity.this, participantName
+                            + " has been added!", Toast.LENGTH_SHORT).show();
+                    Participant self = instance.searchParticipant(participantName);
+                    instance.setSelfParticipant(self);
+                    Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(LoginActivity.this, "Input invalid, please try again",
+                            Toast.LENGTH_SHORT).show();
+                    }
+                    */
             }
         });
     }

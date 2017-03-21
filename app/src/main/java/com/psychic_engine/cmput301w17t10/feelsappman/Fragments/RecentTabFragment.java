@@ -3,8 +3,8 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Fragments;
 /**
  * Created by jordi on 2017-03-09.
  */
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,38 +14,27 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.EditMoodActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.ViewMoodEventActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.DeleteMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
+import static android.graphics.Color.parseColor;
 
 
 public class RecentTabFragment extends Fragment {
 
-    public ArrayList<MoodEvent> moodEventsRecent;
-    private MoodEvent moodEvent;
     private TextView date;
     private TextView viewmood;
-    private ParticipantSingleton instance;
     private TextView location;
     private ImageView imageView;
     private Button delete;
     private Button edit;
-    private int mostRecentIndex;
+    private Participant participant;
+    private MoodEvent moodEvent;
 
 
     @Override
@@ -58,82 +47,90 @@ public class RecentTabFragment extends Fragment {
         viewmood = (TextView) rootView.findViewById(R.id.mood);
         location = (TextView) rootView.findViewById(R.id.location);
         imageView = (ImageView) rootView.findViewById(R.id.picture);
-        moodEventsRecent = ParticipantSingleton.getInstance().getSelfParticipant().getMoodList();
-        mostRecentIndex = ParticipantSingleton.getInstance().getSelfParticipant().getMostRecentMoodEventIndex();
+        participant = ParticipantSingleton.getInstance().getSelfParticipant();
+        moodEvent = participant.getMostRecentMoodEvent();
 
 
-        if (moodEventsRecent.size()>0){
-            moodEvent = moodEventsRecent.get(mostRecentIndex);
-
-
-            viewmood.setText(moodEvent.getMood().toString());
-            date.setText(moodEvent.getDate().toString());
-            if (moodEvent.getPicture() != null) {
-                imageView.setImageBitmap(moodEvent.getPicture().getImage());
-            }
-            //location.setText(moodEvent.getLocation().toString());
-            //saveInFile();
-
-        }
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (moodEventsRecent.size()>0) {
-                    moodEventsRecent.remove(moodEventsRecent.size() - 1);
-                    ParticipantSingleton.getInstance().getSelfParticipant().setMoodList(moodEventsRecent);
+                if (moodEvent != null) {
+                    DeleteMoodController.remove(moodEvent);
 
-
-                    if (moodEventsRecent.size() > 0) {
-
-
-                        moodEvent = moodEventsRecent.get(moodEventsRecent.size() - 1);
-
-
-                        viewmood.setText(moodEvent.getMood().toString());
-                        date.setText(moodEvent.getDate().toString());
-                        if (moodEvent.getPicture() != null) {
-                            imageView.setImageBitmap(moodEvent.getPicture().getImage());
-                            //location.setText(moodEvent.getLocation().toString());
-                        }
-                    } else {
-                        viewmood.setText("");
-                        date.setText("There's No Mood Event Yet! Why Don't you add one!");
-                        location.setText("");
-                        imageView.setImageBitmap(null);
-                    }
-                }
-                 else {
-                        viewmood.setText("");
-                        date.setText("There's No Mood Event Yet! Why Don't you add one!");
-                        location.setText("");
-
+                    // refresh display
+                    display();
                 }
             }
         });
+
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (moodEventsRecent.size() > 0) {
-                    Intent intent = new Intent(getActivity(), EditMoodActivity.class);
-                    intent.putExtra("moodEventPosition", mostRecentIndex);
-                    startActivity(intent);
-                }
+                editMood();
             }
         });
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (moodEventsRecent.size() > 0) {
-                    Intent intent = new Intent(getActivity(), ViewMoodEventActivity.class);
-                    intent.putExtra("moodEventPosition", mostRecentIndex);
-                    startActivity(intent);
-                }
+                viewMood();
             }
         });
 
         return rootView;
     }
 
+
+    private void display() {
+        moodEvent = participant.getMostRecentMoodEvent();
+
+        if (moodEvent != null) {
+            int color = parseColor(moodEvent.getMood().getColor().getBGColor());
+            this.getView().setBackgroundColor(color);
+            viewmood.setText(moodEvent.getMood().toString());
+            date.setText(moodEvent.getDate().toString());
+            if (moodEvent.getPicture() != null) {
+                imageView.setImageBitmap(moodEvent.getPicture().getImage());
+            }
+            location.setText(moodEvent.getLocation().toString());
+        } else {
+            this.getView().setBackgroundColor(Color.BLACK);
+            viewmood.setText("");
+            date.setText("There's No Mood Event Yet! Why Don't you add one!");
+            location.setText("");
+            imageView.setImageBitmap(null);
+        }
+    }
+
+    /**
+     * Launch the edit mood event activity
+     * passing it the id of the mood event to be edited as extras
+     */
+    private void editMood() {
+        if (moodEvent != null) {
+            Intent intent = new Intent(getActivity(), EditMoodActivity.class);
+            intent.putExtra("moodEventId", moodEvent.getId());
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * Launch the view mood event activity
+     * passing it the id of the mood event to be viewed as extras
+     */
+    private void viewMood() {
+        if (moodEvent != null) {
+            Intent intent = new Intent(getActivity(), ViewMoodEventActivity.class);
+            intent.putExtra("moodEventId", moodEvent.getId());
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Refresh display
+        display();
+    }
 }

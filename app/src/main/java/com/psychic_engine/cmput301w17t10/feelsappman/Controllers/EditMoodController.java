@@ -1,11 +1,16 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by jyuen1 on 3/8/2017.
@@ -13,7 +18,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 
 public class EditMoodController {
 
-    public static boolean updateMoodEventList(int moodEventPosition, String moodString, String socialSettingString, String trigger, Photograph photo, String location) {
+    public static void updateMoodEventList(MoodEvent moodEvent, String moodString, String socialSettingString, String trigger, Photograph photo, String location) throws TriggerTooLongException {
 
         Mood mood = null;
         SocialSetting socialSetting;
@@ -62,12 +67,20 @@ public class EditMoodController {
                 socialSetting = null;
         }
 
-        // replace old moodEvent with new one
-        if (ParticipantSingleton.getInstance().getSelfParticipant().setMoodEvent(
-                moodEventPosition, mood, socialSetting, trigger, photo, location))
-            return true;
-        else
-            return false;
+        // update properties of the mood event
+        moodEvent.setMood(mood);
+        moodEvent.setDate(new Date());
+        moodEvent.setSocialSetting(socialSetting);
+        try {
+            moodEvent.setTrigger(trigger);
+        } catch (TriggerTooLongException e) {
+            throw new TriggerTooLongException();
+        }
+        moodEvent.setPicture(photo);
+        moodEvent.setLocation(location);
 
+        // update the most recent mood event
+        Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
+        participant.setMostRecentMoodEvent(moodEvent);
     }
 }

@@ -30,6 +30,7 @@ public class Participant extends ModelFrame{
     public ArrayList<Participant> pendingRequests;
     public String id;
 
+
     /**
      * Everytime the participant is initialized, we will save their name into the system. Since
      * the account is new, they will have no mood events, no followers, no following, and no
@@ -42,6 +43,7 @@ public class Participant extends ModelFrame{
         this.followers = new ArrayList<Participant>();
         this.following = new ArrayList<Participant>();
         this.pendingRequests = new ArrayList<Participant>();
+        this.id = null;
     }
 
     //TODO: Potentially unique ID ???
@@ -105,79 +107,22 @@ public class Participant extends ModelFrame{
      */
     public MoodEvent getMostRecentMoodEvent() { return this.mostRecentMoodEvent; }
 
-    /**
-     * Getter for mostRecentMoodEventIndex
-     * @return
-     */
-    public int getMostRecentMoodEventIndex() { return this.mostRecentMoodEventIndex; }
 
     /**
-     * replace old mood event with new mood event at index. Currently out of service until further
-     * notice. Most likely be issued into the controller class instead if any.
-     * @param index
-     * @param mood
-     * @param socialSetting
-     * @param trigger
-     * @param photo
-     * @param location
-     * @return
+     * Adds a new mood event to the mood event list
+     * @param moodEvent
      */
-    public boolean setMoodEvent(int index, Mood mood, SocialSetting socialSetting, String trigger, Photograph photo, String location) {
-        moodEvents.get(index).setMood(mood);
-        moodEvents.get(index).setDate(new Date());
-        moodEvents.get(index).setSocialSetting(socialSetting);
-        try {
-            moodEvents.get(index).setTrigger(trigger);
-        } catch (TriggerTooLongException e) {
-            return false;
-        }
-        moodEvents.get(index).setPicture(photo);
-        moodEvents.get(index).setLocation(location);
-
-        return true;
-    }
-
     public void addMoodEvent(MoodEvent moodEvent) {
-        if (moodEvents.isEmpty()) {
-            Log.d("Empty", "MoodEvents is empty for "+ login);
-        }
-
-        if (mostRecentMoodEvent == null) {
-            mostRecentMoodEvent = moodEvent;
-            mostRecentMoodEventIndex = moodEvents.size();
-        }
-        else if (moodEvent.getDate().after(mostRecentMoodEvent.getDate())) {
-            mostRecentMoodEvent = moodEvent;
-            mostRecentMoodEventIndex = moodEvents.size();
-        }
-
         moodEvents.add(moodEvent);
-        Log.d("Success", "Successful addition of mood event");
-        Log.d("Added", this.moodEvents.get(0).getMood().getMood().toString());
     }
 
-    public void removeMoodEvent(int index) {
-        moodEvents.remove(index);
 
-        if (moodEvents.size() == 0) {
-            mostRecentMoodEvent = null;
-            mostRecentMoodEventIndex = -1;
-        }
-        else {
-            Date earliestDate = moodEvents.get(0).getDate();
-            for (int i = 0; i < moodEvents.size(); i++) {
-                if (moodEvents.get(i).getDate().after(earliestDate)) {
-                    mostRecentMoodEventIndex = i;
-                    mostRecentMoodEvent = moodEvents.get(mostRecentMoodEventIndex);
-                }
-
-            }
-        }
-    }
-
-    public void setMoodList(ArrayList<MoodEvent> moodList)
-    {
-        this.moodEvents = moodList;
+    /**
+     * Set the most recent mood event
+     * @param moodEvent
+     */
+    public void setMostRecentMoodEvent(MoodEvent moodEvent) {
+        this.mostRecentMoodEvent = moodEvent;
     }
 }
 
