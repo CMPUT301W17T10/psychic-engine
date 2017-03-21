@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.EditMoodActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.ViewMoodEventActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Comparators.CustomComparator;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.DeleteMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
@@ -96,18 +97,25 @@ public class HistoryTabFragment extends Fragment {
         applyFilters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                filter();
-                adapter.notifyDataSetChanged();
+                refresh();
             }
         });
 
 
         // enable viewing mood event on tap of list item
+        moodEventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), ViewMoodEventActivity.class);
+                intent.putExtra("moodEventId", filteredMoodList.get(position).getId());
+                startActivity(intent);
+            }
+        });
 
 
         // enable edit and delete options on long click of a list item
         registerForContextMenu(moodEventsListView);
+
 
         return rootView;
     }
@@ -219,6 +227,13 @@ public class HistoryTabFragment extends Fragment {
         moodEventsListView.setAdapter(adapter);
 
         // initial filter according to users last settings
+        refresh();
+    }
+
+    /**
+     * filter and refresh the display
+     */
+    private void refresh() {
         filter();
         adapter.notifyDataSetChanged();
     }
