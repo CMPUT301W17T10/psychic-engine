@@ -89,7 +89,7 @@ public class ElasticSearchParticipantController {
             return participantList;
         }
     }
-    
+
     public static void verifySettings() {
         if (client == null) {
             DroidClientConfig.Builder builder = new DroidClientConfig.Builder
