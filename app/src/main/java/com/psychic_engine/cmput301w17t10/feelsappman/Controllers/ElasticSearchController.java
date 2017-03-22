@@ -26,7 +26,7 @@ public class ElasticSearchController extends ElasticController {
             Participant foundParticipant = null;
             String query = "{\"from\" : 0, \"size\" : 1,\"query\" : {\"match\" : { \"login\" : \"" +params[0] + "\" }}}";
 
-            Search search = new Search.TemplateBuilder(query)
+            Search search = new Search.Builder(query)
                     .addIndex("cmput301w17t10")
                     .addType("participant")
                     .build();
