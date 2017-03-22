@@ -70,19 +70,25 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String participantName = participantEditText.getText().toString();
-                /*
-                if(ElasticSearchController.takenName(participantName)) {
-                    Participant self = instance.searchParticipant(participantName);
-                    instance.setSelfParticipant(self);
-                    Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
-                    startActivity(intent);
+                if (!ParticipantController.checkUniqueParticipant(participantName)) {
+                    Participant self = null;
+                    try {
+                        ElasticSearchController.FindParticipantTask findParticipantTask = new
+                                ElasticSearchController.FindParticipantTask();
+                        self = findParticipantTask.execute(participantName).get();
+                        ParticipantSingleton.getInstance().setSelfParticipant(self);
+                        Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        Log.i("Error", "Error logging in");
+                    }
                 }
                 else {
                     Toast.makeText(LoginActivity.this,
                             "This participant does not exist, please sign up"
                             , Toast.LENGTH_SHORT).show();
                 }
-                */
+
             }
         });
 
