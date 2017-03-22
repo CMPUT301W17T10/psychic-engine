@@ -32,7 +32,6 @@ public class ParticipantController {
         } catch (Exception e) {
             Log.i("CheckParticipantName", "Failed connection with the elastic server");
         }
-
         return foundParticipant == null;
     }
 }

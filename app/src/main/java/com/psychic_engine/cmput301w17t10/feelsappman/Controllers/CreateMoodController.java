@@ -71,6 +71,11 @@ public class CreateMoodController {
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         participant.addMoodEvent(moodEvent);
 
+        // Mock elastic search add
+        ElasticMoodController.AddMoodEventTask addMoodEventTask = new ElasticMoodController
+                .AddMoodEventTask();
+        addMoodEventTask.execute(moodEvent);
+
         // update most recent mood event
         participant.setMostRecentMoodEvent(moodEvent);
 

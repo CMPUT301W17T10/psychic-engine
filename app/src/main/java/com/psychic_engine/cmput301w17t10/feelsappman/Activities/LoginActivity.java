@@ -75,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         ElasticSearchController.FindParticipantTask findParticipantTask = new
                                 ElasticSearchController.FindParticipantTask();
+                        //TODO: Set participant so entire selfnewsfeed doesnt crash
                         self = findParticipantTask.execute(participantName).get();
                         ParticipantSingleton.getInstance().setSelfParticipant(self);
                         Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);

@@ -24,6 +24,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.CreateMoodController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
@@ -161,8 +162,6 @@ public class CreateMoodActivity extends AppCompatActivity {
         String location = locationEditText.getText().toString(); // TODO tentative, location type will change in part 5
 
         if (photoSizeUnder) {
-            Log.d("Enter", "Entering CreateMoodController ...");
-            Log.d("MoodString", moodString);
             boolean success = createMoodController.updateMoodEventList(moodString, socialSettingString, trigger, photo, location);
 
             if (!success) {
