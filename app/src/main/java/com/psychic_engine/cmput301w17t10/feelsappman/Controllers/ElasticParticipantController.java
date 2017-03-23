@@ -38,10 +38,9 @@ public class ElasticParticipantController extends ElasticController {
                 // Attempt to create an index for the new participants to store into the server
                 try {
                     DocumentResult result = client.execute(index);
-                    // Upon successful execution of index creation, attempt to save id to participant
+                    // Upon successful execution of index creation, attempt to save uniqueID to participant
                     if (result.isSucceeded()) {
-                        participant.setID(result.getId());
-                        Log.i("Success", "Participant ID: "+participant.getID());
+                        Log.i("Success", "Participant UUID: "+participant.getID());
                     }
                     else {
                         Log.i("Error", "Elasticsearch was not able to add the new participant");
@@ -53,5 +52,35 @@ public class ElasticParticipantController extends ElasticController {
             return null;
         }
     }
+
+    public static class FindParticipantTask extends AsyncTask<String, Void, Participant> {
+        @Override
+        protected Participant doInBackground(String... params) {
+            verifySettings();
+            Participant foundParticipant = null;
+            String query = "{\"size\" : 1,\"query\" : {\"term\" : { \"login\" : \"" +params[0] + "\" }}}";
+
+            Search search = new Search.Builder(query)
+                    .addIndex("cmput301w17t10")
+                    .addType("participant")
+                    .build();
+
+            try {
+                Log.i("Attempt", "Search for " + params[0] + " Query: "+ query);
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    foundParticipant = result.getSourceAsObject(Participant.class);
+                    Log.i("Found", "Found the participant name: "+ foundParticipant.getLogin());
+                }
+                else {
+                    return null;
+                }
+            } catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+            return foundParticipant;
+        }
+    }
+
 
 }

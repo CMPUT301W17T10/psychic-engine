@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.EditMoodActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.ViewMoodEventActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.DeleteMoodController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
@@ -50,15 +51,14 @@ public class RecentTabFragment extends Fragment {
         participant = ParticipantSingleton.getInstance().getSelfParticipant();
         moodEvent = participant.getMostRecentMoodEvent();
 
-
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (moodEvent != null) {
                     DeleteMoodController.remove(moodEvent);
-
-                    // refresh display
+                    ElasticMoodController.DeleteMoodEventTask deleteMoodEventTask = new
+                            ElasticMoodController.DeleteMoodEventTask();
+                    deleteMoodEventTask.execute(moodEvent);
                     display();
                 }
             }
@@ -105,7 +105,7 @@ public class RecentTabFragment extends Fragment {
 
     /**
      * Launch the edit mood event activity
-     * passing it the id of the mood event to be edited as extras
+     * passing it the uniqueID of the mood event to be edited as extras
      */
     private void editMood() {
         if (moodEvent != null) {
@@ -117,7 +117,7 @@ public class RecentTabFragment extends Fragment {
 
     /**
      * Launch the view mood event activity
-     * passing it the id of the mood event to be viewed as extras
+     * passing it the uniqueID of the mood event to be viewed as extras
      */
     private void viewMood() {
         if (moodEvent != null) {

@@ -14,8 +14,6 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
-import java.util.ArrayList;
-
 import static android.graphics.Color.parseColor;
 
 /**

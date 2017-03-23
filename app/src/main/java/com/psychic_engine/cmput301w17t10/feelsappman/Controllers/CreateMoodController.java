@@ -10,6 +10,9 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+
 /**
  * Created by jyuen1 on 3/7/17.
  */
@@ -17,10 +20,8 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 public class CreateMoodController {
 
     public static boolean updateMoodEventList(String moodString, String socialSettingString, String trigger, Photograph photo, String location) {
-        Log.d("TAG","-----------------------------------------------------");
         Mood mood;
         SocialSetting socialSetting;
-        Log.d("Mood String", moodString);
         switch(moodString) {
             case "Sad":
                 mood = new Mood(MoodState.SAD);
@@ -71,6 +72,21 @@ public class CreateMoodController {
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         participant.addMoodEvent(moodEvent);
 
+        // Mock elastic search add
+        ElasticMoodController.AddMoodEventTask addMoodEventTask = new ElasticMoodController
+                .AddMoodEventTask();
+        addMoodEventTask.execute(moodEvent);
+
+        // mock elastic search
+        ElasticMoodController.FindMoodByReasonTask findMoodByReasonTask = new ElasticMoodController.FindMoodByReasonTask();
+        try {
+            ArrayList<MoodEvent> foundEvents = findMoodByReasonTask.execute("dead").get();
+            for (MoodEvent event : foundEvents) {
+                Log.i("Info", "Event has the reason: dead and mood " + event.getMood().getMood());
+            }
+        } catch (Exception e) {
+            Log.i("Error", "Elastic server error");
+        }
         // update most recent mood event
         participant.setMostRecentMoodEvent(moodEvent);
 

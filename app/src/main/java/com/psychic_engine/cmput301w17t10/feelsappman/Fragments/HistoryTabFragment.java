@@ -204,18 +204,18 @@ public class HistoryTabFragment extends Fragment {
     private void checkFilterSelected() {
 
         // Check if the date filter is selected
-        dateFilterSelected = (filterDate.isChecked() ? true : false);
+        dateFilterSelected = (filterDate.isChecked());
 
         // Check if the week filter is selected
-        weekFilterSelected = (filterWeek.isChecked() ? true : false);
+        weekFilterSelected = (filterWeek.isChecked());
 
         // Check if trigger filter is selected
         triggerFilterSelected = (!filterTrigger.getText().toString().
-                equals("") ? true : false);
+                equals(""));
 
         // Check if mood is selected in mood filter
         moodFilterSelected = (!moodSpinner.getSelectedItem().toString().
-                equals("None") ? true : false);
+                equals("None"));
 
     }
 

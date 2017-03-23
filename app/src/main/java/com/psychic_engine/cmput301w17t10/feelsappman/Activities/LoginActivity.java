@@ -10,16 +10,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
-import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticSearchController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ParticipantController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
-
-import java.util.concurrent.ExecutionException;
-
-// created by Alex Dong | March 6, 2017 | Comments by Alex Dong
 
 /**
  * LoginActivity is the login page of the app, and the first activity that will run upon opening
@@ -71,12 +66,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String participantName = participantEditText.getText().toString();
                 if (!ParticipantController.checkUniqueParticipant(participantName)) {
-                    Participant self = null;
                     try {
-                        ElasticSearchController.FindParticipantTask findParticipantTask = new
-                                ElasticSearchController.FindParticipantTask();
-                        self = findParticipantTask.execute(participantName).get();
-                        ParticipantSingleton.getInstance().setSelfParticipant(self);
+                        Participant self = instance.searchParticipant(participantName);
+                        instance.setSelfParticipant(self);
+
                         Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
                         startActivity(intent);
                     } catch (Exception e) {
@@ -92,7 +85,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // signup button does not take participant to a signup activity (UML) - alex
         /**
          * The signup button action will cause the system to store the name that was given in the
          * EditText and thus be "registered" into the system. The system would then be able to store
@@ -103,41 +95,27 @@ public class LoginActivity extends AppCompatActivity {
          */
         signupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                setResult(RESULT_OK);
                 String participantName = participantEditText.getText().toString();
-                Participant newParticipant = new Participant(participantName);
                 if (ParticipantController.checkUniqueParticipant(participantName)) {
-                    ParticipantSingleton.getInstance().addParticipant(participantName);
-                    ElasticParticipantController.AddParticipantTask addParticipantTask = new
-                            ElasticParticipantController.AddParticipantTask();
-                    addParticipantTask.execute(newParticipant);
-                    Toast.makeText(LoginActivity.this, participantName
-                            + " has been added!", Toast.LENGTH_SHORT).show();
-                    Participant self = instance.searchParticipant(participantName);
-                    // TODO: Check for new participant logged user and add him
-                    instance.setSelfParticipant(self);
-                    Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
-                    startActivity(intent);
-                }
+                    Participant newParticipant = new Participant(participantName);
 
-                /*
-                if (!ElasticSearchController.takenName(participantName)) {
-                    ParticipantSingleton.getInstance().addParticipant(participantName);
+                    // add participant into the server
                     ElasticParticipantController.AddParticipantTask addParticipantTask = new
                             ElasticParticipantController.AddParticipantTask();
                     addParticipantTask.execute(newParticipant);
+
+                    // add participant into the singleton locally
+                    instance.addParticipant(newParticipant);
+                    instance.setSelfParticipant(newParticipant);
+
+                    // confirm creation message
                     Toast.makeText(LoginActivity.this, participantName
                             + " has been added!", Toast.LENGTH_SHORT).show();
-                    Participant self = instance.searchParticipant(participantName);
-                    instance.setSelfParticipant(self);
+
+                    // move user to news feed activity
                     Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
                     startActivity(intent);
                 }
-                else {
-                    Toast.makeText(LoginActivity.this, "Input invalid, please try again",
-                            Toast.LENGTH_SHORT).show();
-                    }
-                    */
             }
         });
     }
