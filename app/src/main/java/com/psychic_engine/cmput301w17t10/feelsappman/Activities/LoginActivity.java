@@ -16,6 +16,8 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * LoginActivity is the login page of the app, and the first activity that will run upon opening
  * the app. The person using the app will be able to sign up and log in here. A username will need

@@ -13,8 +13,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
 import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.HistoryTabFragment;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.RecentTabFragment;
@@ -58,6 +60,12 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        // attempt to add participant follower
+        Participant dummyParticipant = new Participant("dummy");
+        ElasticParticipantController.AddParticipantTask add = new ElasticParticipantController.AddParticipantTask();
+        add.execute(dummyParticipant);
+        ElasticParticipantController.AddFollowerTask addFollowerTask = new ElasticParticipantController.AddFollowerTask();
+        addFollowerTask.execute(instance.getSelfParticipant(),dummyParticipant);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
