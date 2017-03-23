@@ -30,6 +30,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Activities.EditMoodActivity
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.ViewMoodEventActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Comparators.CustomComparator;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.DeleteMoodController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
@@ -167,6 +168,12 @@ public class HistoryTabFragment extends Fragment {
         // Check which filters have been selected
         checkFilterSelected();
 
+        // elastic version of filter by reason
+        String selfName = ParticipantSingleton.getInstance().getSelfParticipant().getLogin();
+        ElasticMoodController.FilterMoodByReasonTask filterMoodByReasonTask = new ElasticMoodController.FilterMoodByReasonTask();
+        filterMoodByReasonTask.execute(selfName, filterTrigger.getText().toString().toLowerCase());
+
+        // offline version
         for (MoodEvent moodEvent : unfilteredMoodList) {
 
             satisfiesMood = true;
@@ -237,5 +244,4 @@ public class HistoryTabFragment extends Fragment {
         filter();
         adapter.notifyDataSetChanged();
     }
-
 }

@@ -35,6 +35,7 @@ public class ElasticParticipantController extends ElasticController {
                     DocumentResult result = client.execute(index);
                     // Upon successful execution of index creation, attempt to save uniqueID to participant
                     if (result.isSucceeded()) {
+                        participant.setId(result.getId());
                         Log.i("Success", "Participant UUID: "+participant.getId());
                     }
                     else {
@@ -48,23 +49,6 @@ public class ElasticParticipantController extends ElasticController {
         }
     }
 
-    public static class DeleteParticipantTask extends AsyncTask<Participant, Void, Void> {
-        @Override
-        protected Void doInBackground(Participant... deleteParticipants) {
-            verifySettings();
-
-            for (Participant deleted : deleteParticipants) {
-                try {
-                    String participantID = deleted.getId();
-                    client.execute(new Delete.Builder(participantID).index("cmput301w17t10").type("participant").build());
-                    Log.i("Success", "Deleted participant ID: "+ participantID);
-                } catch (Exception e) {
-                    Log.i("Error", "Error deleting participant");
-                }
-            }
-            return null;
-        }
-    }
     public static class FindParticipantTask extends AsyncTask<String, Void, Participant> {
         @Override
         protected Participant doInBackground(String... params) {
@@ -96,6 +80,11 @@ public class ElasticParticipantController extends ElasticController {
         }
     }
 
+    /**
+     * Elastic task method used to update a participant. Use this method when you need to update
+     * participant data, such as following, followers, and mood events.
+     * @see Participant
+     */
     public static class UpdateParticipantTask extends AsyncTask<Participant, Void, Void> {
         /*
         add follower to participant's following (prior)
@@ -106,36 +95,37 @@ public class ElasticParticipantController extends ElasticController {
         would utilize add/delete tasks, but unable to implement
          */
         @Override
-        protected Void doInBackground(Participant... follower) {
+        protected Void doInBackground(Participant... updated) {
             verifySettings();
-            Participant followingParticipant = follower[0];
-            String followingID = followingParticipant.getId();
-
-            // need to delete the participant first
+            Participant updatingParticipant = updated[0];
+            // need to delete the participant first and add the participant again
+            String updateID = updatingParticipant.getId();
             try {
-                client.execute(new Delete.Builder(followingID).index("cmput301w17t10").type("participant").build());
-                Log.i("Success", "Deleted participant ID: " + followingID);
+                client.execute(new Delete.Builder(updateID).index("cmput301w17t10").type("participant").build());
+                Log.i("Sucess", "Deleted the participant");
             } catch (Exception e) {
                 Log.i("Error", "Unable to add follower into the server");
             }
 
             // then add the updated participant with the newer info (keep id)
             // create new index in the elastic with the same id before that was deleted
-            Index index = new Index.Builder(followingParticipant)
+
+            Index index = new Index.Builder(updatingParticipant)
                     .index("cmput301w17t10")
                     .type("participant")
-                    .id(followingID)
+                    .id(updateID)
                     .build();
             try {
                 //execute the index command
                 DocumentResult result = client.execute(index);
                 if (result.isSucceeded()) {
-                    followingParticipant.setId(result.getId());
+                    updatingParticipant.setId(result.getId());
                     Log.i("Success", "Successful addition again");
                 }
             } catch (Exception e) {
-                Log.i("Error","Error updating in elastic");
+                Log.i("Error", "Error updating in elastic");
             }
+
             return null;
         }
     }

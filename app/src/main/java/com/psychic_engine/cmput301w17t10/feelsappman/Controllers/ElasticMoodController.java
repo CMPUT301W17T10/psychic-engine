@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,16 +24,34 @@ import static com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticC
  * Created by Airer on 3/21/2017.
  */
 
-// TODO: Find by emoji | Find by reason | Find by location ???| Delete | Edit
+// TODO: Find by emoji | Find by reason | Find by location ???| need to find way to filter with params
+
 public class ElasticMoodController extends ElasticController{
 
-    public static class FindMoodByReasonTask extends AsyncTask<String, Void, ArrayList<MoodEvent>> {
+    public static class FilterMoodByReasonTask extends AsyncTask<String, Void, ArrayList<MoodEvent>> {
         @Override
-        protected ArrayList<MoodEvent> doInBackground(String ... params) {
+        protected ArrayList<MoodEvent> doInBackground(String ... reason) {
             verifySettings();
             ArrayList<MoodEvent> foundMoodEvents = new ArrayList<>();
 
-            String query = "{\"query\" : {\"match\" : { \"trigger\" : \"" + params[0] + "\"}}}";
+            // filters[0] mood filter
+            // filters[1] weeks filter
+            // filters[2] trigger filter
+            // depending on what is true (checked off), get the query corresponding
+            String self = reason[0];
+            Log.i("Self","Logged in as "+ self);
+            String query = "{\n" +
+                    "\t\"query\": {\n" +
+                    "\t\t\"match\": {\"moodOwner\":\""+self+"\"}\n" +
+                    "\t},\n" +
+                    "\t\"filter\":{\n" +
+                    "\t\t\"bool\":{\n" +
+                    "\t\t\t\"must\":{\n" +
+                    "\t\t\t\t\"term\":{\"trigger\":\""+reason[0]+"\"}\n" +
+                    "\t\t\t}\n" +
+                    "\t\t}\n" +
+                    "\t}\n" +
+                    "}"; ;
 
             Search search = new Search.Builder(query)
                     .addIndex("cmput301w17t10")
@@ -39,7 +59,6 @@ public class ElasticMoodController extends ElasticController{
                     .build();
 
             try {
-                Log.i("Attempt", "Search for "+ params[0] + " Query: "+ query);
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     List<MoodEvent> foundEvents = result.getSourceAsObjectList(MoodEvent.class);
@@ -73,6 +92,7 @@ public class ElasticMoodController extends ElasticController{
                     if (result.isSucceeded()) {
                         moodEvent.setId(result.getId());
                         Log.i("Success", "Mood event UUID: "+ moodEvent.getId());
+                        Log.i("ID", "Added mood event to Participant: " + ParticipantSingleton.getInstance().getSelfParticipant().getId());
                     }
                 } catch (Exception e) {
                     Log.i("Error", "The application failed to build and send the participants");
@@ -132,6 +152,48 @@ public class ElasticMoodController extends ElasticController{
                 Log.i("Error", "Communication error with server");
             }
 
+            return null;
+        }
+    }
+
+    /**
+     * Update task to update the mood events as you try to edit your mood. In offline mode, you
+     * would be able to edit your moods, but as there is connection, it will update every mood event
+     * that is in the participant's mood list, then update the entire participant with the updated
+     * mood events.
+     */
+    public static class UpdateMoodTask extends AsyncTask<MoodEvent, Void, Void> {
+
+        @Override
+        protected Void doInBackground(MoodEvent... updateEvent) {
+
+            // for every mood event that is added
+            for (MoodEvent updatingMood : updateEvent) {
+                String updateID = updatingMood.getId();
+                try {
+                    client.execute(new Delete.Builder(updateID).index("cmput301w17t10").type("moodevent").build());
+                } catch (Exception e) {
+                    Log.i("Error", "Unable to update mood into the server");
+                }
+
+                // then add the updated participant with the newer info (keep id)
+                // create new index in the elastic with the same id before that was deleted
+                Index index = new Index.Builder(updatingMood)
+                        .index("cmput301w17t10")
+                        .type("moodevent")
+                        .id(updateID)
+                        .build();
+                try {
+                    //execute the index command
+                    DocumentResult result = client.execute(index);
+                    if (result.isSucceeded()) {
+                        updatingMood.setId(result.getId());
+                        Log.i("Success", "Successful addition again");
+                    }
+                } catch (Exception e) {
+                    Log.i("Error", "Error updating in elastic");
+                }
+            }
             return null;
         }
     }
