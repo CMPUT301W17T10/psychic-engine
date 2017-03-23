@@ -51,7 +51,6 @@ public class RecentTabFragment extends Fragment {
         participant = ParticipantSingleton.getInstance().getSelfParticipant();
         moodEvent = participant.getMostRecentMoodEvent();
 
-
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
