@@ -60,12 +60,6 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        // attempt to add participant follower
-        Participant dummyParticipant = new Participant("dummy");
-        ElasticParticipantController.AddParticipantTask add = new ElasticParticipantController.AddParticipantTask();
-        add.execute(dummyParticipant);
-        ElasticParticipantController.AddFollowerTask addFollowerTask = new ElasticParticipantController.AddFollowerTask();
-        addFollowerTask.execute(instance.getSelfParticipant(),dummyParticipant);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -75,7 +69,6 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 mSectionsPagerAdapter.notifyDataSetChanged();
-
             }
 
             @Override

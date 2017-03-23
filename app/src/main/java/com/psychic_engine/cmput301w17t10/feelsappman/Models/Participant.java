@@ -40,13 +40,13 @@ public class Participant extends ModelFrame{
         this.followers = new ArrayList<Participant>();
         this.following = new ArrayList<Participant>();
         this.pendingRequests = new ArrayList<Participant>();
-        this.uniqueID = UUID.randomUUID().toString();
+        this.uniqueID = null;
     }
-
+    public void setId(String ID) {this.uniqueID = ID;}
     /**
      * Getter method to get the ID that was set by the elastic search server
      */
-    public String getID() {
+    public String getId() {
         return this.uniqueID;
     }
 

@@ -4,19 +4,12 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
-import com.searchly.jestdroid.DroidClientConfig;
-import com.searchly.jestdroid.JestClientFactory;
-import com.searchly.jestdroid.JestDroidClient;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
-import io.searchbox.core.Update;
 
 /**
  * Created by adong on 2017-03-13.
@@ -42,7 +35,7 @@ public class ElasticParticipantController extends ElasticController {
                     DocumentResult result = client.execute(index);
                     // Upon successful execution of index creation, attempt to save uniqueID to participant
                     if (result.isSucceeded()) {
-                        Log.i("Success", "Participant UUID: "+participant.getID());
+                        Log.i("Success", "Participant UUID: "+participant.getId());
                     }
                     else {
                         Log.i("Error", "Elasticsearch was not able to add the new participant");
@@ -55,11 +48,28 @@ public class ElasticParticipantController extends ElasticController {
         }
     }
 
+    public static class DeleteParticipantTask extends AsyncTask<Participant, Void, Void> {
+        @Override
+        protected Void doInBackground(Participant... deleteParticipants) {
+            verifySettings();
+
+            for (Participant deleted : deleteParticipants) {
+                try {
+                    String participantID = deleted.getId();
+                    client.execute(new Delete.Builder(participantID).index("cmput301w17t10").type("participant").build());
+                    Log.i("Success", "Deleted participant ID: "+ participantID);
+                } catch (Exception e) {
+                    Log.i("Error", "Error deleting participant");
+                }
+            }
+            return null;
+        }
+    }
     public static class FindParticipantTask extends AsyncTask<String, Void, Participant> {
         @Override
         protected Participant doInBackground(String... params) {
             verifySettings();
-            Participant foundParticipant = null;
+            Participant singleParticipant = null;
             String query = "{\"size\" : 1,\"query\" : {\"term\" : { \"login\" : \"" +params[0] + "\" }}}";
 
             Search search = new Search.Builder(query)
@@ -71,39 +81,61 @@ public class ElasticParticipantController extends ElasticController {
                 Log.i("Attempt", "Search for " + params[0] + " Query: "+ query);
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
-                    foundParticipant = result.getSourceAsObject(Participant.class);
-                    Log.i("Found", "Found the participant name: "+ foundParticipant.getLogin());
+                    singleParticipant = result.getSourceAsObject(Participant.class);
+                    Log.i("Found", "Found the participant name: "+ singleParticipant.getLogin());
                 }
                 else {
                     return null;
                 }
+
             } catch (Exception e) {
+                e.printStackTrace();
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
-            return foundParticipant;
+            return singleParticipant;
         }
     }
 
-    public static class AddFollowerTask extends AsyncTask<Participant, Void, Void> {
+    public static class UpdateParticipantTask extends AsyncTask<Participant, Void, Void> {
+        /*
+        add follower to participant's following (prior)
+        delete participant from the elastic server
+        add participant again with the updated info
+        follower[0] is the following participant (getting a follower)
+        follower[1] is the follower participant (giving a follow)
+        would utilize add/delete tasks, but unable to implement
+         */
         @Override
         protected Void doInBackground(Participant... follower) {
             verifySettings();
             Participant followingParticipant = follower[0];
-            String followingID = followingParticipant.getID();
-            String script = "{\n" +
-                    "    \"script\" : \"ctx._source.following += new_following\",\n" +
-                    "    \"params\" : {\n" +
-                    "        \"new_following\" : \""+follower[1].getID()+"\"\n" +
-                    "    }\n" +
-                    "}";
+            String followingID = followingParticipant.getId();
 
+            // need to delete the participant first
             try {
-                client.execute(new Update.Builder(script).index("cmput301w17t10")
-                        .type("participant").id(followingID).build());
+                client.execute(new Delete.Builder(followingID).index("cmput301w17t10").type("participant").build());
+                Log.i("Success", "Deleted participant ID: " + followingID);
             } catch (Exception e) {
                 Log.i("Error", "Unable to add follower into the server");
             }
 
+            // then add the updated participant with the newer info (keep id)
+            // create new index in the elastic with the same id before that was deleted
+            Index index = new Index.Builder(followingParticipant)
+                    .index("cmput301w17t10")
+                    .type("participant")
+                    .id(followingID)
+                    .build();
+            try {
+                //execute the index command
+                DocumentResult result = client.execute(index);
+                if (result.isSucceeded()) {
+                    followingParticipant.setId(result.getId());
+                    Log.i("Success", "Successful addition again");
+                }
+            } catch (Exception e) {
+                Log.i("Error","Error updating in elastic");
+            }
             return null;
         }
     }

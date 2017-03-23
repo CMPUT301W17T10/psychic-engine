@@ -1,7 +1,5 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 
-import android.util.Log;
-
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
@@ -9,9 +7,6 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
-
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by jyuen1 on 3/7/17.
@@ -77,19 +72,12 @@ public class CreateMoodController {
                 .AddMoodEventTask();
         addMoodEventTask.execute(moodEvent);
 
-        // mock elastic search
-        ElasticMoodController.FindMoodByReasonTask findMoodByReasonTask = new ElasticMoodController.FindMoodByReasonTask();
-        try {
-            ArrayList<MoodEvent> foundEvents = findMoodByReasonTask.execute("dead").get();
-            for (MoodEvent event : foundEvents) {
-                Log.i("Info", "Event has the reason: dead and mood " + event.getMood().getMood());
-            }
-        } catch (Exception e) {
-            Log.i("Error", "Elastic server error");
-        }
         // update most recent mood event
         participant.setMostRecentMoodEvent(moodEvent);
 
+        // Test
+        ElasticParticipantController.UpdateParticipantTask updateParticipantTask = new ElasticParticipantController.UpdateParticipantTask();
+        updateParticipantTask.execute(participant);
         return true;
     }
 }
