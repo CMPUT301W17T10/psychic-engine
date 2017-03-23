@@ -1,14 +1,10 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Models;
 
-import android.util.Log;
-
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.LoginActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ModelFrame;
-import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
-import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by adong on 2/27/17.
@@ -17,7 +13,8 @@ import java.util.Date;
 /**
  * Participant model to describe the attributes of the participant. Each participant upon signup
  * will hold their own personal arrays of mood events, followers, following, and pending requests.
- * Currently the last three are out of service until later development.
+ * Currently the last three are out of service until later development. Participants will have
+ * their own unique ID upon creation.
  * @see LoginActivity
  */
 public class Participant extends ModelFrame{
@@ -28,7 +25,7 @@ public class Participant extends ModelFrame{
     public ArrayList<Participant> followers;
     public ArrayList<Participant> following;
     public ArrayList<Participant> pendingRequests;
-    public String id;
+    public String uniqueID;
 
 
     /**
@@ -43,23 +40,14 @@ public class Participant extends ModelFrame{
         this.followers = new ArrayList<Participant>();
         this.following = new ArrayList<Participant>();
         this.pendingRequests = new ArrayList<Participant>();
-        this.id = null;
+        this.uniqueID = UUID.randomUUID().toString();
     }
 
-    //TODO: Potentially unique ID ???
     /**
      * Getter method to get the ID that was set by the elastic search server
      */
     public String getID() {
-        return this.id;
-    }
-
-    //TODO: Potentially unique ID ???
-    /**
-     * Setter method to set the ID that was given in the elastic search server
-     */
-    public void setID(String id) {
-        this.id = id;
+        return this.uniqueID;
     }
 
     /**

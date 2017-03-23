@@ -90,7 +90,7 @@ public class ParticipantSingleton {
 
     /**
      * Getter method to obtain the participant count stored
-     * @return
+     * @return size of participant list
      */
     public int getParticipantCount() {
         return participantCount;
@@ -100,17 +100,17 @@ public class ParticipantSingleton {
      * Method to add a new participant into storage. It is only called in the login page
      * when you sign up for a new account.
      * @see LoginActivity
-     * @param participantName
+     * @param participant
      * @return true if successful
      * @return false if unsuccessful
      */
-    public Boolean addParticipant(String participantName) {
+    public Boolean addParticipant(Participant participant) {
         try {
-            if (participantName.equals("")){
+            if (participant.getLogin().equals("")){
+                Log.i("Blank", "Blank login textbox");
                 return false;
             }
-            Participant newParticipant = new Participant(participantName);
-            participantList.add(newParticipant);
+            participantList.add(participant);
             participantCount = participantList.size();
             return true;
         } catch (Throwable e) {
@@ -156,15 +156,6 @@ public class ParticipantSingleton {
         this.instance = instance;
     }
 
-    public static boolean participantNameTaken(String participantName) {
-        Boolean found = false;
-        for(Participant participant: instance.getParticipantList()) {
-            if (participant.getLogin().equals(participantName)) {
-                found = true;
-            }
-        }
-        return found;
-    }
 
     /**
      * Method searches for the participant object using their login name and returns the objectID

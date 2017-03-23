@@ -178,12 +178,6 @@ public class CreateMoodActivity extends AppCompatActivity {
                     "Photo size is too large! (Max 65536 bytes)",
                     Toast.LENGTH_LONG).show();
         }
-        //TODO: MoodEvent list for selfParticipant needs to save
-        //TODO: MoodEvent list resets on app termination and reopen
-        //TODO: Maybe try to get the bring in saveInFile on a superclass and keep on all activities
-        for (MoodEvent mood : ParticipantSingleton.getInstance().getSelfParticipant().getMoodList()) {
-            Log.i("MoodEvent Added", "This mood event is of: " + mood.getMood().getMood());
-        }
     }
 
     /**

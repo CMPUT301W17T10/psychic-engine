@@ -6,7 +6,9 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ModelFrame;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -43,7 +45,7 @@ public class MoodEvent extends ModelFrame {
      * @param location
      */
     public MoodEvent(Mood mood, SocialSetting socialSetting, String trigger, Photograph picture, String location) {
-        this.id = UUID.randomUUID().toString();
+        this.id = null;
         this.mood = mood;
         this.socialSetting = socialSetting;
         this.date = new Date();
@@ -51,9 +53,8 @@ public class MoodEvent extends ModelFrame {
         this.picture = picture;
         this.location = location;
     }
-
     /**
-     * Getter for id
+     * Getter for uniqueID
      * @return
      */
     public String getId() { return this.id; }
@@ -101,7 +102,7 @@ public class MoodEvent extends ModelFrame {
     public String getLocation() { return this.location; }
 
     /**
-     * Setter for id
+     * Setter for uniqueID
      * @param id
      */
     public void setId(String id) { this.id = id; }
@@ -160,4 +161,5 @@ public class MoodEvent extends ModelFrame {
     public String toString(){
         return "I feel "+ this.mood.getMood().toString() + " | " + this.getDate() ;
     }
+
 }

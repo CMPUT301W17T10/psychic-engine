@@ -3,6 +3,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 import android.icu.text.MessagePattern;
 import android.util.Log;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 
 import java.util.concurrent.ExecutionException;
@@ -13,13 +14,11 @@ import java.util.concurrent.ExecutionException;
 
 public class ParticipantController {
 
-    private static Participant loggedParticipant = null;
-
     private ParticipantController(){}
 
     public static boolean checkUniqueParticipant(String participantName) {
         Participant foundParticipant = null;
-        ElasticSearchController.FindParticipantTask spt = new ElasticSearchController.FindParticipantTask();
+        ElasticParticipantController.FindParticipantTask spt = new ElasticParticipantController.FindParticipantTask();
 
         try {
 
@@ -34,4 +33,21 @@ public class ParticipantController {
         }
         return foundParticipant == null;
     }
+
+    //TODO: Delete mood event from your mood event list
+
+    public static void deleteMoodEvent(MoodEvent moodEvent) {
+        ElasticMoodController.DeleteMoodEventTask deleteMoodEventTask = new ElasticMoodController
+                .DeleteMoodEventTask();
+        deleteMoodEventTask.execute(moodEvent);
+    }
+
+    //TODO: Update mood event from the mood event list
+    /*
+    public static void editMoodEvent(MoodEvent moodEvent) {
+        ElasticMoodController.EditMoodEventTask editMoodEventTask = new ElasticMoodController
+                .EditMoodEventTask();
+        editMoodEventTask.execute(moodEvent);
+    }
+    */
 }
