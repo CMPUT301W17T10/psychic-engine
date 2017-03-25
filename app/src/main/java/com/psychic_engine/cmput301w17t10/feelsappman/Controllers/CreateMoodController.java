@@ -1,5 +1,7 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 
+import android.util.Log;
+
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
@@ -64,13 +66,15 @@ public class CreateMoodController {
         }
 
         MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
-        Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
-        participant.addMoodEvent(moodEvent);
-
         // Mock elastic search add
         ElasticMoodController.AddMoodEventTask addMoodEventTask = new ElasticMoodController
                 .AddMoodEventTask();
         addMoodEventTask.execute(moodEvent);
+
+        // add to participant
+        Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
+        Log.i("Add", "Adding to the self participant "+ ParticipantSingleton.getInstance().getSelfParticipant().getLogin());
+        participant.addMoodEvent(moodEvent);
 
         // update most recent mood event
         participant.setMostRecentMoodEvent(moodEvent);
@@ -78,6 +82,7 @@ public class CreateMoodController {
         // Test
         ElasticParticipantController.UpdateParticipantTask updateParticipantTask = new ElasticParticipantController.UpdateParticipantTask();
         updateParticipantTask.execute(participant);
+
         return true;
     }
 }

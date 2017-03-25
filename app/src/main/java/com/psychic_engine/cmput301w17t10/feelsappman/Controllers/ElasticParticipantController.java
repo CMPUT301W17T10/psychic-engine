@@ -16,6 +16,12 @@ import io.searchbox.core.SearchResult;
  */
 
 // TODO: Comments
+    //able to add participant on signup
+    //able to follow a participant's recent mood event on follow request
+    //able to search for a participant's name and their recent mood event
+    //update participant at anytime if information is changed by edit
+
+
 public class ElasticParticipantController extends ElasticController {
     // Function to save new participants
     public static class AddParticipantTask extends AsyncTask<Participant, Void, Void>  {

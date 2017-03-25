@@ -41,14 +41,18 @@ public class ElasticMoodController extends ElasticController{
             // params[0] is the current participant filtering their moods
             String self = params[0];
             Log.i("Self","Logged in as "+ self);
+
+            // would not need to filter by reason if the trigger had no reason in the edit text
+            // would change the method if there was no filter by reason intended.
+            /*
             if (params[1] == null) {
                 query = "{\"query\": {\"filtered\": {\"query\": {\"match\":{\"moodOwner\": \n" +
                         params[0] + "\"}},\"filter\":{\"missing\":{\"field\":\"trigger\"}}}}}";
             }
-            else {
-                query = "{\"query\": {\"filtered\": {\"query\": {\"match\":{\"moodOwner\": \n" +
+            */
+            query = "{\"query\": {\"filtered\": {\"query\": {\"match\":{\"moodOwner\": \n" +
                         params[0] + "\"}},\"filter\":{\"term\":{\"trigger\":\""+params[1]+"\"}}}}}";
-            }
+
 
             Search search = new Search.Builder(query)
                     .addIndex("cmput301w17t10")

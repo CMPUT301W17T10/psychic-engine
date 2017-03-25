@@ -36,18 +36,6 @@
         android:layout_below="@+id/titlePage"
         android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:text="@string/title_page"
-        android:id="@+id/titlePage"
-        android:layout_height="100dp"
-        android:layout_width="300dp"
-        android:textAlignment="center"
-        android:textSize="45sp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
-        android:fontFamily="casual" />
-
     <Button
         android:text="@string/login_button"
         android:layout_width="180dp"
@@ -58,6 +46,26 @@
         android:layout_alignLeft="@+id/nameEditText"
         android:layout_alignStart="@+id/nameEditText"
         android:layout_marginTop="26dp" />
+
+    <TextView
+        android:text="@string/title_page"
+        android:id="@+id/titlePage"
+        android:layout_height="100dp"
+        android:layout_width="300dp"
+        android:textAlignment="center"
+        android:textSize="45sp"
+        android:layout_marginTop="25dp"
+        android:fontFamily="casual"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Generate Test Data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/generateButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

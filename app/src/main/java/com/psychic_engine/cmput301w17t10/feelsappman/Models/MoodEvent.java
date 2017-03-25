@@ -27,7 +27,7 @@ import java.util.UUID;
 public class MoodEvent extends ModelFrame {
     private String id;
     private String moodOwner;
-    private ArrayList<String> eventFollowers;
+    private ArrayList<String> followers;
     private Mood mood;
     private String trigger;
     private SocialSetting socialSetting;
@@ -49,7 +49,7 @@ public class MoodEvent extends ModelFrame {
      */
     public MoodEvent(Mood mood, SocialSetting socialSetting, String trigger, Photograph picture, String location) {
         this.id = null;
-        this.eventFollowers = new ArrayList<>();
+        this.followers = new ArrayList<>();
         this.mood = mood;
         this.socialSetting = socialSetting;
         this.date = new Date();
@@ -59,7 +59,7 @@ public class MoodEvent extends ModelFrame {
         this.location = location;
     }
     /**
-     * Getter for uniqueID
+     * Getter for Id given
      * @return
      */
     public String getId() { return this.id; }

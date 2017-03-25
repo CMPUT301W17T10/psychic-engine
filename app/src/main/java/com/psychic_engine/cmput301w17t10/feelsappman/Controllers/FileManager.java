@@ -27,7 +27,6 @@ public class FileManager {
 
 
     // TODO: GSON does not properly load files. Will crash the application sometimes
-    // TODO: Temporary Solution: Clear data on your disk before running the program
 
     /**
      * This method will extract the details from the FILENAME from JSON to the participant singleton.
