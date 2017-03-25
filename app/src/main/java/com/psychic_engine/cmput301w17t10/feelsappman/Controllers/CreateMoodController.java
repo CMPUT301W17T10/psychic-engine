@@ -17,10 +17,8 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 public class CreateMoodController {
 
     public static boolean updateMoodEventList(String moodString, String socialSettingString, String trigger, Photograph photo, String location) {
-        Log.d("TAG","-----------------------------------------------------");
         Mood mood;
         SocialSetting socialSetting;
-        Log.d("Mood String", moodString);
         switch(moodString) {
             case "Sad":
                 mood = new Mood(MoodState.SAD);
@@ -68,11 +66,22 @@ public class CreateMoodController {
         }
 
         MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
+        // Mock elastic search add
+        ElasticMoodController.AddMoodEventTask addMoodEventTask = new ElasticMoodController
+                .AddMoodEventTask();
+        addMoodEventTask.execute(moodEvent);
+
+        // add to participant
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
+        Log.i("Add", "Adding to the self participant "+ ParticipantSingleton.getInstance().getSelfParticipant().getLogin());
         participant.addMoodEvent(moodEvent);
 
         // update most recent mood event
         participant.setMostRecentMoodEvent(moodEvent);
+
+        // Test
+        ElasticParticipantController.UpdateParticipantTask updateParticipantTask = new ElasticParticipantController.UpdateParticipantTask();
+        updateParticipantTask.execute(participant);
 
         return true;
     }

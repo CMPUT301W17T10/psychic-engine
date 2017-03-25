@@ -9,6 +9,7 @@ import android.os.Build;
 
 public class Photograph {
 
+    //TODO: getByteSizeCount not accurate. Decoded memory vs compressed size
     private static Integer BYTE;
     private Boolean limitSize;
     private Bitmap map;

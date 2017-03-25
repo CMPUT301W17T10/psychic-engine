@@ -82,5 +82,9 @@ public class EditMoodController {
         // update the most recent mood event
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         participant.setMostRecentMoodEvent(moodEvent);
+
+        // update the most recent mood event in elastic
+        ElasticMoodController.UpdateMoodTask updateMoodTask = new ElasticMoodController.UpdateMoodTask();
+        updateMoodTask.execute(moodEvent);
     }
 }

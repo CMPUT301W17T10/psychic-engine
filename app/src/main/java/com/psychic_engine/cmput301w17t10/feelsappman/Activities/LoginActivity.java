@@ -9,17 +9,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.CreateMoodController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMasterController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
-import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticSearchController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ParticipantController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
 import java.util.concurrent.ExecutionException;
-
-// created by Alex Dong | March 6, 2017 | Comments by Alex Dong
 
 /**
  * LoginActivity is the login page of the app, and the first activity that will run upon opening
@@ -45,7 +49,9 @@ public class LoginActivity extends AppCompatActivity {
     private EditText participantEditText;
     private Button loginButton;
     private Button signupButton;
+    private Button generateButton;
     private ParticipantSingleton instance;
+
 
 
     @Override
@@ -55,6 +61,11 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.loginButton);
         signupButton = (Button) findViewById(R.id.signupButton);
         participantEditText = (EditText) findViewById(R.id.nameEditText);
+
+        // for testing purposes generate test data to test queries and filter
+        // delete resets the instance to be equivalent to the elastic server
+        // pls no press
+        generateButton = (Button) findViewById(R.id.generateButton);
 
         loadInstance();
         instance = ParticipantSingleton.getInstance();
@@ -71,12 +82,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String participantName = participantEditText.getText().toString();
                 if (!ParticipantController.checkUniqueParticipant(participantName)) {
-                    Participant self = null;
                     try {
-                        ElasticSearchController.FindParticipantTask findParticipantTask = new
-                                ElasticSearchController.FindParticipantTask();
-                        self = findParticipantTask.execute(participantName).get();
-                        ParticipantSingleton.getInstance().setSelfParticipant(self);
+                        Participant self = instance.searchParticipant(participantName);
+                        instance.setSelfParticipant(self);
+
                         Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
                         startActivity(intent);
                     } catch (Exception e) {
@@ -92,7 +101,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // signup button does not take participant to a signup activity (UML) - alex
         /**
          * The signup button action will cause the system to store the name that was given in the
          * EditText and thus be "registered" into the system. The system would then be able to store
@@ -103,41 +111,35 @@ public class LoginActivity extends AppCompatActivity {
          */
         signupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                setResult(RESULT_OK);
                 String participantName = participantEditText.getText().toString();
-                Participant newParticipant = new Participant(participantName);
                 if (ParticipantController.checkUniqueParticipant(participantName)) {
-                    ParticipantSingleton.getInstance().addParticipant(participantName);
-                    ElasticParticipantController.AddParticipantTask addParticipantTask = new
-                            ElasticParticipantController.AddParticipantTask();
-                    addParticipantTask.execute(newParticipant);
-                    Toast.makeText(LoginActivity.this, participantName
-                            + " has been added!", Toast.LENGTH_SHORT).show();
-                    Participant self = instance.searchParticipant(participantName);
-                    // TODO: Check for new participant logged user and add him
-                    instance.setSelfParticipant(self);
-                    Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
-                    startActivity(intent);
-                }
+                    Participant newParticipant = new Participant(participantName);
 
-                /*
-                if (!ElasticSearchController.takenName(participantName)) {
-                    ParticipantSingleton.getInstance().addParticipant(participantName);
+                    // add participant into the server
                     ElasticParticipantController.AddParticipantTask addParticipantTask = new
                             ElasticParticipantController.AddParticipantTask();
                     addParticipantTask.execute(newParticipant);
+
+                    // add participant into the singleton locally
+                    instance.addParticipant(newParticipant);
+                    instance.setSelfParticipant(newParticipant);
+
+                    // confirm creation message
                     Toast.makeText(LoginActivity.this, participantName
                             + " has been added!", Toast.LENGTH_SHORT).show();
-                    Participant self = instance.searchParticipant(participantName);
-                    instance.setSelfParticipant(self);
+
+                    // move user to news feed activity
                     Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
                     startActivity(intent);
                 }
-                else {
-                    Toast.makeText(LoginActivity.this, "Input invalid, please try again",
-                            Toast.LENGTH_SHORT).show();
-                    }
-                    */
+            }
+        });
+
+        // generates data for testing purposes
+        generateButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                generateData();
+                Toast.makeText(LoginActivity.this, "Data has been generated!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -175,5 +177,53 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         FileManager.saveInFile(this);
+    }
+
+    // ASSUMES USER IS SELF PARTICIPANT
+    public void generateData() {
+
+        // reset the server
+        ElasticMasterController.ResetElasticServer reset = new ElasticMasterController.ResetElasticServer();
+        reset.execute();
+        // instantiate elastic controllers
+        ElasticParticipantController.AddParticipantTask addParticipantTask = new  ElasticParticipantController
+                .AddParticipantTask();
+        ElasticMoodController.AddMoodEventTask addMoodEventTask = new ElasticMoodController
+                .AddMoodEventTask();
+
+        // instantiate participants
+        Participant testParticipant = new Participant("USER");
+        Participant test1 = new Participant("testHappy1");
+        Participant test2 = new Participant("testSad2");
+        Participant test3 = new Participant("testConfused3");
+
+        // setup singleton for the person using the app
+        // clear the participant list in case
+        // set USER as the participant using the app
+        ParticipantSingleton instance = ParticipantSingleton.getInstance();
+        instance.getParticipantList().clear();
+        instance.setSelfParticipant(testParticipant);
+
+        // add participants into the elastic server
+        addParticipantTask.execute(testParticipant, test1, test2, test3);
+
+        /*
+        add mood events for the participants
+        mood events will be mainly in USER for filtering with combination of reason/date/mood
+        test1/2/3 will follow recent later
+        (location set to "")
+         */
+
+        // happy/sad/confused moods
+        MoodEvent testMood1 = new MoodEvent(new Mood(MoodState.HAPPY), SocialSetting.ALONE,
+                "", null, "");
+        MoodEvent testMood2 = new MoodEvent(new Mood(MoodState.SAD), SocialSetting.ONEOTHER,
+                "test", null, "");
+        MoodEvent testMood3 = new MoodEvent(new Mood(MoodState.CONFUSED), SocialSetting.TWOTOSEVERAL,
+                "test", null, "");
+
+        addMoodEventTask.execute(testMood1, testMood2, testMood3);
+        CreateMoodController.updateMoodEventList("Happy", "Crowd", "test", null, "");
+        CreateMoodController.updateMoodEventList("Happy", "Crowd", "", null, "");
     }
 }

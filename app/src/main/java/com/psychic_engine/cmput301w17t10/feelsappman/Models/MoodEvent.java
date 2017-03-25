@@ -6,7 +6,10 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ModelFrame;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -23,6 +26,8 @@ import java.util.UUID;
  */
 public class MoodEvent extends ModelFrame {
     private String id;
+    private String moodOwner;
+    private ArrayList<String> followers;
     private Mood mood;
     private String trigger;
     private SocialSetting socialSetting;
@@ -43,17 +48,18 @@ public class MoodEvent extends ModelFrame {
      * @param location
      */
     public MoodEvent(Mood mood, SocialSetting socialSetting, String trigger, Photograph picture, String location) {
-        this.id = UUID.randomUUID().toString();
+        this.id = null;
+        this.followers = new ArrayList<>();
         this.mood = mood;
         this.socialSetting = socialSetting;
         this.date = new Date();
+        this.moodOwner = ParticipantSingleton.getInstance().getSelfParticipant().getLogin();
         this.trigger = trigger;
         this.picture = picture;
         this.location = location;
     }
-
     /**
-     * Getter for id
+     * Getter for Id given
      * @return
      */
     public String getId() { return this.id; }
@@ -101,7 +107,7 @@ public class MoodEvent extends ModelFrame {
     public String getLocation() { return this.location; }
 
     /**
-     * Setter for id
+     * Setter for uniqueID
      * @param id
      */
     public void setId(String id) { this.id = id; }
@@ -157,7 +163,22 @@ public class MoodEvent extends ModelFrame {
         this.location = location;
     }
 
+    /**
+     * Method to display on the history tab the general description of your mood, as well as the
+     * date that the mood has been last created/editted
+     * @return
+     */
     public String toString(){
         return "I feel "+ this.mood.getMood().toString() + " | " + this.getDate() ;
     }
+
+    /**
+     * Getter method to get all of the participants that follow this mood event
+     * @return eventFollower list for the mood event
+     */
+    // "adder method" will be put in the mood controller
+    public ArrayList<String> getEventFollowers() {
+        return this.getEventFollowers();
+    }
+
 }
