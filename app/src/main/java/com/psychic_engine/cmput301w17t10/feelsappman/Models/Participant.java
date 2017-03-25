@@ -37,7 +37,7 @@ public class Participant extends ModelFrame{
      */
     public Participant(String loginName) {
         this.login = loginName;
-        //this.moodEvents = new ArrayList<>();
+        this.moodEvents = new ArrayList<>();
         this.followers = new ArrayList<>();
         this.following = new ArrayList<>();
         this.pendingRequests = new ArrayList<>();
