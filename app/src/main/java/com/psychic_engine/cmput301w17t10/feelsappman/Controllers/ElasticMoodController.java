@@ -30,28 +30,25 @@ public class ElasticMoodController extends ElasticController{
 
     public static class FilterMoodByReasonTask extends AsyncTask<String, Void, ArrayList<MoodEvent>> {
         @Override
-        protected ArrayList<MoodEvent> doInBackground(String ... reason) {
+        protected ArrayList<MoodEvent> doInBackground(String ... params) {
             verifySettings();
+            String query;
             ArrayList<MoodEvent> foundMoodEvents = new ArrayList<>();
 
-            // filters[0] mood filter
-            // filters[1] weeks filter
-            // filters[2] trigger filter
-            // depending on what is true (checked off), get the query corresponding
-            String self = reason[0];
+
+            //if params[1] is null (trigger) : use the missing field
+            //if params[1] is not null (trigger) : use the second query with the reason text
+            // params[0] is the current participant filtering their moods
+            String self = params[0];
             Log.i("Self","Logged in as "+ self);
-            String query = "{\n" +
-                    "\t\"query\": {\n" +
-                    "\t\t\"match\": {\"moodOwner\":\""+self+"\"}\n" +
-                    "\t},\n" +
-                    "\t\"filter\":{\n" +
-                    "\t\t\"bool\":{\n" +
-                    "\t\t\t\"must\":{\n" +
-                    "\t\t\t\t\"term\":{\"trigger\":\""+reason[0]+"\"}\n" +
-                    "\t\t\t}\n" +
-                    "\t\t}\n" +
-                    "\t}\n" +
-                    "}"; ;
+            if (params[1] == null) {
+                query = "{\"query\": {\"filtered\": {\"query\": {\"match\":{\"moodOwner\": \n" +
+                        params[0] + "\"}},\"filter\":{\"missing\":{\"field\":\"trigger\"}}}}}";
+            }
+            else {
+                query = "{\"query\": {\"filtered\": {\"query\": {\"match\":{\"moodOwner\": \n" +
+                        params[0] + "\"}},\"filter\":{\"term\":{\"trigger\":\""+params[1]+"\"}}}}}";
+            }
 
             Search search = new Search.Builder(query)
                     .addIndex("cmput301w17t10")
