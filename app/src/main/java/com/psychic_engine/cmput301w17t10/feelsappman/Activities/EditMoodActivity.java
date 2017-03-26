@@ -1,6 +1,7 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -69,7 +70,14 @@ public class EditMoodActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_mood);
 
-        isStoragePermissionGranted();
+        //List of permissions required and Requestcode for the permssions needed
+        //in ActivityCompat.requestPermissions
+        int permission_code = 1;
+        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+
+        if(!hasPermissions(this, permissions)){
+            ActivityCompat.requestPermissions(this, permissions, permission_code);
+        }
 
         moodEventId = getIntent().getExtras().getString("moodEventId");
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
@@ -112,21 +120,17 @@ public class EditMoodActivity extends AppCompatActivity{
      * @return true if SDK < 23 or participant permits
      * @return false if participant denies and SDK > 23
      */
-    //Taken from http://stackoverflow.com/questions/33162152/storage-permission-error-in-marshmallow/41221852#41221852
-    //March 10, 2017
-    public boolean isStoragePermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
-                return true;
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                return false;
+    //Taken from http://stackoverflow.com/questions/34342816/android-6-0-multiple-permissions
+    //March 26, 2017
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (Build.VERSION.SDK_INT >= 23 && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
             }
         }
-        else { //permission is automatically granted on sdk<23 upon installation
-            return true;
-        }
+        return true;
     }
 
     @Override
