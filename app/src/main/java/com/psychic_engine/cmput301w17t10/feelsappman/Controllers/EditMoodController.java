@@ -4,6 +4,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongEx
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodLocation;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
@@ -18,7 +19,7 @@ import java.util.Date;
 
 public class EditMoodController {
 
-    public static void updateMoodEventList(MoodEvent moodEvent, String moodString, String socialSettingString, String trigger, Photograph photo, String location) throws TriggerTooLongException {
+    public static void updateMoodEventList(MoodEvent moodEvent, String moodString, String socialSettingString, String trigger, Photograph photo, MoodLocation location) throws TriggerTooLongException {
 
         Mood mood = null;
         SocialSetting socialSetting;

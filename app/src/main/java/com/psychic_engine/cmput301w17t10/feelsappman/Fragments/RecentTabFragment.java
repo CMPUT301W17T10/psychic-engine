@@ -93,12 +93,13 @@ public class RecentTabFragment extends Fragment {
             if (moodEvent.getPicture() != null) {
                 imageView.setImageBitmap(moodEvent.getPicture().getImage());
             }
-            location.setText(moodEvent.getLocation().toString());
+            if (moodEvent.getLocation() != null)
+                location.setText(moodEvent.getLocation().getLatitude().concat(moodEvent.getLocation().getLongitude()));
         } else {
             this.getView().setBackgroundColor(Color.BLACK);
             viewmood.setText("");
             date.setText("There's No Mood Event Yet! Why Don't you add one!");
-            location.setText("");
+            //location.setText("");
             imageView.setImageBitmap(null);
         }
     }

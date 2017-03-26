@@ -220,15 +220,15 @@ public class LoginActivity extends AppCompatActivity {
 
         // happy/sad/confused moods
         MoodEvent testMood1 = new MoodEvent(new Mood(MoodState.HAPPY), SocialSetting.ALONE,
-                "", null, "");
+                "", null, null);
         MoodEvent testMood2 = new MoodEvent(new Mood(MoodState.SAD), SocialSetting.ONEOTHER,
-                "test", null, "");
+                "test", null, null);
         MoodEvent testMood3 = new MoodEvent(new Mood(MoodState.CONFUSED), SocialSetting.TWOTOSEVERAL,
-                "test", null, "");
+                "test", null, null);
         MoodEvent testMood4 = new MoodEvent(new Mood(MoodState.HAPPY), SocialSetting.CROWD,
-                "test", null, "");
+                "test", null, null);
         MoodEvent testMood5 = new MoodEvent(new Mood(MoodState.HAPPY), SocialSetting.CROWD,
-                "", null, "");
+                "", null, null);
 
         // add mood events into the server
         addMoodEventTask.execute(testMood1, testMood2, testMood3, testMood4);

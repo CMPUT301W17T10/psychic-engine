@@ -5,6 +5,7 @@ import android.util.Log;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodLocation;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
@@ -16,7 +17,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 
 public class CreateMoodController {
 
-    public static boolean updateMoodEventList(String moodString, String socialSettingString, String trigger, Photograph photo, String location) {
+    public static boolean updateMoodEventList(String moodString, String socialSettingString, String trigger, Photograph photo, MoodLocation location) {
         Mood mood;
         SocialSetting socialSetting;
         switch(moodString) {

@@ -33,7 +33,7 @@ public class MoodEvent extends ModelFrame {
     private SocialSetting socialSetting;
     private Date date;
     private Photograph picture;
-    private String location;
+    private MoodLocation location;
 
     // string array and split
     /**
@@ -47,7 +47,7 @@ public class MoodEvent extends ModelFrame {
      * @param picture
      * @param location
      */
-    public MoodEvent(Mood mood, SocialSetting socialSetting, String trigger, Photograph picture, String location) {
+    public MoodEvent(Mood mood, SocialSetting socialSetting, String trigger, Photograph picture, MoodLocation location) {
         this.id = "";
         this.followers = new ArrayList<>();
         this.mood = mood;
@@ -105,7 +105,7 @@ public class MoodEvent extends ModelFrame {
      * @see Location
      * @return location as a Location class
      */
-    public String getLocation() { return this.location; }
+    public MoodLocation getLocation() { return this.location; }
 
     /**
      * Setter for uniqueID
@@ -160,7 +160,7 @@ public class MoodEvent extends ModelFrame {
      * along with the current mood event.
      * @param location
      */
-    public void setLocation(String location) {
+    public void setLocation(MoodLocation location) {
         this.location = location;
     }
 

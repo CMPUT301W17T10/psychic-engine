@@ -31,13 +31,12 @@
         android:inputType="textPersonName"
         android:maxLength="20" />
 
-    <EditText
-        android:id="@+id/location"
-        android:layout_width="match_parent"
+
+    <CheckBox android:id="@+id/includeLocation"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/add_location"
-        android:inputType="textPersonName" />
+        android:text="Include Location?"
+        android:layout_weight="1"/>
 
     <Button
         android:id="@+id/browse"

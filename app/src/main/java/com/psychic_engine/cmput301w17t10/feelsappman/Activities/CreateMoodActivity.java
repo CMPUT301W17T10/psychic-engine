@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -27,8 +28,10 @@ import android.widget.Toast;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.CreateMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodLocation;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodLocation;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
@@ -58,7 +61,7 @@ public class CreateMoodActivity extends AppCompatActivity {
     private Spinner moodSpinner;
     private Spinner socialSettingSpinner;
     private EditText triggerEditText;
-    private EditText locationEditText; // TODO: change type
+    private CheckBox locationCheckBox; // TODO: change type
     private Button browseButton;
     private ImageView photoImageView;
     private Button createButton;
@@ -143,7 +146,10 @@ public class CreateMoodActivity extends AppCompatActivity {
         String socialSettingString = socialSettingSpinner.getSelectedItem().toString();
         String trigger = triggerEditText.getText().toString();
 
+        //optional features that require a model initially set to null
         Photograph photo = null;
+        MoodLocation location = null;
+
         boolean photoSizeUnder = TRUE;
 
 
@@ -159,7 +165,9 @@ public class CreateMoodActivity extends AppCompatActivity {
             // pass
         }
 
-        String location = locationEditText.getText().toString(); // TODO tentative, location type will change in part 5
+        //String location = locationEditText.getText().toString(); // TODO tentative, location type will change in part 5
+
+
 
         if (photoSizeUnder) {
             boolean success = createMoodController.updateMoodEventList(moodString, socialSettingString, trigger, photo, location);
@@ -232,8 +240,8 @@ public class CreateMoodActivity extends AppCompatActivity {
      * Setup method for the location EditText (TEMPORARY) category
      */
     void setUpLocation() {
-        locationEditText = (EditText) findViewById(R.id.location);
-        locationEditText.setText("");
+        locationCheckBox = (CheckBox) findViewById(R.id.includeLocation);
+
     }
 
     /**
