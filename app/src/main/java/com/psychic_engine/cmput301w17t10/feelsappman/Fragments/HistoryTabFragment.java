@@ -170,21 +170,20 @@ public class HistoryTabFragment extends Fragment {
         checkFilterSelected();
 
         // elastic version of filter by reason
-        String selfName = ParticipantSingleton.getInstance().getSelfParticipant().getLogin();
         /*
+        String selfName = ParticipantSingleton.getInstance().getSelfParticipant().getLogin();
         ElasticMoodController.FilterMoodByReasonTask filter = new ElasticMoodController.FilterMoodByReasonTask();
         try {
             filter.execute(selfName, "test");
-            ArrayList<MoodEvent> result = filter.get();
-            Log.i("Size", "Result size is " + String.valueOf(result.size()));
-            for (MoodEvent mood : result) {
-                Log.i("Mood ID", "Found the mood with reason : "+ mood.getTrigger()+ "| mood state "+
-                        mood.getMood().getMood());
+            ArrayList<MoodEvent> results = filter.get();
+            for (MoodEvent event : results) {
+                filteredMoodList.add(event);
             }
         } catch (Exception e) {
             Log.i("Failed", "Failed filter");
         }
         */
+
         // offline version
         for (MoodEvent moodEvent : unfilteredMoodList) {
 
@@ -210,7 +209,6 @@ public class HistoryTabFragment extends Fragment {
             // add mood event to the list to be displayed if it satisfies all conditions
             if (satisfiesMood && satisfiesDate && satisfiesTrigger)
                 filteredMoodList.add(moodEvent);
-
         }
 
         // sort mood events in reverse chronological order
@@ -241,7 +239,7 @@ public class HistoryTabFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        adapter = new ArrayAdapter<MoodEvent>(getActivity(), R.layout.item_history, filteredMoodList);
+        adapter = new ArrayAdapter<>(getActivity(), R.layout.item_history, filteredMoodList);
         moodEventsListView.setAdapter(adapter);
 
         // initial filter according to users last settings

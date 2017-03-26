@@ -232,6 +232,10 @@ public class LoginActivity extends AppCompatActivity {
 
         // add mood events into the server
         addMoodEventTask.execute(testMood1, testMood2, testMood3, testMood4);
+        testParticipant.addMoodEvent(testMood1);
+        testParticipant.addMoodEvent(testMood2);
+        testParticipant.addMoodEvent(testMood3);
+        testParticipant.addMoodEvent(testMood4);
 
         // add mood events specifically into the self participant and update participant
         // CreateMoodController.updateMoodEventList("Happy", "Crowd", "test", null, "");
