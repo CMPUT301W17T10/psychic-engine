@@ -48,7 +48,7 @@ public class MoodEvent extends ModelFrame {
      * @param location
      */
     public MoodEvent(Mood mood, SocialSetting socialSetting, String trigger, Photograph picture, String location) {
-        this.id = null;
+        this.id = "";
         this.followers = new ArrayList<>();
         this.mood = mood;
         this.socialSetting = socialSetting;
@@ -58,6 +58,7 @@ public class MoodEvent extends ModelFrame {
         this.picture = picture;
         this.location = location;
     }
+
     /**
      * Getter for Id given
      * @return

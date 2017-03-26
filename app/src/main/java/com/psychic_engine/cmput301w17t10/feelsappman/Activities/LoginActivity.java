@@ -23,6 +23,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -185,6 +186,7 @@ public class LoginActivity extends AppCompatActivity {
         // reset the server
         ElasticMasterController.ResetElasticServer reset = new ElasticMasterController.ResetElasticServer();
         reset.execute();
+
         // instantiate elastic controllers
         ElasticParticipantController.AddParticipantTask addParticipantTask = new  ElasticParticipantController
                 .AddParticipantTask();
@@ -202,7 +204,9 @@ public class LoginActivity extends AppCompatActivity {
         // set USER as the participant using the app
         ParticipantSingleton instance = ParticipantSingleton.getInstance();
         instance.getParticipantList().clear();
+        instance.addParticipant(testParticipant);
         instance.setSelfParticipant(testParticipant);
+        Log.i("Participant", "Participant set to "+ testParticipant.getLogin());
 
         // add participants into the elastic server
         addParticipantTask.execute(testParticipant, test1, test2, test3);
@@ -221,9 +225,20 @@ public class LoginActivity extends AppCompatActivity {
                 "test", null, "");
         MoodEvent testMood3 = new MoodEvent(new Mood(MoodState.CONFUSED), SocialSetting.TWOTOSEVERAL,
                 "test", null, "");
+        MoodEvent testMood4 = new MoodEvent(new Mood(MoodState.HAPPY), SocialSetting.CROWD,
+                "test", null, "");
+        MoodEvent testMood5 = new MoodEvent(new Mood(MoodState.HAPPY), SocialSetting.CROWD,
+                "", null, "");
 
-        addMoodEventTask.execute(testMood1, testMood2, testMood3);
-        CreateMoodController.updateMoodEventList("Happy", "Crowd", "test", null, "");
-        CreateMoodController.updateMoodEventList("Happy", "Crowd", "", null, "");
+        // add mood events into the server
+        addMoodEventTask.execute(testMood1, testMood2, testMood3, testMood4);
+
+        // add mood events specifically into the self participant and update participant
+        // CreateMoodController.updateMoodEventList("Happy", "Crowd", "test", null, "");
+        // CreateMoodController.updateMoodEventList("Happy", "Crowd", "", null, "");
+
+        // search for the mood events with the reason "test"
+
+
     }
 }

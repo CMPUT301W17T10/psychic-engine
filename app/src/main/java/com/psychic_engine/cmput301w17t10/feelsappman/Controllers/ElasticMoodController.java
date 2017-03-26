@@ -35,12 +35,13 @@ public class ElasticMoodController extends ElasticController{
             String query;
             ArrayList<MoodEvent> foundMoodEvents = new ArrayList<>();
 
-
             //if params[1] is null (trigger) : use the missing field
             //if params[1] is not null (trigger) : use the second query with the reason text
             // params[0] is the current participant filtering their moods
             String self = params[0];
+            String reason = params[1];
             Log.i("Self","Logged in as "+ self);
+            Log.i("Trigger", "Search for "+ reason);
 
             // would not need to filter by reason if the trigger had no reason in the edit text
             // would change the method if there was no filter by reason intended.
@@ -50,9 +51,10 @@ public class ElasticMoodController extends ElasticController{
                         params[0] + "\"}},\"filter\":{\"missing\":{\"field\":\"trigger\"}}}}}";
             }
             */
-            query = "{\"query\": {\"filtered\": {\"query\": {\"match\":{\"moodOwner\": \n" +
-                        params[0] + "\"}},\"filter\":{\"term\":{\"trigger\":\""+params[1]+"\"}}}}}";
+            query = "{\"query\": {\"match\":{\"moodOwner\":\"" +
+                    "" + self + "\"}},\"filter\":{\"term\":{\"trigger\":\""+reason+"\"}}}";
 
+            Log.i ("QUERY", query);
 
             Search search = new Search.Builder(query)
                     .addIndex("cmput301w17t10")
@@ -63,14 +65,12 @@ public class ElasticMoodController extends ElasticController{
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     List<MoodEvent> foundEvents = result.getSourceAsObjectList(MoodEvent.class);
+                    Log.i("Size List", "Size of list: "+ String.valueOf(foundEvents.size()));
                     foundMoodEvents.addAll(foundEvents);
-                    return  foundMoodEvents;
                 } else {
                     Log.i("None", "No mood events with this reason has been found");
-                    return null;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
                 Log.i("Error", "Communication error with server");
             }
             return foundMoodEvents;
@@ -92,7 +92,7 @@ public class ElasticMoodController extends ElasticController{
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()) {
                         moodEvent.setId(result.getId());
-                        Log.i("Success", "Mood event UUID: "+ moodEvent.getId());
+                        Log.i("Success", "Mood event ID: "+ moodEvent.getId());
                         Log.i("ID", "Added mood event to Participant: " + ParticipantSingleton.getInstance().getSelfParticipant().getId());
                     }
                 } catch (Exception e) {

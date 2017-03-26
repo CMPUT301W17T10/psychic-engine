@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import io.searchbox.client.JestResult;
+import io.searchbox.core.Index;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.mapping.PutMapping;
@@ -25,31 +26,36 @@ public class ElasticMasterController extends ElasticController {
             verifySettings();
 
             // delete cmput301/w17/t10 index to delete entire section
+            //DeleteIndex deleteIndexParticipant = new DeleteIndex.Builder(INDEX).type(P_TYPE).build();
+            //DeleteIndex deleteIndexMood = new DeleteIndex.Builder(INDEX).type(M_TYPE).build();
             DeleteIndex deleteIndex = new DeleteIndex.Builder(INDEX).build();
             try {
-                JestResult result = client.execute(deleteIndex);
-                if (result.isSucceeded()) {
-                    Log.i("Success", "Deleted 'cmput301w17t10' index");
+                JestResult resultParticipant = client.execute(deleteIndex);
+                if (resultParticipant.isSucceeded()) {
+                    Log.i("Success", "Deleted participant type");
                 }
-
             } catch(Exception e) {
                 Log.i("Failed", "Failed to delete index");
             }
 
+            /*
             // create a fresh index and types with custom mapping for nested moods
             try {
                 JestResult result = client.execute(new CreateIndex.Builder(INDEX).build());
                 if (result.isSucceeded()) {
-                    createParticipantMapping();
-                    createMoodMapping();
+                    Log.i("Success", "Succesful reset");
+                    //createParticipantMapping();
+                    //createMoodMapping();
                 }
             } catch (Exception e) {
                 Log.i("Failed", "Failed to create new index");
             }
+            */
             return null;
         }
     }
 
+    /*
     private static void createParticipantMapping() {
         PutMapping putMapping = new PutMapping.Builder(INDEX, P_TYPE,
                 "{\n" +
@@ -105,4 +111,5 @@ public class ElasticMasterController extends ElasticController {
             Log.i("Fail", "Failed mapping for the moodevent");
         }
     }
+    */
 }

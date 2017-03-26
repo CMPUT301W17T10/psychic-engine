@@ -65,16 +65,20 @@ public class CreateMoodController {
                 socialSetting = null;
         }
 
+
         MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
-        // Mock elastic search add
-        ElasticMoodController.AddMoodEventTask addMoodEventTask = new ElasticMoodController
-                .AddMoodEventTask();
-        addMoodEventTask.execute(moodEvent);
 
         // add to participant
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         Log.i("Add", "Adding to the self participant "+ ParticipantSingleton.getInstance().getSelfParticipant().getLogin());
         participant.addMoodEvent(moodEvent);
+
+
+        // Mock elastic search add
+        ElasticMoodController.AddMoodEventTask addMoodEventTask = new ElasticMoodController
+                .AddMoodEventTask();
+        addMoodEventTask.execute(moodEvent);
+
 
         // update most recent mood event
         participant.setMostRecentMoodEvent(moodEvent);

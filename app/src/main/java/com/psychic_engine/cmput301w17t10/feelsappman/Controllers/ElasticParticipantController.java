@@ -60,7 +60,7 @@ public class ElasticParticipantController extends ElasticController {
         protected Participant doInBackground(String... params) {
             verifySettings();
             Participant singleParticipant = null;
-            String query = "{\"size\" : 1,\"query\" : {\"term\" : { \"login\" : \"" +params[0] + "\" }}}";
+            String query = "{\"size\" : 1,\"query\" : {\"match\" : { \"login\" : \"" +params[0] + "\" }}}";
 
             Search search = new Search.Builder(query)
                     .addIndex("cmput301w17t10")

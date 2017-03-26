@@ -12,6 +12,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -170,9 +171,20 @@ public class HistoryTabFragment extends Fragment {
 
         // elastic version of filter by reason
         String selfName = ParticipantSingleton.getInstance().getSelfParticipant().getLogin();
-        ElasticMoodController.FilterMoodByReasonTask filterMoodByReasonTask = new ElasticMoodController.FilterMoodByReasonTask();
-        filterMoodByReasonTask.execute(selfName, filterTrigger.getText().toString().toLowerCase());
-
+        /*
+        ElasticMoodController.FilterMoodByReasonTask filter = new ElasticMoodController.FilterMoodByReasonTask();
+        try {
+            filter.execute(selfName, "test");
+            ArrayList<MoodEvent> result = filter.get();
+            Log.i("Size", "Result size is " + String.valueOf(result.size()));
+            for (MoodEvent mood : result) {
+                Log.i("Mood ID", "Found the mood with reason : "+ mood.getTrigger()+ "| mood state "+
+                        mood.getMood().getMood());
+            }
+        } catch (Exception e) {
+            Log.i("Failed", "Failed filter");
+        }
+        */
         // offline version
         for (MoodEvent moodEvent : unfilteredMoodList) {
 
@@ -204,7 +216,6 @@ public class HistoryTabFragment extends Fragment {
         // sort mood events in reverse chronological order
         if (dateFilterSelected)
             Collections.sort(filteredMoodList, new CustomComparator());
-
     }
 
 

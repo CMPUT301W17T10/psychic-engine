@@ -41,7 +41,7 @@ public class Participant extends ModelFrame{
         this.followers = new ArrayList<>();
         this.following = new ArrayList<>();
         this.pendingRequests = new ArrayList<>();
-        this.uniqueID = null;
+        this.uniqueID = "";
     }
     public void setId(String ID) {this.uniqueID = ID;}
     /**
