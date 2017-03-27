@@ -1,3 +1,4 @@
+
 package com.psychic_engine.cmput301w17t10.feelsappman.Fragments;
 
 /**
@@ -12,16 +13,25 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.psychic_engine.cmput301w17t10.feelsappman.Custom.DayAxisValueFormatter;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class SummaryTabFragment extends Fragment {
@@ -37,7 +47,7 @@ public class SummaryTabFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+/*
         View rootView = inflater.inflate(R.layout.summary, container, false);
 
         tvX = (TextView) getActivity().findViewById(R.id.tvXMax);
@@ -67,7 +77,7 @@ public class SummaryTabFragment extends Fragment {
 
 
 
-        /*
+
         participant = ParticipantSingleton.getInstance().getSelfParticipant();
         moodEventList = participant.getMoodList();
 
@@ -105,13 +115,14 @@ public class SummaryTabFragment extends Fragment {
 
         // Display bar chart
         getActivity().setContentView(chart);
-*/
-
 
 
 
 
 
         return rootView;
+        */
+        return null;
     }
 }
+
