@@ -12,6 +12,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -30,6 +31,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Activities.EditMoodActivity
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.ViewMoodEventActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Comparators.CustomComparator;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.DeleteMoodController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
@@ -167,6 +169,22 @@ public class HistoryTabFragment extends Fragment {
         // Check which filters have been selected
         checkFilterSelected();
 
+        // elastic version of filter by reason
+        /*
+        String selfName = ParticipantSingleton.getInstance().getSelfParticipant().getLogin();
+        ElasticMoodController.FilterMoodByReasonTask filter = new ElasticMoodController.FilterMoodByReasonTask();
+        try {
+            filter.execute(selfName, "test");
+            ArrayList<MoodEvent> results = filter.get();
+            for (MoodEvent event : results) {
+                filteredMoodList.add(event);
+            }
+        } catch (Exception e) {
+            Log.i("Failed", "Failed filter");
+        }
+        */
+
+        // offline version
         for (MoodEvent moodEvent : unfilteredMoodList) {
 
             satisfiesMood = true;
@@ -191,13 +209,11 @@ public class HistoryTabFragment extends Fragment {
             // add mood event to the list to be displayed if it satisfies all conditions
             if (satisfiesMood && satisfiesDate && satisfiesTrigger)
                 filteredMoodList.add(moodEvent);
-
         }
 
         // sort mood events in reverse chronological order
         if (dateFilterSelected)
             Collections.sort(filteredMoodList, new CustomComparator());
-
     }
 
 
@@ -223,7 +239,7 @@ public class HistoryTabFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        adapter = new ArrayAdapter<MoodEvent>(getActivity(), R.layout.item_history, filteredMoodList);
+        adapter = new ArrayAdapter<>(getActivity(), R.layout.item_history, filteredMoodList);
         moodEventsListView.setAdapter(adapter);
 
         // initial filter according to users last settings
@@ -237,5 +253,4 @@ public class HistoryTabFragment extends Fragment {
         filter();
         adapter.notifyDataSetChanged();
     }
-
 }

@@ -14,7 +14,8 @@ import java.util.UUID;
  * Participant model to describe the attributes of the participant. Each participant upon signup
  * will hold their own personal arrays of mood events, followers, following, and pending requests.
  * Currently the last three are out of service until later development. Participants will have
- * their own unique ID upon creation.
+ * their own unique ID upon creation. Followers/Following are kept to their names. When required,
+ * pull profile of the names that they would have picked
  * @see LoginActivity
  */
 public class Participant extends ModelFrame{
@@ -22,8 +23,8 @@ public class Participant extends ModelFrame{
     public MoodEvent mostRecentMoodEvent;
     public int mostRecentMoodEventIndex;
     public ArrayList<MoodEvent> moodEvents;
-    public ArrayList<Participant> followers;
-    public ArrayList<Participant> following;
+    public ArrayList<String> followers;
+    public ArrayList<String> following;
     public ArrayList<Participant> pendingRequests;
     public String uniqueID;
 
@@ -36,17 +37,17 @@ public class Participant extends ModelFrame{
      */
     public Participant(String loginName) {
         this.login = loginName;
-        this.moodEvents = new ArrayList<MoodEvent>();
-        this.followers = new ArrayList<Participant>();
-        this.following = new ArrayList<Participant>();
-        this.pendingRequests = new ArrayList<Participant>();
-        this.uniqueID = UUID.randomUUID().toString();
+        this.moodEvents = new ArrayList<>();
+        this.followers = new ArrayList<>();
+        this.following = new ArrayList<>();
+        this.pendingRequests = new ArrayList<>();
+        this.uniqueID = "";
     }
-
+    public void setId(String ID) {this.uniqueID = ID;}
     /**
      * Getter method to get the ID that was set by the elastic search server
      */
-    public String getID() {
+    public String getId() {
         return this.uniqueID;
     }
 
@@ -69,7 +70,7 @@ public class Participant extends ModelFrame{
      * Getter method to get the followers list. Will return NULL poiinter if called when empty.
      * @return
      */
-    public ArrayList<Participant> getFollowers() {
+    public ArrayList<String> getFollowers() {
         return this.followers;
     }
 
@@ -77,7 +78,7 @@ public class Participant extends ModelFrame{
      * Getter method to get the following list, Will return NULL pointer if called when empty.
      * @return
      */
-    public ArrayList<Participant> getFollowing() {
+    public ArrayList<String> getFollowing() {
         return this.following;
     }
 

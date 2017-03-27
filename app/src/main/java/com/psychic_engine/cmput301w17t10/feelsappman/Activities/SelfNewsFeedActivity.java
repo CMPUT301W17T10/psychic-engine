@@ -10,15 +10,22 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
 import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.HistoryTabFragment;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.RecentTabFragment;
 import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.SummaryTabFragment;
+
+import java.util.ArrayList;
 
 public class SelfNewsFeedActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
@@ -67,7 +74,6 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 mSectionsPagerAdapter.notifyDataSetChanged();
-
             }
 
             @Override
@@ -75,6 +81,7 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
     @Override

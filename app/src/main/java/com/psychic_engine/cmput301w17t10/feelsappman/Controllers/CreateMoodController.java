@@ -5,13 +5,11 @@ import android.util.Log;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodLocation;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
-
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by jyuen1 on 3/7/17.
@@ -19,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 
 public class CreateMoodController {
 
-    public static boolean updateMoodEventList(String moodString, String socialSettingString, String trigger, Photograph photo, String location) {
+    public static boolean updateMoodEventList(String moodString, String socialSettingString, String trigger, Photograph photo, MoodLocation location) {
         Mood mood;
         SocialSetting socialSetting;
         switch(moodString) {
@@ -68,27 +66,27 @@ public class CreateMoodController {
                 socialSetting = null;
         }
 
+
         MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
+
+        // add to participant
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
+        Log.i("Add", "Adding to the self participant "+ ParticipantSingleton.getInstance().getSelfParticipant().getLogin());
         participant.addMoodEvent(moodEvent);
+
 
         // Mock elastic search add
         ElasticMoodController.AddMoodEventTask addMoodEventTask = new ElasticMoodController
                 .AddMoodEventTask();
         addMoodEventTask.execute(moodEvent);
 
-        // mock elastic search
-        ElasticMoodController.FindMoodByReasonTask findMoodByReasonTask = new ElasticMoodController.FindMoodByReasonTask();
-        try {
-            ArrayList<MoodEvent> foundEvents = findMoodByReasonTask.execute("dead").get();
-            for (MoodEvent event : foundEvents) {
-                Log.i("Info", "Event has the reason: dead and mood " + event.getMood().getMood());
-            }
-        } catch (Exception e) {
-            Log.i("Error", "Elastic server error");
-        }
+
         // update most recent mood event
         participant.setMostRecentMoodEvent(moodEvent);
+
+        // Test
+        ElasticParticipantController.UpdateParticipantTask updateParticipantTask = new ElasticParticipantController.UpdateParticipantTask();
+        updateParticipantTask.execute(participant);
 
         return true;
     }

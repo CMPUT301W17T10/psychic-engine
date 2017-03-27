@@ -35,7 +35,7 @@ public class ParticipantSingleton {
      * getInstance() will be the point where we will make a reference to the an ArrayList
      **/
     private ParticipantSingleton() {
-        participantList = new ArrayList<Participant>();
+        participantList = new ArrayList<>();
         participantCount = 0;
     }
 

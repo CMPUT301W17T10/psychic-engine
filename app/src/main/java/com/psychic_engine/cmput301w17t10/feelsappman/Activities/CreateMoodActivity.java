@@ -1,6 +1,7 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -26,8 +28,10 @@ import android.widget.Toast;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.CreateMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodLocation;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodLocation;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
@@ -57,7 +61,7 @@ public class CreateMoodActivity extends AppCompatActivity {
     private Spinner moodSpinner;
     private Spinner socialSettingSpinner;
     private EditText triggerEditText;
-    private EditText locationEditText; // TODO: change type
+    private CheckBox locationCheckBox; // TODO: change type
     private Button browseButton;
     private ImageView photoImageView;
     private Button createButton;
@@ -73,7 +77,14 @@ public class CreateMoodActivity extends AppCompatActivity {
         photoImageView = (ImageView) findViewById(R.id.imageView);
         setContentView(R.layout.activity_create_mood);
 
-        isStoragePermissionGranted();
+        //List of permissions required and Requestcode for the permssions needed
+        //in ActivityCompat.requestPermissions
+        int permission_code = 1;
+        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+
+        if(!hasPermissions(this, permissions)){
+            ActivityCompat.requestPermissions(this, permissions, permission_code);
+        }
 
         // set up mood and social setting spinners (drop downs)
         setUpSpinners();
@@ -93,32 +104,24 @@ public class CreateMoodActivity extends AppCompatActivity {
         // set up events that happen when user clicks cancel button
         setUpCancel();
     }
-    //Taken from http://stackoverflow.com/questions/33162152/storage-permission-error-in-marshmallow/41221852#41221852
-    //March 10, 2017
+    //Taken from http://stackoverflow.com/questions/34342816/android-6-0-multiple-permissions
+    //March 26, 2017
 
     /**
-     * Method to detect whether or not reading from the phone storage is enabled or disabled. Upon
+     * Method to detect whether or not permissions required for the app to run are granted. Upon
      * earlier versions of the SDK, permission is automatically granted
      * @return true if SDK < 23 or participant permits
      * @return false if participant denies and SDK > 23
      */
-    public boolean isStoragePermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
-
-                return true;
-            } else {
-
-
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                return false;
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (Build.VERSION.SDK_INT >= 23 && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
             }
         }
-        else { //permission is automatically granted on sdk<23 upon installation
-
-            return true;
-        }
+        return true;
     }
 
     @Override
@@ -143,7 +146,10 @@ public class CreateMoodActivity extends AppCompatActivity {
         String socialSettingString = socialSettingSpinner.getSelectedItem().toString();
         String trigger = triggerEditText.getText().toString();
 
+        //optional features that require a model initially set to null
         Photograph photo = null;
+        MoodLocation location = null;
+
         boolean photoSizeUnder = TRUE;
 
 
@@ -159,7 +165,9 @@ public class CreateMoodActivity extends AppCompatActivity {
             // pass
         }
 
-        String location = locationEditText.getText().toString(); // TODO tentative, location type will change in part 5
+        //String location = locationEditText.getText().toString(); // TODO tentative, location type will change in part 5
+
+
 
         if (photoSizeUnder) {
             boolean success = createMoodController.updateMoodEventList(moodString, socialSettingString, trigger, photo, location);
@@ -232,8 +240,8 @@ public class CreateMoodActivity extends AppCompatActivity {
      * Setup method for the location EditText (TEMPORARY) category
      */
     void setUpLocation() {
-        locationEditText = (EditText) findViewById(R.id.location);
-        locationEditText.setText("");
+        locationCheckBox = (CheckBox) findViewById(R.id.includeLocation);
+
     }
 
     /**
