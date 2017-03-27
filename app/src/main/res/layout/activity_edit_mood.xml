@@ -51,7 +51,7 @@
         android:id="@+id/imageView1"
         android:layout_width="match_parent"
         android:layout_height="215dp"
-        android:layout_weight="0.40" />
+        android:layout_weight="0.76" />
 
     <LinearLayout
         android:orientation="horizontal"

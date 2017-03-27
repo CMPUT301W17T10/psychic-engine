@@ -33,10 +33,9 @@
 
 
     <CheckBox android:id="@+id/includeLocation"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Include Location?"
-        android:layout_weight="1"/>
+        android:text="Include Location?" />
 
     <Button
         android:id="@+id/browse"
@@ -48,7 +47,7 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="210dp"
-        android:layout_weight="0.37" />
+        android:layout_weight="0.73" />
 
     <LinearLayout
         android:orientation="horizontal"
