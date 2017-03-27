@@ -12,7 +12,6 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -29,9 +28,8 @@ import android.widget.Spinner;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.EditMoodActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.ViewMoodEventActivity;
-import com.psychic_engine.cmput301w17t10.feelsappman.Comparators.CustomComparator;
+import com.psychic_engine.cmput301w17t10.feelsappman.Custom.CustomComparator;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.DeleteMoodController;
-import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;

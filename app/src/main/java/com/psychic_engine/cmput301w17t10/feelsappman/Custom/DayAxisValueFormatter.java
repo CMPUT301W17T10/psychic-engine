@@ -5,6 +5,10 @@ import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 /**
+ * Created by jyuen1 on 3/27/17.
+ */
+
+/**
  * Taken from https://github.com/PhilJay/MPAndroidChart on 3/26/2017
  */
 
@@ -37,7 +41,7 @@ public class DayAxisValueFormatter implements IAxisValueFormatter
             return monthName + " " + yearName;
         } else {
 
-            int dayOfMonth = determineDayOfMonth(days, month + 12 * (year - 2016));
+            int dayOfMonth = determineDayOfMonth(days, month + 12 * (year - 2017));
 
             String appendix = "th";
 
@@ -126,15 +130,15 @@ public class DayAxisValueFormatter implements IAxisValueFormatter
     private int determineYear(int days) {
 
         if (days <= 366)
-            return 2016;
-        else if (days <= 730)
             return 2017;
-        else if (days <= 1094)
+        else if (days <= 730)
             return 2018;
-        else if (days <= 1458)
+        else if (days <= 1094)
             return 2019;
-        else
+        else if (days <= 1458)
             return 2020;
+        else
+            return 2021;
 
     }
 }
