@@ -23,8 +23,6 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 /**
  * LoginActivity is the login page of the app, and the first activity that will run upon opening
@@ -180,7 +178,13 @@ public class LoginActivity extends AppCompatActivity {
         FileManager.saveInFile(this);
     }
 
-    // ASSUMES USER IS SELF PARTICIPANT
+
+    /**
+     * Method that generates set data to utilize for the app testing purposes. It will automatically
+     * set the selfParticipant in the singleton to be "USER". To see what moods that would be added,
+     * you need to login as USER as it is added into the singleton and the server as well.
+     * @see ParticipantSingleton
+     */
     public void generateData() {
 
         // reset the server
@@ -211,14 +215,11 @@ public class LoginActivity extends AppCompatActivity {
         // add participants into the elastic server
         addParticipantTask.execute(testParticipant, test1, test2, test3);
 
-        /*
-        add mood events for the participants
-        mood events will be mainly in USER for filtering with combination of reason/date/mood
-        test1/2/3 will follow recent later
-        (location set to "")
-         */
 
-        // happy/sad/confused moods
+        // add mood events for the participants
+        // mood events will be mainly in USER for filtering with combination of reason/date/mood
+        // test1/2/3 will follow recent later
+
         MoodEvent testMood1 = new MoodEvent(new Mood(MoodState.HAPPY), SocialSetting.ALONE,
                 "", null, null);
         MoodEvent testMood2 = new MoodEvent(new Mood(MoodState.SAD), SocialSetting.ONEOTHER,
@@ -236,13 +237,7 @@ public class LoginActivity extends AppCompatActivity {
         testParticipant.addMoodEvent(testMood2);
         testParticipant.addMoodEvent(testMood3);
         testParticipant.addMoodEvent(testMood4);
-
-        // add mood events specifically into the self participant and update participant
-        // CreateMoodController.updateMoodEventList("Happy", "Crowd", "test", null, "");
-        // CreateMoodController.updateMoodEventList("Happy", "Crowd", "", null, "");
-
-        // search for the mood events with the reason "test"
-
+        testParticipant.addMoodEvent(testMood5);
 
     }
 }

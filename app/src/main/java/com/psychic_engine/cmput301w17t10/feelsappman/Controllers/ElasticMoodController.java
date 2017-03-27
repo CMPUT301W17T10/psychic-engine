@@ -4,30 +4,39 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
-import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
-import static com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticController.verifySettings;
-
-/**
- * Created by Airer on 3/21/2017.
- */
 
 // TODO: Find by emoji | Find by reason | Find by location ???| need to find way to filter with params
 
+/**
+ * ElasticMoodController handles any changes regarding moods, whether it would be updating, deleting,
+ * or adding moods. Main method is to obtain the mood events in relation to the participant
+ * currently using the app, then utilize the offline filtering to handle the required features
+ * that a mood event should have such as mood, reason, and date.
+ *
+ * How to use:
+ * ElasticMoodController.x task_name = new ElasticMoodController.x
+ * (x is the method task you want to use ie. FilterMoodByReasonTask)
+ * task_name.execute(parameters)
+ * @author adong
+ */
 public class ElasticMoodController extends ElasticController{
 
+    /**
+     * FilterMoodByReasonTask takes in two parameters, the first one being the login name of participant
+     * currently using the app. The second parameter is the reason (trigger) for the mood event.
+     * The task filters the mood events that the participant has through the trigger field.
+     */
     public static class FilterMoodByReasonTask extends AsyncTask<String, Void, ArrayList<MoodEvent>> {
         @Override
         protected ArrayList<MoodEvent> doInBackground(String ... params) {
@@ -45,12 +54,6 @@ public class ElasticMoodController extends ElasticController{
 
             // would not need to filter by reason if the trigger had no reason in the edit text
             // would change the method if there was no filter by reason intended.
-            /*
-            if (params[1] == null) {
-                query = "{\"query\": {\"filtered\": {\"query\": {\"match\":{\"moodOwner\": \n" +
-                        params[0] + "\"}},\"filter\":{\"missing\":{\"field\":\"trigger\"}}}}}";
-            }
-            */
             query = "{\"query\": {\"match\":{\"moodOwner\":\"" +
                     "" + self + "\"}},\"filter\":{\"term\":{\"trigger\":\""+reason+"\"}}}";
 
@@ -78,6 +81,10 @@ public class ElasticMoodController extends ElasticController{
 
     }
 
+    /**
+     * AddMoodEventTask adds a mood event into the elastic server. Utilized when the participant
+     * would like to create a mood event in the CreateMoodActivity.
+     */
     public static class AddMoodEventTask extends AsyncTask<MoodEvent, Void, Void> {
 
         @Override
@@ -103,7 +110,11 @@ public class ElasticMoodController extends ElasticController{
         }
     }
 
-
+    /**
+     * DeleteMoodEventTask is used when the participant would like to delete their mood events. The
+     * task will only delete the mood event from the elastic server, and not from the participant's
+     * mood event list locally.
+     */
     public static class DeleteMoodEventTask extends AsyncTask<MoodEvent, Void, Void> {
         @Override
         protected Void doInBackground(MoodEvent... deleteMoods) {
@@ -119,40 +130,6 @@ public class ElasticMoodController extends ElasticController{
                     Log.i("Error", "Error deleting moods");
                 }
             }
-            return null;
-        }
-    }
-
-    public static class FindMoodByWeekTask extends AsyncTask<Void, Void, ArrayList<MoodEvent>> {
-
-        @Override
-        protected ArrayList<MoodEvent> doInBackground(Void... params) {
-            verifySettings();
-            ArrayList<MoodEvent> foundMoodEvents = new ArrayList<>();
-
-            String query = "{\"query\" : {\"match\" : { \"\" : \"" + params[0] + "\"}}}";
-
-            Search search = new Search.Builder(query)
-                    .addIndex("cmput301w17t10")
-                    .addType("moodevent")
-                    .build();
-
-            try {
-                Log.i("Attempt", "Search for "+ params[0] + " Query: "+ query);
-                SearchResult result = client.execute(search);
-                if (result.isSucceeded()) {
-                    List<MoodEvent> foundEvents = result.getSourceAsObjectList(MoodEvent.class);
-                    foundMoodEvents.addAll(foundEvents);
-                    return  foundMoodEvents;
-                } else {
-                    Log.i("None", "No mood events with this reason has been found");
-                    return null;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.i("Error", "Communication error with server");
-            }
-
             return null;
         }
     }

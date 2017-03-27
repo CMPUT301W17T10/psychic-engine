@@ -5,12 +5,9 @@ import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
 /**
- * Created by adong on 2017-03-20.
- */
-
-/**
  * Elastic search controller superclass that is used to create the variety of
  * controllers used throughout the program.
+ * @author adong
  */
 public class ElasticController {
 

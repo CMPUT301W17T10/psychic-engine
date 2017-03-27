@@ -11,19 +11,22 @@ import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
-/**
- * Created by adong on 2017-03-13.
- */
-
-// TODO: Comments
     //able to add participant on signup
     //able to follow a participant's recent mood event on follow request
     //able to search for a participant's name and their recent mood event
     //update participant at anytime if information is changed by edit
 
-
+/**
+ * ElasticParticipantController handles all elastic requests in regards to participants. Tasks will
+ * be used to update, add, and find participants to find other participants using the app.
+ * @author adong
+ */
 public class ElasticParticipantController extends ElasticController {
-    // Function to save new participants
+
+    /**
+     * AddParticipantTask deals with adding new participants into the server when the participant
+     * signs up at the login page.
+     */
     public static class AddParticipantTask extends AsyncTask<Participant, Void, Void>  {
 
         // Make it handle arbitrary number of arguments
@@ -55,13 +58,19 @@ public class ElasticParticipantController extends ElasticController {
         }
     }
 
+    /**
+     * FindParticipantTask is used to find a participant with a certain login name (case insensitive).
+     * Usage for finding whether or not the name is already taken in the elastic server (satisfy
+     * unique name requirement). A successful hit will mean that the name is already taken.
+     */
     public static class FindParticipantTask extends AsyncTask<String, Void, Participant> {
         @Override
         protected Participant doInBackground(String... params) {
             verifySettings();
             Participant singleParticipant = null;
-            String query = "{\"size\" : 1,\"query\" : {\"match\" : { \"login\" : \"" +params[0] + "\" }}}";
 
+            // set a query to find 1 hit of a participant with the login name
+            String query = "{\"size\" : 1,\"query\" : {\"match\" : { \"login\" : \"" +params[0] + "\" }}}";
             Search search = new Search.Builder(query)
                     .addIndex("cmput301w17t10")
                     .addType("participant")
@@ -70,10 +79,14 @@ public class ElasticParticipantController extends ElasticController {
             try {
                 Log.i("Attempt", "Search for " + params[0] + " Query: "+ query);
                 SearchResult result = client.execute(search);
+
+                // successful hit
                 if (result.isSucceeded()) {
                     singleParticipant = result.getSourceAsObject(Participant.class);
                     Log.i("Found", "Found the participant name: "+ singleParticipant.getLogin());
                 }
+
+                // no participant found
                 else {
                     return null;
                 }
@@ -88,34 +101,31 @@ public class ElasticParticipantController extends ElasticController {
 
     /**
      * Elastic task method used to update a participant. Use this method when you need to update
-     * participant data, such as following, followers, and mood events.
+     * participant data, such as following, followers, and mood events. Let the parameter be
+     * the participant that you would like to update. Reindexing the participant is necessary
+     * if there are significant changes that is not simply incrementing a value. Reindexing is done
+     * by deleting the participant by ID and then adding the same participant again, preserving the
+     * ID that was assigned to it previously.
      * @see Participant
      */
     public static class UpdateParticipantTask extends AsyncTask<Participant, Void, Void> {
-        /*
-        add follower to participant's following (prior)
-        delete participant from the elastic server
-        add participant again with the updated info
-        follower[0] is the following participant (getting a follower)
-        follower[1] is the follower participant (giving a follow)
-        would utilize add/delete tasks, but unable to implement
-         */
+
         @Override
         protected Void doInBackground(Participant... updated) {
             verifySettings();
             Participant updatingParticipant = updated[0];
-            // need to delete the participant first and add the participant again
+
+            // need to delete the participant first
             String updateID = updatingParticipant.getId();
             try {
                 client.execute(new Delete.Builder(updateID).index("cmput301w17t10").type("participant").build());
-                Log.i("Sucess", "Deleted the participant");
+                Log.i("Success", "Deleted the participant");
             } catch (Exception e) {
                 Log.i("Error", "Unable to add follower into the server");
             }
 
             // then add the updated participant with the newer info (keep id)
             // create new index in the elastic with the same id before that was deleted
-
             Index index = new Index.Builder(updatingParticipant)
                     .index("cmput301w17t10")
                     .type("participant")
