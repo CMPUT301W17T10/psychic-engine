@@ -198,6 +198,7 @@ public class SummaryTabFragment extends Fragment implements
         /                         TEST DATA                       /
         *********************************************************/
 
+         /*
         Mood testSadMood = new Mood(MoodState.SAD);
         MoodEvent test1 = new MoodEvent(testSadMood, null, "", null, null);
         MoodEvent test2 = new MoodEvent(testSadMood, null, "", null, null);
@@ -226,6 +227,7 @@ public class SummaryTabFragment extends Fragment implements
         //participant.addMoodEvent(test6);
         //participant.addMoodEvent(test7);
         //participant.addMoodEvent(test8);
+        */
 
         /*~*********************************************************
          *                         TEST DATA                       /
