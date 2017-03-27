@@ -1,6 +1,16 @@
-Unstaged changes after reset:
-D	app/src/main/java/com/psychic_engine/cmput301w17t10/feelsappman/Comparators/CustomComparator.java
-M	app/src/main/java/com/psychic_engine/cmput301w17t10/feelsappman/Custom/CustomComparator.java
-M	app/src/main/java/com/psychic_engine/cmput301w17t10/feelsappman/Custom/DayAxisValueFormatter.java
-M	app/src/main/java/com/psychic_engine/cmput301w17t10/feelsappman/Fragments/SummaryTabFragment.java
-M	app/src/main/res/layout/summary.xml
+package com.psychic_engine.cmput301w17t10.feelsappman.Custom;
+
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
+
+import java.util.Comparator;
+
+/**
+ * Created by Hussain on 3/13/2017.
+ */
+
+public class CustomComparator implements Comparator<MoodEvent> {
+    @Override
+    public int compare(MoodEvent o1, MoodEvent o2) {
+        return o2.getDate().compareTo(o1.getDate());
+    }
+}
