@@ -49,6 +49,7 @@ import static java.lang.Boolean.TRUE;
 
 /**
  * Created by jyuen1 on 3/7/2017.
+ * Location and photo by Pierre Lin on 3/28/2017
  */
 
 /**
