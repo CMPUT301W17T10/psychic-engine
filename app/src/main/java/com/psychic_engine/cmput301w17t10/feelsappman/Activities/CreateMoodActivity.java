@@ -170,6 +170,7 @@ public class CreateMoodActivity extends AppCompatActivity {
                 double lon = coords.getLongitude();
                 location = new MoodLocation(new GeoPoint(lat, lon));
             } catch (Exception e) {
+                //pass
             }
 
         }

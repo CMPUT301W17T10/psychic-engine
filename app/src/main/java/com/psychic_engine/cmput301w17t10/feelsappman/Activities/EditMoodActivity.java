@@ -8,6 +8,9 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +25,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.EditMoodController;
@@ -35,6 +39,8 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
+
+import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +56,8 @@ import static java.lang.Boolean.TRUE;
  */
 public class EditMoodActivity extends AppCompatActivity{
     private static int RESULT_LOAD_IMAGE = 1;
+    private LocationManager lm;
+    private LocationListener locationListener;
 
     private Spinner moodSpinner;
     private Spinner socialSettingSpinner;
@@ -137,6 +145,7 @@ public class EditMoodActivity extends AppCompatActivity{
         return true;
     }
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -145,11 +154,24 @@ public class EditMoodActivity extends AppCompatActivity{
         }
     }
 
+    //check if specified EditText is empty
+    //Taken from http://stackoverflow.com/questions/24391809/android-check-if-edittext-is-empty
+    //March 28, 2017
+    private boolean isEmpty(EditText myeditText) {
+        return myeditText.getText().toString().trim().length() == 0;
+    }
     /**
      * Retrieves information set in widgets and calls EditMoodController to register changes.
      * @see EditMoodController
      */
     void saveMoodEvent() {
+        //check if location checkbox is checked
+        Boolean isChecked = locationCheckBox.isChecked();
+
+        //check if editTexts for lat long are empty
+        Boolean isLatEmpty = isEmpty(locationLat);
+        Boolean isLongEmpty = isEmpty(locationLong);
+
         // get the mood from the mood spinner
         String moodString = moodSpinner.getSelectedItem().toString();
 
@@ -159,10 +181,37 @@ public class EditMoodActivity extends AppCompatActivity{
         // get the trigger from the trigger edit text
         String trigger = triggerEditText.getText().toString();
 
-        Photograph photo = null;
-        MoodLocation location = null;
+        Photograph photo = moodEvent.getPicture();
+        MoodLocation location = moodEvent.getLocation();
 
         boolean photoSizeUnder = TRUE;
+
+        if (isChecked && (!isLatEmpty || !isLongEmpty)) {
+            Toast.makeText(EditMoodActivity.this,
+                    "Location input invalid",
+                    Toast.LENGTH_LONG).show();
+        }
+        //use current location not checked, lat, long editTexts are not empty
+        if (!isChecked && !isLatEmpty && !isLongEmpty) {
+            double lat = Double.parseDouble(locationLat.getText().toString());
+            double lon = Double.parseDouble(locationLong.getText().toString());
+            location = new MoodLocation(new GeoPoint(lat, lon));
+        }
+
+        if (isChecked && isLatEmpty && isLongEmpty) {
+            //TODO DO LOC STUFF, get current loc and make it location
+            Location coords = new Location("GPS");
+            coords = getCurrentLocation(coords);
+            //set location as new MoodLocation as a Geopoint
+            try {
+                double lat = coords.getLatitude();
+                double lon = coords.getLongitude();
+                location = new MoodLocation(new GeoPoint(lat, lon));
+            } catch (Exception e) {
+                //pass
+            }
+
+        }
 
         try {
             Bitmap bitmap = ((BitmapDrawable) photoImageView.getDrawable()).getBitmap();
@@ -191,6 +240,57 @@ public class EditMoodActivity extends AppCompatActivity{
 
         Intent intent = new Intent(EditMoodActivity.this, SelfNewsFeedActivity.class);
         startActivity(intent);
+    }
+
+    public Location getCurrentLocation(Location coords) {
+        //Taken from http://stackoverflow.com/questions/17584374/check-if-gps-and-or-mobile-network-location-is-enabled
+        //March 27, 2017
+        lm = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+            }
+        };
+        //Create new Location object using provider
+        Boolean gps = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        Boolean network = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        //GPS service gets FINE location
+        //Network provider gets COARSE location
+        if (gps) {
+            //Ignore warnings, permissions checked when activity starts
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            if (lm != null) {
+                coords = lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+            }
+
+        }
+        if (!gps && network) {
+            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            if (lm!=null) {
+                coords = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            }
+
+        }
+        //no GPS or network provider
+        if (!gps && !network) {
+            Toast.makeText(EditMoodActivity.this,
+                    "You are not connected to GPS or a network provider",
+                    Toast.LENGTH_LONG).show();
+        }
+        return coords;
     }
 
     /**
@@ -240,6 +340,8 @@ public class EditMoodActivity extends AppCompatActivity{
                     moodEvent.getSocialSetting().toString()));
         else
             socialSettingSpinner.setSelection(0);
+        ((TextView) findViewById(R.id.locationLat)).setHint(moodEvent.getLocation().getLatitudeStr());
+        ((TextView) findViewById(R.id.locationLong)).setHint(moodEvent.getLocation().getLongitudeStr());
     }
 
     /**
@@ -256,7 +358,7 @@ public class EditMoodActivity extends AppCompatActivity{
      */
     void setUpLocation() {
         // display the previous location
-        locationCheckBox = (CheckBox) findViewById(R.id.includeLocation);
+        locationCheckBox = (CheckBox) findViewById(R.id.editToCurrentLocation);
         locationLat = (EditText) findViewById(R.id.locationLat);
         locationLong = (EditText) findViewById(R.id.locationLong);
         //locationCheckBox.setText(moodEvent.getLocation());
