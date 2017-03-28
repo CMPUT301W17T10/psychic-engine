@@ -4,33 +4,33 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Fragments;
  * Created by jordi on 2017-03-09.
  */
 
-import android.annotation.SuppressLint;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.MPPointF;
 import com.psychic_engine.cmput301w17t10.feelsappman.Custom.DayAxisValueFormatter;
 import com.psychic_engine.cmput301w17t10.feelsappman.Custom.MutableInteger;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodColor;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
@@ -46,6 +46,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static android.graphics.Color.parseColor;
+
 /**
  * @Author Jennifer Yuen
  *
@@ -59,11 +61,11 @@ import java.util.concurrent.TimeUnit;
 
 
 public class SummaryTabFragment extends Fragment implements
-        SeekBar.OnSeekBarChangeListener, OnChartValueSelectedListener {
+        SeekBar.OnSeekBarChangeListener, OnChartGestureListener, OnChartValueSelectedListener {
 
 
-    private BarChart mChart;
-    private SeekBar mSeekBarDensity, mSeekBarStart; // TODO: 3rd seek bar for y axis range, right now its automatically scaling (which is fine)
+    private LineChart mChart;
+    private SeekBar mSeekBarDensity, mSeekBarStart; // TODO: 3rd seek bar for y axis range, right now its automatically scaling
     private TextView tvX, tvY;
 
     Participant participant;
@@ -84,11 +86,8 @@ public class SummaryTabFragment extends Fragment implements
         mSeekBarDensity = (SeekBar) rootView.findViewById(R.id.seekBar1);
         mSeekBarStart = (SeekBar) rootView.findViewById(R.id.seekBar2);
 
-        mChart = (BarChart) rootView.findViewById(R.id.chart);
+        mChart = (LineChart) rootView.findViewById(R.id.chart);
         mChart.setOnChartValueSelectedListener(this);
-
-        mChart.setDrawBarShadow(false);
-        mChart.setDrawValueAboveBar(true);
 
         mChart.getDescription().setEnabled(false);
 
@@ -101,33 +100,31 @@ public class SummaryTabFragment extends Fragment implements
         mChart.setDrawGridBackground(false);
         // mChart.setDrawYLabels(false);
 
+        mChart.setOnChartValueSelectedListener(this);
+        mChart.setOnChartValueSelectedListener(this);
+
         IAxisValueFormatter xAxisFormatter = new DayAxisValueFormatter(mChart);
 
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        //xAxis.setTypeface(mTfLight);
         xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f); // only intervals of 1 day
+        // only intervals of 1 day
+        xAxis.setGranularity(1f);
         xAxis.setLabelCount(7);
         xAxis.setValueFormatter(xAxisFormatter);
 
-        //IAxisValueFormatter custom = new MyAxisValueFormatter();
 
         YAxis leftAxis = mChart.getAxisLeft();
-        //leftAxis.setTypeface(mTfLight);
         leftAxis.setLabelCount(8, false);
-        //leftAxis.setValueFormatter(custom);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setSpaceTop(15f);
-        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+        leftAxis.setAxisMinimum(0f);
 
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setDrawGridLines(false);
-        //rightAxis.setTypeface(mTfLight);
         rightAxis.setLabelCount(8, false);
-        //rightAxis.setValueFormatter(custom);
         rightAxis.setSpaceTop(15f);
-        rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+        rightAxis.setAxisMinimum(0f);
 
         Legend l = mChart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
@@ -139,8 +136,10 @@ public class SummaryTabFragment extends Fragment implements
         l.setTextSize(11f);
         l.setXEntrySpace(4f);
 
+        setData(1, 0);                        // TODO set to earliest mood/currently viewed mood/latest mood
+
         mSeekBarStart.setProgress(0);        // TODO set to earliest mood/currently viewed mood/latest mood
-        mSeekBarDensity.setProgress(0);      // TODO set to average / highest count
+        mSeekBarDensity.setProgress(0);
 
         mSeekBarStart.setOnSeekBarChangeListener(this);
         mSeekBarDensity.setOnSeekBarChangeListener(this);
@@ -198,36 +197,70 @@ public class SummaryTabFragment extends Fragment implements
         /                         TEST DATA                       /
         *********************************************************/
 
-         /*
-        Mood testSadMood = new Mood(MoodState.SAD);
-        MoodEvent test1 = new MoodEvent(testSadMood, null, "", null, null);
-        MoodEvent test2 = new MoodEvent(testSadMood, null, "", null, null);
-        MoodEvent test3 = new MoodEvent(testSadMood, null, "", null, null);
-        MoodEvent test4 = new MoodEvent(testSadMood, null, "", null, null);
-        MoodEvent test5 = new MoodEvent(testSadMood, null, "", null, null);
-        MoodEvent test6 = new MoodEvent(testSadMood, null, "", null, null);
-        MoodEvent test7 = new MoodEvent(testSadMood, null, "", null, null);
-        MoodEvent test8 = new MoodEvent(testSadMood, null, "", null, null);
-
-        test1.setDate(parseDate("2017-03-25"));
-        test2.setDate(parseDate("2017-03-25"));
-        test3.setDate(parseDate("2017-04-01"));
-        test4.setDate(parseDate("2017-05-01"));
-        test5.setDate(parseDate("2017-05-15"));
-        //test6.setDate(parseDate("2018-03-25"));
-        //test7.setDate(parseDate("2019-03-25"));
-        //test8.setDate(parseDate("2020-03-25"));
-
+/*
         participant.getMoodList().clear();
-        participant.addMoodEvent(test1);
-        participant.addMoodEvent(test2);
-        participant.addMoodEvent(test3);
-        participant.addMoodEvent(test4);
-        participant.addMoodEvent(test5);
-        //participant.addMoodEvent(test6);
-        //participant.addMoodEvent(test7);
-        //participant.addMoodEvent(test8);
-        */
+
+        Mood testSadMood = new Mood(MoodState.SAD);
+        MoodEvent testSad1 = new MoodEvent(testSadMood, null, "", null, null);
+        MoodEvent testSad2 = new MoodEvent(testSadMood, null, "", null, null);
+        MoodEvent testSad3 = new MoodEvent(testSadMood, null, "", null, null);
+        MoodEvent testSad4 = new MoodEvent(testSadMood, null, "", null, null);
+        MoodEvent testSad5 = new MoodEvent(testSadMood, null, "", null, null);
+        MoodEvent testSad6 = new MoodEvent(testSadMood, null, "", null, null);
+        MoodEvent testSad7 = new MoodEvent(testSadMood, null, "", null, null);
+        MoodEvent testSad8 = new MoodEvent(testSadMood, null, "", null, null);
+
+        testSad1.setDate(parseDate("2017-03-25"));
+        testSad2.setDate(parseDate("2017-03-25"));
+        testSad3.setDate(parseDate("2017-04-01"));
+        testSad4.setDate(parseDate("2017-05-01"));
+        testSad5.setDate(parseDate("2017-05-15"));
+        testSad6.setDate(parseDate("2018-03-25"));
+        testSad7.setDate(parseDate("2019-03-25"));
+        testSad8.setDate(parseDate("2020-03-25"));
+
+        participant.addMoodEvent(testSad1);
+        participant.addMoodEvent(testSad2);
+        participant.addMoodEvent(testSad3);
+        participant.addMoodEvent(testSad4);
+        participant.addMoodEvent(testSad5);
+        participant.addMoodEvent(testSad6);
+        participant.addMoodEvent(testSad7);
+        participant.addMoodEvent(testSad8);
+
+
+
+
+
+        Mood testHappyMood = new Mood(MoodState.HAPPY);
+        MoodEvent testHappy1 = new MoodEvent(testHappyMood, null, "", null, null);
+        MoodEvent testHappy2 = new MoodEvent(testHappyMood, null, "", null, null);
+        MoodEvent testHappy3 = new MoodEvent(testHappyMood, null, "", null, null);
+        MoodEvent testHappy4 = new MoodEvent(testHappyMood, null, "", null, null);
+        MoodEvent testHappy5 = new MoodEvent(testHappyMood, null, "", null, null);
+        MoodEvent testHappy6 = new MoodEvent(testHappyMood, null, "", null, null);
+        MoodEvent testHappy7 = new MoodEvent(testHappyMood, null, "", null, null);
+        MoodEvent testHappy8 = new MoodEvent(testHappyMood, null, "", null, null);
+
+        testHappy1.setDate(parseDate("2017-03-27"));
+        testHappy2.setDate(parseDate("2017-03-27"));
+        testHappy3.setDate(parseDate("2017-03-27"));
+        testHappy4.setDate(parseDate("2017-04-25"));
+        testHappy5.setDate(parseDate("2017-04-25"));
+        testHappy6.setDate(parseDate("2017-04-28"));
+        testHappy7.setDate(parseDate("2019-03-23"));
+        testHappy8.setDate(parseDate("2020-03-25"));
+
+        participant.addMoodEvent(testHappy1);
+        participant.addMoodEvent(testHappy2);
+        participant.addMoodEvent(testHappy3);
+        participant.addMoodEvent(testHappy4);
+        participant.addMoodEvent(testHappy5);
+        participant.addMoodEvent(testHappy6);
+        participant.addMoodEvent(testHappy7);
+        participant.addMoodEvent(testHappy8);
+
+*/
 
         /*~*********************************************************
          *                         TEST DATA                       /
@@ -246,6 +279,7 @@ public class SummaryTabFragment extends Fragment implements
 
             switch (moodEvent.getMood().getMood()) {
 
+                // For each mood, create mappings from days to mood count for that day
                 case SAD:
                     if (sadDayToCountMap.containsKey(days)) {
                         count = sadDayToCountMap.get(days);
@@ -317,6 +351,8 @@ public class SummaryTabFragment extends Fragment implements
 
 
 /*
+        // To get the earliest mood to initialize graph view
+
         ArrayList<MoodEvent> copy = new ArrayList<MoodEvent>(moodEventList);
         Collections.sort(copy, new CustomComparator());
         MoodEvent earliestMoodEvent = copy.get(copy.size() - 1);
@@ -328,78 +364,170 @@ public class SummaryTabFragment extends Fragment implements
 
 */
 
+        // Create an array of data points for each mood
+        ArrayList<Entry> yValsSad = new ArrayList<Entry>();
+        ArrayList<Entry> yValsHappy = new ArrayList<Entry>();
+        ArrayList<Entry> yValsShame = new ArrayList<Entry>();
+        ArrayList<Entry> yValsFear = new ArrayList<Entry>();
+        ArrayList<Entry> yValsAnger = new ArrayList<Entry>();
+        ArrayList<Entry> yValsDisgust = new ArrayList<Entry>();
+        ArrayList<Entry> yValsConfused = new ArrayList<Entry>();
+        ArrayList<Entry> yValsSurprised = new ArrayList<Entry>();
+
 
         float start = mSeekBarStart.getProgress();
 
-        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
 
         for (int i = (int) start; i < start + num + 1; i++) {
 
-            MutableInteger val = sadDayToCountMap.get(i);
+            addEntry(yValsSad, sadDayToCountMap, i);
+            addEntry(yValsHappy, happyDayToCountMap, i);
+            addEntry(yValsShame, shameDayToCountMap, i);
+            addEntry(yValsFear, fearDayToCountMap, i);
+            addEntry(yValsAnger, angerDayToCountMap, i);
+            addEntry(yValsDisgust, disgustDayToCountMap, i);
+            addEntry(yValsConfused, confusedDayToCountMap, i);
+            addEntry(yValsSurprised, surprisedDayToCountMap, i);
 
-            if (val != null)
-                yVals1.add(new BarEntry(i, val.toFloat()));
-            else
-                yVals1.add(new BarEntry(i, 0));
         }
 
 
-        BarDataSet set1;
+        LineDataSet setSad;
+        LineDataSet setHappy;
+        LineDataSet setShame;
+        LineDataSet setFear;
+        LineDataSet setAnger;
+        LineDataSet setDisgust;
+        LineDataSet setConfused;
+        LineDataSet setSurprised;
 
-        if (mChart.getData() != null &&
-                mChart.getData().getDataSetCount() > 0) {
-            set1 = (BarDataSet) mChart.getData().getDataSetByIndex(0);
-            set1.setValues(yVals1);
+
+        if (mChart.getData() != null && mChart.getData().getDataSetCount() > 0) {
+
+            setSad = (LineDataSet) mChart.getData().getDataSetByIndex(0);
+            setSad.setValues(yValsSad);
+
+            setHappy = (LineDataSet) mChart.getData().getDataSetByIndex(1);
+            setHappy.setValues(yValsHappy);
+
+            setShame = (LineDataSet) mChart.getData().getDataSetByIndex(2);
+            setShame.setValues(yValsShame);
+
+            setFear = (LineDataSet) mChart.getData().getDataSetByIndex(3);
+            setFear.setValues(yValsFear);
+
+            setAnger = (LineDataSet) mChart.getData().getDataSetByIndex(4);
+            setAnger.setValues(yValsAnger);
+
+            setDisgust = (LineDataSet) mChart.getData().getDataSetByIndex(5);
+            setDisgust.setValues(yValsDisgust);
+
+            setConfused = (LineDataSet) mChart.getData().getDataSetByIndex(6);
+            setConfused.setValues(yValsConfused);
+
+            setSurprised = (LineDataSet) mChart.getData().getDataSetByIndex(7);
+            setSurprised.setValues(yValsSurprised);
+
             mChart.getData().notifyDataChanged();
             mChart.notifyDataSetChanged();
+
         } else {
-            set1 = new BarDataSet(yVals1, "The year 2017");
 
-            //set1.setDrawIcons(false);
+            setSad = new LineDataSet(yValsSad, "sad");
+            setHappy = new LineDataSet(yValsHappy, "happy");
+            setShame = new LineDataSet(yValsShame, "shame");
+            setFear = new LineDataSet(yValsFear, "fear");
+            setAnger = new LineDataSet(yValsAnger, "anger");
+            setDisgust = new LineDataSet(yValsDisgust, "disgust");
+            setConfused = new LineDataSet(yValsConfused, "confused");
+            setSurprised = new LineDataSet(yValsSurprised, "surprised");
 
-            set1.setColors(ColorTemplate.MATERIAL_COLORS);
+            ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+            dataSets.add(setSad);
+            dataSets.add(setHappy);
+            dataSets.add(setShame);
+            dataSets.add(setFear);
+            dataSets.add(setAnger);
+            dataSets.add(setDisgust);
+            dataSets.add(setConfused);
+            dataSets.add(setSurprised);
 
-            ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
-            dataSets.add(set1);
-
-            BarData data = new BarData(dataSets);
+            LineData data = new LineData(dataSets);
             data.setValueTextSize(10f);
-            //data.setValueTypeface(mTfLight);
-            data.setBarWidth(0.9f);
 
             mChart.setData(data);
         }
 
+    }
 
+
+    public void addEntry(ArrayList<Entry> yVals,  Map<Integer, MutableInteger> moodCountMap, int day) {
+
+        MutableInteger val = moodCountMap.get(day);
+
+        if (val != null)
+            yVals.add(new Entry(day, val.toFloat()));
+        else
+            yVals.add(new Entry(day, 0));
 
     }
 
-    protected RectF mOnValueSelectedRectF = new RectF();
 
-    @SuppressLint("NewApi")
+    @Override
+    public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+        Log.i("Gesture", "START, x: " + me.getX() + ", y: " + me.getY());
+    }
+
+    @Override
+    public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+        Log.i("Gesture", "END, lastGesture: " + lastPerformedGesture);
+
+        // un-highlight values after the gesture is finished and no single-tap
+        if(lastPerformedGesture != ChartTouchListener.ChartGesture.SINGLE_TAP)
+            mChart.highlightValues(null); // or highlightTouch(null) for callback to onNothingSelected(...)
+    }
+
+    @Override
+    public void onChartLongPressed(MotionEvent me) {
+        Log.i("LongPress", "Chart longpressed.");
+    }
+
+    @Override
+    public void onChartDoubleTapped(MotionEvent me) {
+        Log.i("DoubleTap", "Chart double-tapped.");
+    }
+
+    @Override
+    public void onChartSingleTapped(MotionEvent me) {
+        Log.i("SingleTap", "Chart single-tapped.");
+    }
+
+    @Override
+    public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+        Log.i("Fling", "Chart flinged. VeloX: " + velocityX + ", VeloY: " + velocityY);
+    }
+
+    @Override
+    public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+        Log.i("Scale / Zoom", "ScaleX: " + scaleX + ", ScaleY: " + scaleY);
+    }
+
+    @Override
+    public void onChartTranslate(MotionEvent me, float dX, float dY) {
+        Log.i("Translate / Move", "dX: " + dX + ", dY: " + dY);
+    }
+
     @Override
     public void onValueSelected(Entry e, Highlight h) {
-
-        if (e == null)
-            return;
-
-        RectF bounds = mOnValueSelectedRectF;
-        mChart.getBarBounds((BarEntry) e, bounds);
-        MPPointF position = mChart.getPosition(e, YAxis.AxisDependency.LEFT);
-
-        Log.i("bounds", bounds.toString());
-        Log.i("position", position.toString());
-
-        Log.i("x-index",
-                "low: " + mChart.getLowestVisibleX() + ", high: "
-                        + mChart.getHighestVisibleX());
-
-        MPPointF.recycleInstance(position);
+        Log.i("Entry selected", e.toString());
+        Log.i("LOWHIGH", "low: " + mChart.getLowestVisibleX() + ", high: " + mChart.getHighestVisibleX());
+        Log.i("MIN MAX", "xmin: " + mChart.getXChartMin() + ", xmax: " + mChart.getXChartMax() + ", ymin: " + mChart.getYChartMin() + ", ymax: " + mChart.getYChartMax());
     }
 
     @Override
-    public void onNothingSelected() { }
-
+    public void onNothingSelected() {
+        Log.i("Nothing selected", "Nothing selected.");
+    }
 
 
     public static Date parseDate(String date) {
