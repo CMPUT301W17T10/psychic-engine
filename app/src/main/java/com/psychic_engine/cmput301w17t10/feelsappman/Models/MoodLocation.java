@@ -24,11 +24,17 @@ public class MoodLocation {
         return loc;
     }
 
-    public String getLatitude() {
-        return Double.toString(latitude);
+    //getters for lat long are strings because the only time we need them
+    //
+    public String getLatitudeStr() {
+        String str = String.format("%.4f   ", latitude);
+        return str;
     }
 
-    public String getLongitude() {
-        return Double.toString(longitude);
+    public String getLongitudeStr() {
+        String str = String.format("%.4f", longitude);
+        return str;
     }
+
+
 }

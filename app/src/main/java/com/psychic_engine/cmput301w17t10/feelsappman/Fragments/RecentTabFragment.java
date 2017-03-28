@@ -94,7 +94,7 @@ public class RecentTabFragment extends Fragment {
                 imageView.setImageBitmap(moodEvent.getPicture().getImage());
             }
             if (moodEvent.getLocation() != null)
-                location.setText(moodEvent.getLocation().getLatitude().concat(moodEvent.getLocation().getLongitude()));
+                location.setText(moodEvent.getLocation().getLatitudeStr().concat(moodEvent.getLocation().getLongitudeStr()));
         } else {
             this.getView().setBackgroundColor(Color.BLACK);
             viewmood.setText("");

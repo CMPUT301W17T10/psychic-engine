@@ -8,6 +8,9 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +40,8 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +62,8 @@ import static java.lang.Boolean.TRUE;
  */
 public class CreateMoodActivity extends AppCompatActivity {
     private static int RESULT_LOAD_IMAGE = 1;
+    private LocationManager lm;
+    private LocationListener locationListener;
 
     private Spinner moodSpinner;
     private Spinner socialSettingSpinner;
@@ -142,6 +149,7 @@ public class CreateMoodActivity extends AppCompatActivity {
      */
     public void createMoodEvent() {
         Log.d("Clicked on Create", "MoodEvent should be added here");
+        Boolean isChecked = locationCheckBox.isChecked();
         String moodString = moodSpinner.getSelectedItem().toString();
         String socialSettingString = socialSettingSpinner.getSelectedItem().toString();
         String trigger = triggerEditText.getText().toString();
@@ -152,7 +160,68 @@ public class CreateMoodActivity extends AppCompatActivity {
 
         boolean photoSizeUnder = TRUE;
 
+        if (isChecked) {
+            //TODO DO LOC STUFF, get current loc and make it location
+            //Taken from http://stackoverflow.com/questions/17584374/check-if-gps-and-or-mobile-network-location-is-enabled
+            //March 27, 2017
+            lm = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+            locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
 
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+
+                }
+            };
+
+            Location coords = new Location("GPS");
+            Boolean gps = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            Boolean network = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+            //GPS service gets FINE location
+            //Network provider gets COARSE location
+            if (gps) {
+                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                if (lm != null) {
+                    coords = lm.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+
+                }
+
+            }
+            if (!gps && network) {
+                lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+                if (lm!=null) {
+                    coords = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                }
+
+            }
+            if (!gps && !network) {
+                Toast.makeText(CreateMoodActivity.this,
+                        "You are not connected to GPS or a network provider",
+                        Toast.LENGTH_LONG).show();
+            }
+            try {
+                double lat = coords.getLatitude();
+                double lon = coords.getLongitude();
+                location = new MoodLocation(new GeoPoint(lat, lon));
+            } catch (Exception e) {
+            }
+
+
+        }
         //Taken from http://stackoverflow.com/questions/26865787/get-bitmap-from-imageview-in-android-l
         //March 10, 2017
         //gets drawable from imageview and converts drawable to bitmap
