@@ -15,6 +15,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -64,13 +65,12 @@ public class SummaryTabFragment extends Fragment implements
         SeekBar.OnSeekBarChangeListener, OnChartGestureListener, OnChartValueSelectedListener {
 
 
-    private LineChart mChart;
-    private SeekBar mSeekBarDensity, mSeekBarStart; // TODO: 3rd seek bar for y axis range, right now its automatically scaling
-    private TextView tvX, tvY;
-
     Participant participant;
     ArrayList<MoodEvent> moodEventList;
-    int startDay;
+
+    private LineChart mChart;
+    private SeekBar mSeekBarDensity, mSeekBarStart;
+    private TextView tvX, tvY;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,64 +87,19 @@ public class SummaryTabFragment extends Fragment implements
         mSeekBarStart = (SeekBar) rootView.findViewById(R.id.seekBar2);
 
         mChart = (LineChart) rootView.findViewById(R.id.chart);
-        mChart.setOnChartValueSelectedListener(this);
 
-        mChart.getDescription().setEnabled(false);
+        // Set chart, axis, and legend properties
+        setChartProperties();
+        setAxis();
+        setLegend();
 
-        // if more than 60 entries are displayed in the chart, no values will be drawn
-        mChart.setMaxVisibleValueCount(60);
+        setData(1, 0);
 
-        // scaling can now only be done on x- and y-axis separately
-        mChart.setPinchZoom(false);
-
-        mChart.setDrawGridBackground(false);
-        // mChart.setDrawYLabels(false);
-
-        mChart.setOnChartValueSelectedListener(this);
-        mChart.setOnChartValueSelectedListener(this);
-
-        IAxisValueFormatter xAxisFormatter = new DayAxisValueFormatter(mChart);
-
-        XAxis xAxis = mChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-        // only intervals of 1 day
-        xAxis.setGranularity(1f);
-        xAxis.setLabelCount(7);
-        xAxis.setValueFormatter(xAxisFormatter);
-
-
-        YAxis leftAxis = mChart.getAxisLeft();
-        leftAxis.setLabelCount(8, false);
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
-        leftAxis.setSpaceTop(15f);
-        leftAxis.setAxisMinimum(0f);
-
-        YAxis rightAxis = mChart.getAxisRight();
-        rightAxis.setDrawGridLines(false);
-        rightAxis.setLabelCount(8, false);
-        rightAxis.setSpaceTop(15f);
-        rightAxis.setAxisMinimum(0f);
-
-        Legend l = mChart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        l.setDrawInside(false);
-        l.setForm(Legend.LegendForm.SQUARE);
-        l.setFormSize(9f);
-        l.setTextSize(11f);
-        l.setXEntrySpace(4f);
-
-        setData(1, 0);                        // TODO set to earliest mood/currently viewed mood/latest mood
-
-        mSeekBarStart.setProgress(0);        // TODO set to earliest mood/currently viewed mood/latest mood
+        mSeekBarStart.setProgress(0);
         mSeekBarDensity.setProgress(0);
 
         mSeekBarStart.setOnSeekBarChangeListener(this);
         mSeekBarDensity.setOnSeekBarChangeListener(this);
-
-        // mChart.setDrawLegend(false);
 
         return rootView;
     }
@@ -158,9 +113,6 @@ public class SummaryTabFragment extends Fragment implements
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-        tvX.setText("" + (mSeekBarDensity.getProgress() + 2));
-        tvY.setText("" + (mSeekBarStart.getProgress()));
-
         setData(mSeekBarDensity.getProgress() + 1 , mSeekBarStart.getProgress());
 
         mChart.invalidate();
@@ -168,12 +120,12 @@ public class SummaryTabFragment extends Fragment implements
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-        // TODO Auto-generated method stub
+        //
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        // TODO Auto-generated method stub
+        //
     }
 
     /**
@@ -260,8 +212,17 @@ public class SummaryTabFragment extends Fragment implements
         participant.addMoodEvent(testHappy7);
         participant.addMoodEvent(testHappy8);
 
-*/
 
+
+        Mood testShameMood = new Mood(MoodState.SHAME);
+
+        MoodEvent testShame1 = new MoodEvent(testShameMood, null, "", null, null);
+
+        testShame1.setDate(parseDate("2017-03-29"));
+
+        participant.addMoodEvent(testShame1);
+
+*/
         /*~*********************************************************
          *                         TEST DATA                       /
          *********************************************************/
@@ -274,8 +235,9 @@ public class SummaryTabFragment extends Fragment implements
 
         for (MoodEvent moodEvent : moodEventList) {
 
+            // standardize days to reference start day
             diff = moodEvent.getDate().getTime() - beginDate.getTime();
-            days = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+            days = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 2;
 
             switch (moodEvent.getMood().getMood()) {
 
@@ -349,21 +311,6 @@ public class SummaryTabFragment extends Fragment implements
             }
         }
 
-
-/*
-        // To get the earliest mood to initialize graph view
-
-        ArrayList<MoodEvent> copy = new ArrayList<MoodEvent>(moodEventList);
-        Collections.sort(copy, new CustomComparator());
-        MoodEvent earliestMoodEvent = copy.get(copy.size() - 1);
-
-        diff = earliestMoodEvent.getDate().getTime() - beginDate.getTime();
-        days = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-
-        startDay = (int) sadDayToCountMap.get(days).toFloat();
-
-*/
-
         // Create an array of data points for each mood
         ArrayList<Entry> yValsSad = new ArrayList<Entry>();
         ArrayList<Entry> yValsHappy = new ArrayList<Entry>();
@@ -375,9 +322,10 @@ public class SummaryTabFragment extends Fragment implements
         ArrayList<Entry> yValsSurprised = new ArrayList<Entry>();
 
 
-        float start = mSeekBarStart.getProgress();
+        // the start of the window
+        float start = mSeekBarStart.getProgress() + 1;
 
-
+        // the density of the window
         for (int i = (int) start; i < start + num + 1; i++) {
 
             addEntry(yValsSad, sadDayToCountMap, i);
@@ -400,7 +348,6 @@ public class SummaryTabFragment extends Fragment implements
         LineDataSet setDisgust;
         LineDataSet setConfused;
         LineDataSet setSurprised;
-
 
         if (mChart.getData() != null && mChart.getData().getDataSetCount() > 0) {
 
@@ -442,6 +389,66 @@ public class SummaryTabFragment extends Fragment implements
             setConfused = new LineDataSet(yValsConfused, "confused");
             setSurprised = new LineDataSet(yValsSurprised, "surprised");
 
+
+            // TODO: fix issue with colors overlapping
+            // Styling
+            setSad.setColor(parseColor(MoodColor.BLUE.getBGColor()));
+            setSad.setCircleColorHole(parseColor(MoodColor.BLUE.getBGColor()));
+            setSad.setCircleColor(parseColor(MoodColor.BLUE.getBGColor()));
+            setSad.setLineWidth(2.5f);
+            setSad.setDrawFilled(true);
+            setSad.setFillColor(parseColor(MoodColor.BLUE.getBGColor()));
+
+            setHappy.setColor(parseColor(MoodColor.GREEN.getBGColor()));
+            setHappy.setCircleColorHole(parseColor(MoodColor.GREEN.getBGColor()));
+            setHappy.setCircleColor(parseColor(MoodColor.GREEN.getBGColor()));
+            setHappy.setLineWidth(2.5f);
+            setHappy.setDrawFilled(true);
+            setHappy.setFillColor(parseColor(MoodColor.GREEN.getBGColor()));
+
+            setShame.setColor(parseColor(MoodColor.PURPLE.getBGColor()));
+            setShame.setCircleColorHole(parseColor(MoodColor.PURPLE.getBGColor()));
+            setShame.setCircleColor(parseColor(MoodColor.PURPLE.getBGColor()));
+            setShame.setLineWidth(2.5f);
+            setShame.setDrawFilled(true);
+            setShame.setFillColor(parseColor(MoodColor.PURPLE.getBGColor()));
+
+            setFear.setColor(parseColor(MoodColor.ORANGE.getBGColor()));
+            setFear.setCircleColorHole(parseColor(MoodColor.ORANGE.getBGColor()));
+            setFear.setCircleColor(parseColor(MoodColor.ORANGE.getBGColor()));
+            setFear.setLineWidth(2.5f);
+            setFear.setDrawFilled(true);
+            setFear.setFillColor(parseColor(MoodColor.ORANGE.getBGColor()));
+
+            setAnger.setColor(parseColor(MoodColor.RED.getBGColor()));
+            setAnger.setCircleColorHole(parseColor(MoodColor.RED.getBGColor()));
+            setAnger.setCircleColor(parseColor(MoodColor.RED.getBGColor()));
+            setAnger.setLineWidth(2.5f);
+            setAnger.setDrawFilled(true);
+            setAnger.setFillColor(parseColor(MoodColor.RED.getBGColor()));
+
+            setDisgust.setColor(parseColor(MoodColor.LIME.getBGColor()));
+            setDisgust.setCircleColorHole(parseColor(MoodColor.LIME.getBGColor()));
+            setDisgust.setCircleColor(parseColor(MoodColor.LIME.getBGColor()));
+            setDisgust.setLineWidth(2.5f);
+            setDisgust.setDrawFilled(true);
+            setDisgust.setFillColor(parseColor(MoodColor.LIME.getBGColor()));
+
+            setConfused.setColor(parseColor(MoodColor.YELLOW.getBGColor()));
+            setConfused.setCircleColorHole(parseColor(MoodColor.YELLOW.getBGColor()));
+            setConfused.setCircleColor(parseColor(MoodColor.YELLOW.getBGColor()));
+            setConfused.setLineWidth(2.5f);
+            setConfused.setDrawFilled(true);
+            setConfused.setFillColor(parseColor(MoodColor.YELLOW.getBGColor()));
+
+            setSurprised.setColor(parseColor(MoodColor.PINK.getBGColor()));
+            setSurprised.setCircleColorHole(parseColor(MoodColor.PINK.getBGColor()));
+            setSurprised.setCircleColor(parseColor(MoodColor.PINK.getBGColor()));
+            setSurprised.setLineWidth(2.5f);
+            setSurprised.setDrawFilled(true);
+            setSurprised.setFillColor(parseColor(MoodColor.PINK.getBGColor()));
+
+
             ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
             dataSets.add(setSad);
             dataSets.add(setHappy);
@@ -460,8 +467,14 @@ public class SummaryTabFragment extends Fragment implements
 
     }
 
-
-    public void addEntry(ArrayList<Entry> yVals,  Map<Integer, MutableInteger> moodCountMap, int day) {
+    /**
+     * Adds an entry to yVals where the x-value corresponds to the day and
+     * the y-value corresponds to the mood frequency on that day.
+     * @param yVals stores the entries for a dataset of the line graph
+     * @param moodCountMap stores the x and y values for the line graph
+     * @param day corresponds to the day the mood was felt, used as a key in moodCountMap
+     */
+    private void addEntry(ArrayList<Entry> yVals,  Map<Integer, MutableInteger> moodCountMap, int day) {
 
         MutableInteger val = moodCountMap.get(day);
 
@@ -469,6 +482,63 @@ public class SummaryTabFragment extends Fragment implements
             yVals.add(new Entry(day, val.toFloat()));
         else
             yVals.add(new Entry(day, 0));
+
+    }
+
+    /**
+     * Set chart properties
+     */
+    private void setChartProperties() {
+        mChart.getDescription().setEnabled(false);
+        mChart.setMaxVisibleValueCount(60);
+        mChart.setPinchZoom(false);
+        mChart.setDrawGridBackground(false);
+        mChart.setOnChartValueSelectedListener(this);
+
+    }
+
+    /**
+     * Set axis properties
+     */
+    private void setAxis() {
+
+        IAxisValueFormatter xAxisFormatter = new DayAxisValueFormatter(mChart);
+
+        XAxis xAxis = mChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f);
+        xAxis.setLabelCount(7);
+        xAxis.setLabelRotationAngle(-45);
+        xAxis.setValueFormatter(xAxisFormatter);
+
+        YAxis leftAxis = mChart.getAxisLeft();
+        leftAxis.setLabelCount(8, false);
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+        leftAxis.setSpaceTop(15f);
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.setAxisMaximum(5f);
+        leftAxis.setGranularity(1f);
+
+        YAxis rightAxis = mChart.getAxisRight();
+        rightAxis.setEnabled(false);
+
+    }
+
+    /**
+     * Set legend properties
+     */
+    private void setLegend() {
+
+        Legend legend = mChart.getLegend();
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
+        legend.setDrawInside(true);
+        legend.setForm(Legend.LegendForm.SQUARE);
+        legend.setFormSize(9f);
+        legend.setTextSize(10f);
+        legend.setXEntrySpace(4f);
 
     }
 

@@ -17,9 +17,9 @@
         android:layout_above="@+id/seekBar2"
         android:layout_margin="8dp"
         android:layout_marginBottom="35dp"
-        android:layout_toLeftOf="@+id/tvXMax"
         android:layout_marginRight="5dp"
-        android:max="1500"
+        android:layout_toLeftOf="@+id/tvXMax"
+        android:max="29"
         android:paddingBottom="12dp" />
 
     <SeekBar
@@ -31,7 +31,7 @@
         android:layout_margin="8dp"
         android:layout_marginRight="5dp"
         android:layout_toLeftOf="@+id/tvYMax"
-        android:max="1500"
+        android:max="337"
         android:paddingBottom="12dp" />
 
     <TextView
@@ -40,10 +40,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/seekBar1"
         android:layout_alignParentRight="true"
-        android:text="500"
         android:layout_marginBottom="15dp"
         android:layout_marginRight="10dp"
         android:gravity="right"
+        android:text="Density"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
@@ -52,10 +52,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/seekBar2"
         android:layout_alignParentRight="true"
-        android:text="500"
         android:layout_marginBottom="15dp"
         android:layout_marginRight="10dp"
         android:gravity="right"
+        android:text="Window"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>
