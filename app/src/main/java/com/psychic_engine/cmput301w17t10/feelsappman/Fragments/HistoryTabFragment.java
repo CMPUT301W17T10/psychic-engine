@@ -161,6 +161,7 @@ public class HistoryTabFragment extends Fragment {
         }
     }
 
+    //TODO USE THIS for filtered mapview
     private void filter() {
         filteredMoodList.clear();
 
