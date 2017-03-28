@@ -16,6 +16,7 @@ public class MoodLocation {
         this.latitude = loc.getLatitude();
         this.longitude = loc.getLongitude();
     }
+
     public void setLoc(GeoPoint loc) {
         this.loc = loc;
     }
@@ -35,6 +36,7 @@ public class MoodLocation {
         String str = String.format("%.4f", longitude);
         return str;
     }
+
 
 
 }

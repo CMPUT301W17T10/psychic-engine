@@ -55,6 +55,8 @@ public class EditMoodActivity extends AppCompatActivity{
     private Spinner socialSettingSpinner;
     private EditText triggerEditText;
     private CheckBox locationCheckBox; // TODO: change type
+    private EditText locationLat;
+    private EditText locationLong;
     private Button browseButton;
     private ImageView photoImageView;
     private Button createButton;
@@ -255,6 +257,8 @@ public class EditMoodActivity extends AppCompatActivity{
     void setUpLocation() {
         // display the previous location
         locationCheckBox = (CheckBox) findViewById(R.id.includeLocation);
+        locationLat = (EditText) findViewById(R.id.locationLat);
+        locationLong = (EditText) findViewById(R.id.locationLong);
         //locationCheckBox.setText(moodEvent.getLocation());
     }
     /**

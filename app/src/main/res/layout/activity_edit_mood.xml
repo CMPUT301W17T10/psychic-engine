@@ -33,13 +33,37 @@
         android:maxLength="20"
         android:text="20 chars or 3 words." />
 
-    <EditText
-        android:id="@+id/location1"
-        android:hint="@string/add_location"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName" />
+        android:orientation="horizontal" >
+
+        <CheckBox android:id="@+id/includeLocation"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:text="Use Current Location?" />
+
+        <EditText
+            android:id="@+id/locationLat"
+            android:hint="Latitude"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginEnd="3dp"
+            android:inputType="numberDecimal" />
+        <EditText
+            android:id="@+id/locationLong"
+            android:hint="Longitude"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginEnd="3dp"
+            android:inputType="numberDecimal" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/browse1"
