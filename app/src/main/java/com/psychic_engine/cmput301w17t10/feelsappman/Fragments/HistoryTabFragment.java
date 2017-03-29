@@ -121,7 +121,11 @@ public class HistoryTabFragment extends Fragment {
         displayFilterMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                filter();
                 Intent intent = new Intent(getActivity(), FilterMapActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("moodEventList", filteredMoodList);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });

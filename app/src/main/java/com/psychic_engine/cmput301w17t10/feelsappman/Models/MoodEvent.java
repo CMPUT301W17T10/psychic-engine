@@ -1,11 +1,13 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Models;
 
 import android.location.Location;
+import android.os.Parcelable;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ModelFrame;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +26,7 @@ import java.util.UUID;
  * @see SocialSetting
  * @see Photograph
  */
-public class MoodEvent extends ModelFrame {
+public class MoodEvent extends ModelFrame implements Serializable{
     private String id;
     private String moodOwner;
     private ArrayList<String> followers;

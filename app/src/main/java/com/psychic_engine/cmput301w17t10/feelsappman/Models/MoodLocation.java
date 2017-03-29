@@ -2,6 +2,8 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Models;
 
 import org.osmdroid.util.GeoPoint;
 
+import java.io.Serializable;
+
 /**
  * Created by Pierre Lin on 3/25/2017.
  * Comments by adong on 3/29/2017
@@ -11,7 +13,7 @@ import org.osmdroid.util.GeoPoint;
  * Model class for the location portion of the mood event if the participant chooses to add their
  * location.
  */
-public class MoodLocation {
+public class MoodLocation implements Serializable {
     private GeoPoint loc;
     private double latitude;
     private double longitude;

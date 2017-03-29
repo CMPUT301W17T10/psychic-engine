@@ -7,8 +7,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
+
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
@@ -18,15 +22,26 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.OverlayItem;
+
+import java.util.ArrayList;
 
 /**
  * Created by Pierre Lin on 3/28/2017.
  */
 
 public class FilterMapActivity extends Activity {
+    private ArrayList<OverlayItem> sadEvents;
+    private ArrayList<OverlayItem> happyEvents;
+    private ArrayList<OverlayItem> shameEvents;
+    private ArrayList<OverlayItem> fearEvents;
+    private ArrayList<OverlayItem> angerEvents;
+    private ArrayList<OverlayItem> surprisedEvents;
+    private ArrayList<OverlayItem> disgustEvents;
+    private ArrayList<OverlayItem> confusedEvents;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Context ctx = getApplicationContext();
@@ -40,12 +55,32 @@ public class FilterMapActivity extends Activity {
         map.setBuiltInZoomControls(true);
         IMapController mController = map.getController();
 
-        Location coords = new Location("GPS");
-        //This while loop is to keep trying to get a location from the GPS provider
-        //prevents null pointer exception if you momentarily lose GPS
+        ArrayList<MoodEvent> moodList = (ArrayList<MoodEvent>) getIntent().getExtras().getSerializable("moodEventList");
 
+        sadEvents = new ArrayList<OverlayItem>();
+        happyEvents = new ArrayList<OverlayItem>();
+        shameEvents = new ArrayList<OverlayItem>();
+        fearEvents = new ArrayList<OverlayItem>();
+        angerEvents = new ArrayList<OverlayItem>();
+        surprisedEvents = new ArrayList<OverlayItem>();
+        disgustEvents = new ArrayList<OverlayItem>();
+        confusedEvents = new ArrayList<OverlayItem>();
+
+        for (MoodEvent mood : moodList) {
+            String moodType = mood.getMood().getMood().toString();
+
+
+        }
+
+        Location coords = new Location("GPS");
 
         coords = getCurrentLocation(coords);
+
+        //This while loop is to keep trying to get a location from the GPS provider
+        //prevents null pointer exception if you momentarily lose GPS
+        while (coords == null) {
+            coords = getCurrentLocation(coords);
+        }
 
         double lat = coords.getLatitude();
         double lon = coords.getLongitude();

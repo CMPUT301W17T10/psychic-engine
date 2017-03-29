@@ -3,6 +3,8 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Models;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodColor;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 
+import java.io.Serializable;
+
 /**
  * Created by jyuen1 on 2/27/17.
  * Comments by adong on 3/29/2017
@@ -14,7 +16,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
  * the mood event which contains the other details such as settings and trigger.
  * @see MoodEvent
  */
-public class Mood {
+public class Mood implements Serializable {
     private MoodState mood;
     private MoodColor color;
     private String iconName;
