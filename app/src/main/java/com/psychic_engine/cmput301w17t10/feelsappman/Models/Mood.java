@@ -1,14 +1,7 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Models;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
-
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodColor;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by jyuen1 on 2/27/17.
@@ -88,7 +81,7 @@ public class Mood {
                 iconName = "surprised";
                 break;
             case DISGUST:
-                color = MoodColor.LIME;
+                color = MoodColor.BROWN;
                 iconName = "disgusted";
                 break;
             case CONFUSED:

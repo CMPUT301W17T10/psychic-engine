@@ -82,9 +82,23 @@
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:text="View Filters On Map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/filtermap"
+                android:layout_weight="1" />
+
+        </LinearLayout>
 
         <Button
             android:layout_height="wrap_content"

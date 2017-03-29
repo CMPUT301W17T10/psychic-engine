@@ -341,8 +341,10 @@ public class EditMoodActivity extends AppCompatActivity{
                     moodEvent.getSocialSetting().toString()));
         else
             socialSettingSpinner.setSelection(0);
-        ((TextView) findViewById(R.id.locationLat)).setHint(moodEvent.getLocation().getLatitudeStr());
-        ((TextView) findViewById(R.id.locationLong)).setHint(moodEvent.getLocation().getLongitudeStr());
+        if (moodEvent.getLocation() != null) {
+            ((TextView) findViewById(R.id.locationLat)).setHint(moodEvent.getLocation().getLatitudeStr());
+            ((TextView) findViewById(R.id.locationLong)).setHint(moodEvent.getLocation().getLongitudeStr());
+        }
     }
 
     /**

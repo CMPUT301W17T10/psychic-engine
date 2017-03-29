@@ -17,9 +17,11 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 
 public class CreateMoodController {
 
-    public static boolean updateMoodEventList(String moodString, String socialSettingString, String trigger, Photograph photo, MoodLocation location) {
+    public static int updateMoodEventList(String moodString, String socialSettingString, String trigger, Photograph photo, MoodLocation location) {
+
         Mood mood;
         SocialSetting socialSetting;
+
         switch(moodString) {
             case "Sad":
                 mood = new Mood(MoodState.SAD);
@@ -46,7 +48,7 @@ public class CreateMoodController {
                 mood = new Mood(MoodState.CONFUSED);
                 break;
             default:
-                return false;
+                return -1;
         }
 
         switch (socialSettingString) {
@@ -66,6 +68,9 @@ public class CreateMoodController {
                 socialSetting = null;
         }
 
+        int numWords = trigger.trim().split("\\s+").length;
+        if (numWords > 3)
+            return -2;
 
         MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
 
@@ -88,6 +93,6 @@ public class CreateMoodController {
         ElasticParticipantController.UpdateParticipantTask updateParticipantTask = new ElasticParticipantController.UpdateParticipantTask();
         updateParticipantTask.execute(participant);
 
-        return true;
+        return 0;
     }
 }

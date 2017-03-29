@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.EditMoodActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.FilterMapActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.ViewMoodEventActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Custom.CustomComparator;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.DeleteMoodController;
@@ -34,6 +35,8 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
+
+import org.osmdroid.views.MapView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,6 +55,7 @@ public class HistoryTabFragment extends Fragment {
     private Boolean moodFilterSelected;
     private Boolean triggerFilterSelected;
     private Spinner moodSpinner;
+    private Button displayFilterMap;
     private boolean satisfiesMood;
     private boolean satisfiesDate;
     private boolean satisfiesTrigger;
@@ -76,6 +80,7 @@ public class HistoryTabFragment extends Fragment {
         filterWeek = (CheckBox)rootView.findViewById(R.id.weekfilter);
         filterTrigger = (EditText) rootView.findViewById(R.id.filterreason);
         applyFilters = (Button) rootView.findViewById(R.id.applyfilters);
+        displayFilterMap = (Button) rootView.findViewById(R.id.filtermap);
         moodSpinner = (Spinner) rootView.findViewById(R.id.moodsspinner);
 
         // Spinner drop down elements
@@ -98,6 +103,15 @@ public class HistoryTabFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 refresh();
+            }
+        });
+
+        //display filtered list in mapview
+        displayFilterMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FilterMapActivity.class);
+                startActivity(intent);
             }
         });
 
