@@ -8,10 +8,10 @@
 
     <Spinner
         android:id="@+id/moodDropDown"
-        android:prompt="@string/select_mood"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
+        android:prompt="@string/select_mood"
         android:spinnerMode="dropdown" />
 
     <Spinner

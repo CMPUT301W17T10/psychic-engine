@@ -13,10 +13,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.Follows;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.HistoryTabFragment;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
@@ -26,9 +32,11 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.RecentTabFragment
 import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.SummaryTabFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SelfNewsFeedActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
+    private Spinner spinner;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -82,6 +90,7 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
             }
         });
 
+        setupspinners();
     }
 
     @Override
@@ -168,6 +177,51 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
             return null;
         }
     }
+    void setupspinners(){
+        spinner = (Spinner) (findViewById(R.id.dropdown));
+
+        List<String>managefollow = new ArrayList<String>();
+        managefollow.add("");
+        Follows[] followses = Follows.values();
+        for (Follows follows : followses) {
+            managefollow.add(follows.toString());
+        }
+
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,managefollow);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 1:
+                        Intent intent = new Intent(SelfNewsFeedActivity.this,FollowersActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 2:
+                        Intent following = new Intent(SelfNewsFeedActivity.this,FollowingActivity.class);
+                        startActivity(following);
+                        break;
+                    case 3:
+                        Intent followrequest = new Intent(SelfNewsFeedActivity.this,FollowRequestActivity.class);
+                        startActivity(followrequest);
+                        break;
+            }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
+    }
 
     /**
      * Attempt to save the instance when the activity pauses
@@ -176,6 +230,7 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         FileManager.saveInFile(this);
+        spinner.setSelection(0);
     }
 
     /**

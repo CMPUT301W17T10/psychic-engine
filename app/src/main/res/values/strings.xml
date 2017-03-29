@@ -22,4 +22,10 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
 
+    <string-array name="managefollow">
+        <item>Following</item>
+        <item>Followers</item>
+        <item>Follow Requests</item>
+    </string-array>
+
 </resources>
