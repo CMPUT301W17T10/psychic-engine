@@ -61,6 +61,15 @@
             android:theme="@style/AppTheme">
 
         </activity>
+        <activity
+            android:name=".Activities.FilterMapActivity"
+            android:label="FilterMapActivity">
+            <intent-filter>
+                <action android:name="com.psychic_engine.cmput301w17t10.feelsappman.CreateMoodActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
