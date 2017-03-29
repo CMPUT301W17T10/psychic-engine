@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.Followers;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.Follows;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
@@ -20,7 +21,7 @@ import java.util.List;
 public class FollowersActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
     private ListView followerlist;
-    private Spinner spinner;
+    private Spinner spinner1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,47 +40,57 @@ public class FollowersActivity extends AppCompatActivity {
 
 
 
-       // setupspinners();
+       setupspinners();
 
 
     }
 
-    /*void setupspinners(){
-        spinner = (Spinner) (findViewById(R.id.dropdown1));
+    void setupspinners(){
+        spinner1 = (Spinner) (findViewById(R.id.dropdown1));
 
-        List<String> managefollow = new ArrayList<String>();
-        managefollow.add("");
-        managefollow.add(instance.getSelfParticipant().getLogin());
-        Follows[] followses = Follows.values();
-        for (Follows follows : followses) {
-            managefollow.add(follows.toString());
+        List<String> followers = new ArrayList<String>();
+        followers.add("");
+        followers.add(instance.getSelfParticipant().getLogin());
+        Followers[] followerses = Followers.values();
+        for (Followers followers1 : followerses) {
+            followers.add(followers1.toString());
         }
 
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,managefollow);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,followers);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spinner.setAdapter(adapter);
+        spinner1.setAdapter(adapter1);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
+                switch (position) {
                     case 1:
-                        Intent intent = new Intent(.this,FollowersActivity.class);
+                        Intent intent = new Intent(FollowersActivity.this, SelfNewsFeedActivity.class);
                         startActivity(intent);
                         break;
                     case 2:
-                        Intent following = new Intent(SelfNewsFeedActivity.this,FollowingActivity.class);
+                        Intent following = new Intent(FollowersActivity.this, FollowingActivity.class);
                         startActivity(following);
                         break;
                     case 3:
-                        Intent followrequest = new Intent(SelfNewsFeedActivity.this,FollowRequestActivity.class);
+                        Intent followrequest = new Intent(FollowersActivity.this, FollowRequestActivity.class);
                         startActivity(followrequest);
                         break;
                 }
             }
-            */
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+    }
 }
+
+
+
