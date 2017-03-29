@@ -1,9 +1,14 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Models;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodColor;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by jyuen1 on 2/27/17.
@@ -18,7 +23,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 public class Mood {
     private MoodState mood;
     private MoodColor color;
-    private Image icon;
+    private String iconName;
 
     /**
      * Setter method for mood, it will call a method stored inside the class through a switch
@@ -41,7 +46,7 @@ public class Mood {
      * the icons used.
      * @return icon of the mood
      */
-    public Image getIcon() { return icon; }
+    public String getIconName() { return iconName; }
 
     /**
      * Getter method for the string literal version of the mood. The mood can range from happy to
@@ -60,39 +65,39 @@ public class Mood {
         switch(mood) {
             case SAD:
                 color = MoodColor.BLUE;
-                //icon = "sadicon.png";
+                iconName = "sad";
                 break;
             case HAPPY:
                 color = MoodColor.GREEN;
-                //icon = "happyicon.png";
+                iconName = "happy";
                 break;
             case SHAME:
                 color = MoodColor.PURPLE;
-                //icon = "shameicon.png";
+                iconName = "shame";
                 break;
             case FEAR:
                 color = MoodColor.ORANGE;
-                //icon = "fearicon.png";
+                iconName = "fear";
                 break;
             case ANGER:
                 color = MoodColor.RED;
-                //icon = "angericon.png";
+                iconName = "anger";
                 break;
             case SURPRISED:
                 color = MoodColor.PINK;
-                //icon = "surprisedicon.png";
+                iconName = "surprised";
                 break;
             case DISGUST:
                 color = MoodColor.LIME;
-                //icon = "disgusticon.png";
+                iconName = "disgusted";
                 break;
             case CONFUSED:
                 color = MoodColor.YELLOW;
-                //icon = "confusedicon.png";
+                iconName = "confused";
                 break;
             default:
                 color = null;
-                icon = null;
+                iconName = "";
         }
     }
     @Override

@@ -1,5 +1,6 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Activities;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -28,7 +29,7 @@ public class ViewMoodEventActivity extends AppCompatActivity{
     private TextView dateTime;
     private ImageView photo;
     private TextView location;
-    private TextView icon;          // Temporary for now to meet requirements until we have icons for mood
+    private ImageView icon;          // Temporary for now to meet requirements until we have icons for mood
     private TextView trigger;
     private TextView socialIcon;    // Temporary for now to meet requirements until we have icon for social setting
     private ImageButton returnButton;
@@ -46,7 +47,7 @@ public class ViewMoodEventActivity extends AppCompatActivity{
         dateTime = (TextView) findViewById(R.id.me_date_time);
         photo = (ImageView) findViewById(R.id.me_photo);
         location = (TextView) findViewById(R.id.me_location);
-        icon = (TextView) findViewById(R.id.me_icon);
+        icon = (ImageView) findViewById(R.id.me_icon);
         trigger = (TextView) findViewById(R.id.me_trigger);
         socialIcon = (TextView) findViewById(R.id.me_social);
         returnButton = (ImageButton) findViewById(R.id.me_return);
@@ -82,7 +83,11 @@ public class ViewMoodEventActivity extends AppCompatActivity{
             photo.setImageBitmap(moodEvent.getPicture().getImage());
         if (moodEvent.getLocation() != null)
             location.setText(moodEvent.getLocation().getLatitudeStr().concat(moodEvent.getLocation().getLongitudeStr()));
-        icon.setText(moodEvent.getMood().getColor().toString());
+
+        String iconName = moodEvent.getMood().getIconName();
+        int drawableResourceId = this.getResources().getIdentifier(iconName, "drawable", getPackageName());
+        icon.setImageResource(drawableResourceId);
+
         trigger.setText(moodEvent.getTrigger());
         if (moodEvent.getSocialSetting() != null)
             socialIcon.setText(moodEvent.getSocialSetting().toString());

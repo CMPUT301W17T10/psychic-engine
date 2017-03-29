@@ -442,6 +442,17 @@ public class SummaryTabFragment extends Fragment implements
             setConfused = new LineDataSet(yValsConfused, "confused");
             setSurprised = new LineDataSet(yValsSurprised, "surprised");
 
+
+            // Styling
+            setSad.setLineWidth(3f);
+            setSad.setCircleRadius(5f);
+            setSad.setColors(parseColor(MoodColor.RED.getBGColor()));
+            //setSad.setDrawIcons(false);
+            //setSad.setColors(ColorTemplate.MATERIAL_COLORS);
+            setHappy.setColors(parseColor(MoodColor.BLUE.getBGColor()));
+
+
+
             ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
             dataSets.add(setSad);
             dataSets.add(setHappy);
