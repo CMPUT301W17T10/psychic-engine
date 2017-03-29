@@ -219,16 +219,19 @@ public class ElasticMoodController extends ElasticController{
         protected ArrayList<MoodEvent> doInBackground(Void... params) {
             verifySettings();
             ArrayList<MoodEvent> foundMoods = new ArrayList<>();
-            String query = "{\"size\": 10000 , \"query\":{\"sort\" : { \"date\" : { \"order\": \"desc\"}}}}";
 
+            // construct query
+            String query = "{\"size\": 10000 , \"query\":{\"sort\" : { \"date\" : { \"order\": \"desc\"}}}}";
             Search search = new Search.Builder(query)
                     .addIndex("cmput301w17t10")
                     .addType("moodevent")
                     .build();
 
+            // execute query
             try {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
+                    // save all results and add them to the array list
                     List<MoodEvent> resultList = result.getSourceAsObjectList(MoodEvent.class);
                     foundMoods.addAll(resultList);
                     Log.i("Success", "Successfully pulled mood events with locations");

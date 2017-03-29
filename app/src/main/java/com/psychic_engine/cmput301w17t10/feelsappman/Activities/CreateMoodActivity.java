@@ -175,10 +175,11 @@ public class CreateMoodActivity extends AppCompatActivity {
             }
 
         }
+
+
         //Taken from http://stackoverflow.com/questions/26865787/get-bitmap-from-imageview-in-android-l
         //March 10, 2017
         //gets drawable from imageview and converts drawable to bitmap
-
         try {
             Bitmap bitmap = ((BitmapDrawable) photoImageView.getDrawable()).getBitmap();
             photo = new Photograph(bitmap);
@@ -265,7 +266,9 @@ public class CreateMoodActivity extends AppCompatActivity {
         return coords;
     }
     /**
-     * Setup method to create the spinners in the UI
+     * Setup method to create the spinners in the UI. This includes creating the adapters necessary
+     * for the spinners as well as the necessary settings and moods that will be contained in the
+     * spinner.
      */
     void setUpSpinners() {
         // Spinner elements
@@ -398,13 +401,18 @@ public class CreateMoodActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Attempt to save the instance when the activity pauses
+     */
     @Override
     protected void onPause() {
         super.onPause();
         FileManager.saveInFile(this);
     }
 
+    /**
+     * Attempt to save the instance when the activity stops running
+     */
     @Override
     public void onStop() {
         super.onStop();

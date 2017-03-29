@@ -18,6 +18,7 @@ public class ParticipantController {
     private ParticipantController(){}
 
     public static boolean checkUniqueParticipant(String participantName) {
+        Log.i("Check", "Checking for uniqueness in " + participantName);
         Participant foundParticipant = null;
         ElasticParticipantController.FindParticipantTask spt = new ElasticParticipantController.FindParticipantTask();
 
@@ -46,6 +47,12 @@ public class ParticipantController {
     }
     */
 
+    /**
+     * updateSingletonList will attempt to pull the most up to date list of participants from the
+     * elastic server in attempt to try and log in to the app as some participant that is already
+     * registered. This makes it so that the app user will be able to login from any phone so long
+     * an internet connection is there.
+     */
     public static void updateSingletonList() {
 
         Log.i("Update", "Updating current list to elastic servers");

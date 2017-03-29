@@ -91,6 +91,14 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Listener for any clicked widget. But if the widget is of where you would like to add
+     * a mood event, then the app will direct the participant to the CreateMoodActivity where they
+     * will be able to create a mood event.
+     * @see CreateMoodActivity
+     * @param item
+     * @return true if clicked
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -107,6 +115,12 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Adapter for the fragments to properly initialize them with a title and proper positioning.
+     * @see RecentTabFragment
+     * @see HistoryTabFragment
+     * @see SummaryTabFragment
+     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
         @Override
         public int getItemPosition(Object object) {
@@ -155,12 +169,18 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Attempt to save the instance when the activity pauses
+     */
     @Override
     protected void onPause() {
         super.onPause();
         FileManager.saveInFile(this);
     }
 
+    /**
+     * Attempt to save the instance when the activity stops running
+     */
     @Override
     public void onStop() {
         super.onStop();

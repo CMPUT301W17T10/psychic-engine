@@ -53,13 +53,16 @@ import static java.lang.Boolean.TRUE;
  */
 
 /**
- * This class allows the user to edit mood events.
+ * The EditMoodActivity pulls any current details about a certain mood event and presents them
+ * to the participant. The participant will then be able to make adjustments to any part of the
+ * mood event. Upon successful edit of the mood event, a new date is set at the current time. If
+ * a location is enabled for the mood event, then their current location will also be recorded,
+ * regardless of whether or not the mood event did not allow a location to be set.
  */
 public class EditMoodActivity extends AppCompatActivity{
     private static int RESULT_LOAD_IMAGE = 1;
     private LocationManager lm;
     private LocationListener locationListener;
-
     private Spinner moodSpinner;
     private Spinner socialSettingSpinner;
     private EditText triggerEditText;
@@ -75,7 +78,8 @@ public class EditMoodActivity extends AppCompatActivity{
     private String moodEventId;
 
     /**
-     * Called on activity creation.  Initializes widgets and class variables.
+     * Called on activity creation.  Initializes widgets and class variables as well as confirming
+     * system permissions such as external storage and location.
      * @param savedInstanceState
      */
     @Override
@@ -88,6 +92,7 @@ public class EditMoodActivity extends AppCompatActivity{
         int permission_code = 1;
         String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
 
+        // request for permission by the participant if not permitted
         if(!hasPermissions(this, permissions)){
             ActivityCompat.requestPermissions(this, permissions, permission_code);
         }
@@ -155,7 +160,12 @@ public class EditMoodActivity extends AppCompatActivity{
         }
     }
 
-    //check if specified EditText is empty
+
+    /**
+     * Simple checker to determine if some EditText box is empty.
+     * @param myeditText
+     * @return
+     */
     //Taken from http://stackoverflow.com/questions/24391809/android-check-if-edittext-is-empty
     //March 28, 2017
     private boolean isEmpty(EditText myeditText) {
@@ -295,7 +305,7 @@ public class EditMoodActivity extends AppCompatActivity{
     }
 
     /**
-     * Initializes and adds categories to spinners.
+     * Initializes and adds categories to spinners, as well as set up adapters for the spinners.
      */
     void setUpSpinners() {
         // Spinner elements
@@ -448,13 +458,18 @@ public class EditMoodActivity extends AppCompatActivity{
         });
     }
 
-
+    /**
+     * Attempt to save the instance when the activity pauses
+     */
     @Override
     protected void onPause() {
         super.onPause();
         FileManager.saveInFile(this);
     }
 
+    /**
+     * Attempt to save the instance when the activity stops running
+     */
     @Override
     public void onStop() {
         super.onStop();

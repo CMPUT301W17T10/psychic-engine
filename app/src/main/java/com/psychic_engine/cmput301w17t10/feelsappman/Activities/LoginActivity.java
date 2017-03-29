@@ -78,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
          * as searching the list of participants to set as the self participant. The system will then
          * direct the user to their own profile page. If the name does not exist (ie. not stored),
          * then the program will prompt the user that the name does not exist and they should sign up.
+         * Note that the text used to find a participant within the server is case insensitive.
          * @see SelfNewsFeedActivity
          */
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +134,10 @@ public class LoginActivity extends AppCompatActivity {
                     // move user to news feed activity
                     Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
                     startActivity(intent);
+                }
+                else {
+                    Toast.makeText(LoginActivity.this, "Unable to sign up as " + participantName
+                    , Toast.LENGTH_SHORT).show();
                 }
             }
         });
