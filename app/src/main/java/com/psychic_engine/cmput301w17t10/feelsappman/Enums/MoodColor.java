@@ -12,7 +12,7 @@ public enum MoodColor {
     ORANGE,
     RED,
     PINK,
-    LIME,
+    BROWN,
     YELLOW;
 
     @Override
@@ -24,7 +24,7 @@ public enum MoodColor {
             case ORANGE: return "Orange";
             case RED: return "Red";
             case PINK: return "Pink";
-            case LIME: return "Light Green";
+            case BROWN: return "Light Green";
             case YELLOW: return "Yellow";
             default: throw new IllegalArgumentException();
         }
@@ -38,7 +38,7 @@ public enum MoodColor {
             case ORANGE: return "#BF360C";
             case RED: return "#B71C1C";
             case PINK: return "#880E4F";
-            case LIME: return "#827717";
+            case BROWN: return "#3E2723";
             case YELLOW: return "#FFAB00";
             default: throw new IllegalArgumentException();
         }
