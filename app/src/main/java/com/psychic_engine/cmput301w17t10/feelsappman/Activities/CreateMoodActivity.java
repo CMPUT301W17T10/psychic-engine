@@ -51,6 +51,7 @@ import static java.lang.Boolean.TRUE;
 /**
  * Created by jyuen1 on 3/6/17.
  * Comments by Alex Dong on 3/12/17.
+ * Location and photo by Pierre Lin on 3/28/2017
  */
 
 /**
