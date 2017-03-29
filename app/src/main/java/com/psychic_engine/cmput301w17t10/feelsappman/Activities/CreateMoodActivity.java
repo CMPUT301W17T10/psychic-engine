@@ -51,6 +51,7 @@ import static java.lang.Boolean.TRUE;
 /**
  * Created by jyuen1 on 3/6/17.
  * Comments by Alex Dong on 3/12/17.
+ * Location and photo by Pierre Lin on 3/28/2017
  */
 
 /**
@@ -170,13 +171,15 @@ public class CreateMoodActivity extends AppCompatActivity {
                 double lon = coords.getLongitude();
                 location = new MoodLocation(new GeoPoint(lat, lon));
             } catch (Exception e) {
+                //pass
             }
 
         }
+
+
         //Taken from http://stackoverflow.com/questions/26865787/get-bitmap-from-imageview-in-android-l
         //March 10, 2017
         //gets drawable from imageview and converts drawable to bitmap
-
         try {
             Bitmap bitmap = ((BitmapDrawable) photoImageView.getDrawable()).getBitmap();
             photo = new Photograph(bitmap);
@@ -190,12 +193,16 @@ public class CreateMoodActivity extends AppCompatActivity {
 
 
         if (photoSizeUnder) {
-            boolean success = createMoodController.updateMoodEventList(moodString, socialSettingString, trigger, photo, location);
+            int rc = createMoodController.updateMoodEventList(moodString, socialSettingString, trigger, photo, location);
 
-            if (!success) {
+            if (rc == -1) {
                 Toast.makeText(CreateMoodActivity.this,
                         "Please specify a mood.",
                         Toast.LENGTH_LONG).show();
+            } else if (rc == -2) {
+                    Toast.makeText(CreateMoodActivity.this,
+                            "Trigger has to be 3 words.",
+                            Toast.LENGTH_LONG).show();
             } else {
                 Intent intent = new Intent(CreateMoodActivity.this, SelfNewsFeedActivity.class);
                 startActivity(intent);
@@ -259,7 +266,9 @@ public class CreateMoodActivity extends AppCompatActivity {
         return coords;
     }
     /**
-     * Setup method to create the spinners in the UI
+     * Setup method to create the spinners in the UI. This includes creating the adapters necessary
+     * for the spinners as well as the necessary settings and moods that will be contained in the
+     * spinner.
      */
     void setUpSpinners() {
         // Spinner elements
@@ -392,13 +401,18 @@ public class CreateMoodActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Attempt to save the instance when the activity pauses
+     */
     @Override
     protected void onPause() {
         super.onPause();
         FileManager.saveInFile(this);
     }
 
+    /**
+     * Attempt to save the instance when the activity stops running
+     */
     @Override
     public void onStop() {
         super.onStop();

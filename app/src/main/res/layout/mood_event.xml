@@ -6,22 +6,35 @@
     android:weightSum="1">
 
     <TextView
+        android:id="@+id/me_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/me_name"
-        android:textSize="24sp" />
+        android:fontFamily="sans-serif"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+        android:textAllCaps="true"
+        android:textSize="30sp" />
 
     <TextView
+        android:id="@+id/me_date_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/me_date_time"
-        android:textSize="18sp" />
+        android:fontFamily="sans-serif-smallcaps"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/me_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.73" />
+        android:layout_weight="0.73"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -30,35 +43,47 @@
         android:textSize="14sp" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp">
 
-        <TextView
+        <ImageView
             android:id="@+id/me_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_width="30dp"
+            android:layout_height="63dp"
+            android:layout_weight="0.29" />
 
         <TextView
+            android:id="@+id/me_trigger"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/me_trigger"
             android:layout_weight="1"
-            android:textSize="18sp" />
+            android:contentDescription="trigger"
+            android:fontFamily="sans-serif"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/me_social"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:textAlignment="textEnd" />
 
     </LinearLayout>
 
     <ImageButton
         android:id="@+id/me_return"
         android:layout_width="73dp"
-        android:layout_height="53dp"
-        app:srcCompat="@android:drawable/ic_menu_rotate" />
+        android:layout_height="49dp"
+        android:layout_gravity="bottom|right"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/returnbutton1" />
 
 </LinearLayout>

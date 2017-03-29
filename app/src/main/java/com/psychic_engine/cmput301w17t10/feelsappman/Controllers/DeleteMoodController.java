@@ -11,6 +11,10 @@ import java.util.Date;
  * Created by jyuen1 on 3/17/17.
  */
 
+/**
+ * DeleteMoodController will delete mood events from the participant's mood event list. This will
+ * include
+ */
 public class DeleteMoodController {
 
     /**
@@ -18,6 +22,12 @@ public class DeleteMoodController {
      * @param moodEvent
      */
     public static void remove(MoodEvent moodEvent) {
+
+        // delete the mood event from the server
+        ElasticMoodController.DeleteMoodEventTask dmt = new ElasticMoodController.DeleteMoodEventTask();
+        dmt.execute(moodEvent);
+
+        // get the participant's mood list to delete from locally
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         ArrayList<MoodEvent> moodEventList = participant.getMoodList();
 
@@ -40,5 +50,9 @@ public class DeleteMoodController {
             mostRecent = null;
         }
         participant.setMostRecentMoodEvent(mostRecent);
+
+        // update the participant to stay up to date with in the elastic server
+        ElasticParticipantController.UpdateParticipantTask upt = new ElasticParticipantController.UpdateParticipantTask();
+        upt.execute(participant);
     }
 }

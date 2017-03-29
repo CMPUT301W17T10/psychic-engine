@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <CheckBox android:id="@+id/includeLocation"
+        <CheckBox android:id="@+id/editToCurrentLocation"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"

@@ -36,6 +36,15 @@
         android:layout_alignBottom="@+id/deletebutton"
         android:layout_toStartOf="@+id/deletebutton" />
 
+    <Button
+        android:text="View nearby moods"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/recentmap"
+        android:layout_alignBaseline="@+id/editbutton"
+        android:layout_alignBottom="@+id/editbutton"
+        android:layout_toStartOf="@+id/editbutton" />
+
     <ImageView
         android:id="@+id/picture"
         android:layout_width="wrap_content"

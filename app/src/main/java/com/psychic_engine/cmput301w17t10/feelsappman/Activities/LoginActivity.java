@@ -68,13 +68,17 @@ public class LoginActivity extends AppCompatActivity {
 
         loadInstance();
         instance = ParticipantSingleton.getInstance();
-
+        ParticipantController.updateSingletonList();
+        for (Participant stored : instance.getParticipantList()) {
+            Log.i("Stored", "Stored login: " + stored.getLogin());
+        }
         /**
          * A login button action is used to pull the name from the EditText given in the activity.
          * The program will then check that the username has been taken already (ie. stored) as well
          * as searching the list of participants to set as the self participant. The system will then
          * direct the user to their own profile page. If the name does not exist (ie. not stored),
          * then the program will prompt the user that the name does not exist and they should sign up.
+         * Note that the text used to find a participant within the server is case insensitive.
          * @see SelfNewsFeedActivity
          */
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +134,10 @@ public class LoginActivity extends AppCompatActivity {
                     // move user to news feed activity
                     Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
                     startActivity(intent);
+                }
+                else {
+                    Toast.makeText(LoginActivity.this, "Unable to sign up as " + participantName
+                    , Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -198,7 +206,7 @@ public class LoginActivity extends AppCompatActivity {
                 .AddMoodEventTask();
 
         // instantiate participants
-        Participant testParticipant = new Participant("USER");
+        Participant testParticipant = new Participant("user");
         Participant test1 = new Participant("testHappy1");
         Participant test2 = new Participant("testSad2");
         Participant test3 = new Participant("testConfused3");

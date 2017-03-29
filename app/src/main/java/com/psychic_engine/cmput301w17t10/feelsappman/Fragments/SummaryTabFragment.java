@@ -221,8 +221,8 @@ public class SummaryTabFragment extends Fragment implements
         testShame1.setDate(parseDate("2017-03-29"));
 
         participant.addMoodEvent(testShame1);
-
 */
+
         /*~*********************************************************
          *                         TEST DATA                       /
          *********************************************************/
@@ -427,12 +427,12 @@ public class SummaryTabFragment extends Fragment implements
             setAnger.setDrawFilled(true);
             setAnger.setFillColor(parseColor(MoodColor.RED.getBGColor()));
 
-            setDisgust.setColor(parseColor(MoodColor.LIME.getBGColor()));
-            setDisgust.setCircleColorHole(parseColor(MoodColor.LIME.getBGColor()));
-            setDisgust.setCircleColor(parseColor(MoodColor.LIME.getBGColor()));
+            setDisgust.setColor(parseColor(MoodColor.BROWN.getBGColor()));
+            setDisgust.setCircleColorHole(parseColor(MoodColor.BROWN.getBGColor()));
+            setDisgust.setCircleColor(parseColor(MoodColor.BROWN.getBGColor()));
             setDisgust.setLineWidth(2.5f);
             setDisgust.setDrawFilled(true);
-            setDisgust.setFillColor(parseColor(MoodColor.LIME.getBGColor()));
+            setDisgust.setFillColor(parseColor(MoodColor.BROWN.getBGColor()));
 
             setConfused.setColor(parseColor(MoodColor.YELLOW.getBGColor()));
             setConfused.setCircleColorHole(parseColor(MoodColor.YELLOW.getBGColor()));
