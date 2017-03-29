@@ -104,29 +104,7 @@ public class SummaryTabFragment extends Fragment implements
         return rootView;
     }
 
-    /**
-     * Called when the user adjusts the seek bar progress
-     * @param seekBar
-     * @param progress
-     * @param fromUser
-     */
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-        setData(mSeekBarDensity.getProgress() + 1 , mSeekBarStart.getProgress());
-
-        mChart.invalidate();
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-        //
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        //
-    }
 
     /**
      * Set the data to be displayed in the chart
@@ -135,21 +113,11 @@ public class SummaryTabFragment extends Fragment implements
      */
     private void setData(int num, float startDay) {
 
-        Map<Integer, MutableInteger> sadDayToCountMap = new HashMap();
-        Map<Integer, MutableInteger> happyDayToCountMap = new HashMap();
-        Map<Integer, MutableInteger> shameDayToCountMap = new HashMap();
-        Map<Integer, MutableInteger> fearDayToCountMap = new HashMap();
-        Map<Integer, MutableInteger> angerDayToCountMap = new HashMap();
-        Map<Integer, MutableInteger> disgustDayToCountMap = new HashMap();
-        Map<Integer, MutableInteger> confusedDayToCountMap = new HashMap();
-        Map<Integer, MutableInteger> surprisedDayToCountMap = new HashMap();
-
-
          /*~********************************************************
         /                         TEST DATA                       /
         *********************************************************/
 
-/*
+
         participant.getMoodList().clear();
 
         Mood testSadMood = new Mood(MoodState.SAD);
@@ -221,11 +189,21 @@ public class SummaryTabFragment extends Fragment implements
         testShame1.setDate(parseDate("2017-03-29"));
 
         participant.addMoodEvent(testShame1);
-*/
+
 
         /*~*********************************************************
          *                         TEST DATA                       /
          *********************************************************/
+
+
+        Map<Integer, MutableInteger> sadDayToCountMap = new HashMap();
+        Map<Integer, MutableInteger> happyDayToCountMap = new HashMap();
+        Map<Integer, MutableInteger> shameDayToCountMap = new HashMap();
+        Map<Integer, MutableInteger> fearDayToCountMap = new HashMap();
+        Map<Integer, MutableInteger> angerDayToCountMap = new HashMap();
+        Map<Integer, MutableInteger> disgustDayToCountMap = new HashMap();
+        Map<Integer, MutableInteger> confusedDayToCountMap = new HashMap();
+        Map<Integer, MutableInteger> surprisedDayToCountMap = new HashMap();
 
 
         Date beginDate = parseDate("2017-01-01");
@@ -235,6 +213,7 @@ public class SummaryTabFragment extends Fragment implements
 
         for (MoodEvent moodEvent : moodEventList) {
 
+            // TODO: look for better algorithm
             // standardize days to reference start day
             diff = moodEvent.getDate().getTime() - beginDate.getTime();
             days = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 2;
@@ -250,6 +229,7 @@ public class SummaryTabFragment extends Fragment implements
                     else {
                         sadDayToCountMap.put(days, new MutableInteger(1));
                     }
+                    break;
                 case HAPPY:
                     if (happyDayToCountMap.containsKey(days)) {
                         count = happyDayToCountMap.get(days);
@@ -258,6 +238,7 @@ public class SummaryTabFragment extends Fragment implements
                     else {
                         happyDayToCountMap.put(days, new MutableInteger(1));
                     }
+                    break;
                 case SHAME:
                     if (shameDayToCountMap.containsKey(days)) {
                         count = shameDayToCountMap.get(days);
@@ -266,6 +247,7 @@ public class SummaryTabFragment extends Fragment implements
                     else {
                         shameDayToCountMap.put(days, new MutableInteger(1));
                     }
+                    break;
                 case FEAR:
                     if (fearDayToCountMap.containsKey(days)) {
                         count = fearDayToCountMap.get(days);
@@ -274,6 +256,7 @@ public class SummaryTabFragment extends Fragment implements
                     else {
                         fearDayToCountMap.put(days, new MutableInteger(1));
                     }
+                    break;
                 case ANGER:
                     if (angerDayToCountMap.containsKey(days)) {
                         count = angerDayToCountMap.get(days);
@@ -282,6 +265,7 @@ public class SummaryTabFragment extends Fragment implements
                     else {
                         angerDayToCountMap.put(days, new MutableInteger(1));
                     }
+                    break;
                 case DISGUST:
                     if (disgustDayToCountMap.containsKey(days)) {
                         count = disgustDayToCountMap.get(days);
@@ -290,6 +274,7 @@ public class SummaryTabFragment extends Fragment implements
                     else {
                         disgustDayToCountMap.put(days, new MutableInteger(1));
                     }
+                    break;
                 case CONFUSED:
                     if (confusedDayToCountMap.containsKey(days)) {
                         count = confusedDayToCountMap.get(days);
@@ -298,6 +283,7 @@ public class SummaryTabFragment extends Fragment implements
                     else {
                         confusedDayToCountMap.put(days, new MutableInteger(1));
                     }
+                    break;
                 case SURPRISED:
                     if (surprisedDayToCountMap.containsKey(days)) {
                         count = surprisedDayToCountMap.get(days);
@@ -306,6 +292,7 @@ public class SummaryTabFragment extends Fragment implements
                     else {
                         surprisedDayToCountMap.put(days, new MutableInteger(1));
                     }
+                    break;
                 default:
                     // pass
             }
@@ -389,8 +376,6 @@ public class SummaryTabFragment extends Fragment implements
             setConfused = new LineDataSet(yValsConfused, "confused");
             setSurprised = new LineDataSet(yValsSurprised, "surprised");
 
-
-            // TODO: fix issue with colors overlapping
             // Styling
             setSad.setColor(parseColor(MoodColor.BLUE.getBGColor()));
             setSad.setCircleColorHole(parseColor(MoodColor.BLUE.getBGColor()));
@@ -542,6 +527,29 @@ public class SummaryTabFragment extends Fragment implements
 
     }
 
+    /**
+     * Called when the user adjusts the seek bar progress
+     * @param seekBar
+     * @param progress
+     * @param fromUser
+     */
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+        setData(mSeekBarDensity.getProgress() + 1 , mSeekBarStart.getProgress());
+
+        mChart.invalidate();
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        //
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        //
+    }
 
     @Override
     public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
