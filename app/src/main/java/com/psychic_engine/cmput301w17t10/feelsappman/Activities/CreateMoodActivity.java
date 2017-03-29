@@ -192,12 +192,16 @@ public class CreateMoodActivity extends AppCompatActivity {
 
 
         if (photoSizeUnder) {
-            boolean success = createMoodController.updateMoodEventList(moodString, socialSettingString, trigger, photo, location);
+            int rc = createMoodController.updateMoodEventList(moodString, socialSettingString, trigger, photo, location);
 
-            if (!success) {
+            if (rc == -1) {
                 Toast.makeText(CreateMoodActivity.this,
                         "Please specify a mood.",
                         Toast.LENGTH_LONG).show();
+            } else if (rc == -2) {
+                    Toast.makeText(CreateMoodActivity.this,
+                            "Trigger has to be 3 words.",
+                            Toast.LENGTH_LONG).show();
             } else {
                 Intent intent = new Intent(CreateMoodActivity.this, SelfNewsFeedActivity.class);
                 startActivity(intent);
