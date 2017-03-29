@@ -16,6 +16,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -23,9 +24,12 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.ScatterData;
+import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
@@ -68,7 +72,7 @@ public class SummaryTabFragment extends Fragment implements
     Participant participant;
     ArrayList<MoodEvent> moodEventList;
 
-    private LineChart mChart;
+    private ScatterChart mChart;
     private SeekBar mSeekBarDensity, mSeekBarStart;
     private TextView tvX, tvY;
 
@@ -86,7 +90,7 @@ public class SummaryTabFragment extends Fragment implements
         mSeekBarDensity = (SeekBar) rootView.findViewById(R.id.seekBar1);
         mSeekBarStart = (SeekBar) rootView.findViewById(R.id.seekBar2);
 
-        mChart = (LineChart) rootView.findViewById(R.id.chart);
+        mChart = (ScatterChart) rootView.findViewById(R.id.chart);
 
         // Set chart, axis, and legend properties
         setChartProperties();
@@ -327,39 +331,39 @@ public class SummaryTabFragment extends Fragment implements
         }
 
 
-        LineDataSet setSad;
-        LineDataSet setHappy;
-        LineDataSet setShame;
-        LineDataSet setFear;
-        LineDataSet setAnger;
-        LineDataSet setDisgust;
-        LineDataSet setConfused;
-        LineDataSet setSurprised;
+        ScatterDataSet setSad;
+        ScatterDataSet setHappy;
+        ScatterDataSet setShame;
+        ScatterDataSet setFear;
+        ScatterDataSet setAnger;
+        ScatterDataSet setDisgust;
+        ScatterDataSet setConfused;
+        ScatterDataSet setSurprised;
 
         if (mChart.getData() != null && mChart.getData().getDataSetCount() > 0) {
 
-            setSad = (LineDataSet) mChart.getData().getDataSetByIndex(0);
+            setSad = (ScatterDataSet) mChart.getData().getDataSetByIndex(0);
             setSad.setValues(yValsSad);
 
-            setHappy = (LineDataSet) mChart.getData().getDataSetByIndex(1);
+            setHappy = (ScatterDataSet) mChart.getData().getDataSetByIndex(1);
             setHappy.setValues(yValsHappy);
 
-            setShame = (LineDataSet) mChart.getData().getDataSetByIndex(2);
+            setShame = (ScatterDataSet) mChart.getData().getDataSetByIndex(2);
             setShame.setValues(yValsShame);
 
-            setFear = (LineDataSet) mChart.getData().getDataSetByIndex(3);
+            setFear = (ScatterDataSet) mChart.getData().getDataSetByIndex(3);
             setFear.setValues(yValsFear);
 
-            setAnger = (LineDataSet) mChart.getData().getDataSetByIndex(4);
+            setAnger = (ScatterDataSet) mChart.getData().getDataSetByIndex(4);
             setAnger.setValues(yValsAnger);
 
-            setDisgust = (LineDataSet) mChart.getData().getDataSetByIndex(5);
+            setDisgust = (ScatterDataSet) mChart.getData().getDataSetByIndex(5);
             setDisgust.setValues(yValsDisgust);
 
-            setConfused = (LineDataSet) mChart.getData().getDataSetByIndex(6);
+            setConfused = (ScatterDataSet) mChart.getData().getDataSetByIndex(6);
             setConfused.setValues(yValsConfused);
 
-            setSurprised = (LineDataSet) mChart.getData().getDataSetByIndex(7);
+            setSurprised = (ScatterDataSet) mChart.getData().getDataSetByIndex(7);
             setSurprised.setValues(yValsSurprised);
 
             mChart.getData().notifyDataChanged();
@@ -367,74 +371,50 @@ public class SummaryTabFragment extends Fragment implements
 
         } else {
 
-            setSad = new LineDataSet(yValsSad, "sad");
-            setHappy = new LineDataSet(yValsHappy, "happy");
-            setShame = new LineDataSet(yValsShame, "shame");
-            setFear = new LineDataSet(yValsFear, "fear");
-            setAnger = new LineDataSet(yValsAnger, "anger");
-            setDisgust = new LineDataSet(yValsDisgust, "disgust");
-            setConfused = new LineDataSet(yValsConfused, "confused");
-            setSurprised = new LineDataSet(yValsSurprised, "surprised");
+            setSad = new ScatterDataSet(yValsSad, "sad");
+            setHappy = new ScatterDataSet(yValsHappy, "happy");
+            setShame = new ScatterDataSet(yValsShame, "shame");
+            setFear = new ScatterDataSet(yValsFear, "fear");
+            setAnger = new ScatterDataSet(yValsAnger, "anger");
+            setDisgust = new ScatterDataSet(yValsDisgust, "disgust");
+            setConfused = new ScatterDataSet(yValsConfused, "confused");
+            setSurprised = new ScatterDataSet(yValsSurprised, "surprised");
 
             // Styling
             setSad.setColor(parseColor(MoodColor.BLUE.getBGColor()));
-            setSad.setCircleColorHole(parseColor(MoodColor.BLUE.getBGColor()));
-            setSad.setCircleColor(parseColor(MoodColor.BLUE.getBGColor()));
-            setSad.setLineWidth(2.5f);
-            setSad.setDrawFilled(true);
-            setSad.setFillColor(parseColor(MoodColor.BLUE.getBGColor()));
+            setSad.setScatterShapeSize(50f);
+            setSad.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
             setHappy.setColor(parseColor(MoodColor.GREEN.getBGColor()));
-            setHappy.setCircleColorHole(parseColor(MoodColor.GREEN.getBGColor()));
-            setHappy.setCircleColor(parseColor(MoodColor.GREEN.getBGColor()));
-            setHappy.setLineWidth(2.5f);
-            setHappy.setDrawFilled(true);
-            setHappy.setFillColor(parseColor(MoodColor.GREEN.getBGColor()));
+            setHappy.setScatterShapeSize(50f);
+            setHappy.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
             setShame.setColor(parseColor(MoodColor.PURPLE.getBGColor()));
-            setShame.setCircleColorHole(parseColor(MoodColor.PURPLE.getBGColor()));
-            setShame.setCircleColor(parseColor(MoodColor.PURPLE.getBGColor()));
-            setShame.setLineWidth(2.5f);
-            setShame.setDrawFilled(true);
-            setShame.setFillColor(parseColor(MoodColor.PURPLE.getBGColor()));
+            setShame.setScatterShapeSize(50f);
+            setShame.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
             setFear.setColor(parseColor(MoodColor.ORANGE.getBGColor()));
-            setFear.setCircleColorHole(parseColor(MoodColor.ORANGE.getBGColor()));
-            setFear.setCircleColor(parseColor(MoodColor.ORANGE.getBGColor()));
-            setFear.setLineWidth(2.5f);
-            setFear.setDrawFilled(true);
-            setFear.setFillColor(parseColor(MoodColor.ORANGE.getBGColor()));
+            setFear.setScatterShapeSize(50f);
+            setFear.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
             setAnger.setColor(parseColor(MoodColor.RED.getBGColor()));
-            setAnger.setCircleColorHole(parseColor(MoodColor.RED.getBGColor()));
-            setAnger.setCircleColor(parseColor(MoodColor.RED.getBGColor()));
-            setAnger.setLineWidth(2.5f);
-            setAnger.setDrawFilled(true);
-            setAnger.setFillColor(parseColor(MoodColor.RED.getBGColor()));
+            setAnger.setScatterShapeSize(50f);
+            setAnger.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
             setDisgust.setColor(parseColor(MoodColor.BROWN.getBGColor()));
-            setDisgust.setCircleColorHole(parseColor(MoodColor.BROWN.getBGColor()));
-            setDisgust.setCircleColor(parseColor(MoodColor.BROWN.getBGColor()));
-            setDisgust.setLineWidth(2.5f);
-            setDisgust.setDrawFilled(true);
-            setDisgust.setFillColor(parseColor(MoodColor.BROWN.getBGColor()));
+            setDisgust.setScatterShapeSize(50f);
+            setDisgust.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
             setConfused.setColor(parseColor(MoodColor.YELLOW.getBGColor()));
-            setConfused.setCircleColorHole(parseColor(MoodColor.YELLOW.getBGColor()));
-            setConfused.setCircleColor(parseColor(MoodColor.YELLOW.getBGColor()));
-            setConfused.setLineWidth(2.5f);
-            setConfused.setDrawFilled(true);
-            setConfused.setFillColor(parseColor(MoodColor.YELLOW.getBGColor()));
+            setConfused.setScatterShapeSize(50f);
+            setConfused.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
             setSurprised.setColor(parseColor(MoodColor.PINK.getBGColor()));
-            setSurprised.setCircleColorHole(parseColor(MoodColor.PINK.getBGColor()));
-            setSurprised.setCircleColor(parseColor(MoodColor.PINK.getBGColor()));
-            setSurprised.setLineWidth(2.5f);
-            setSurprised.setDrawFilled(true);
-            setSurprised.setFillColor(parseColor(MoodColor.PINK.getBGColor()));
+            setSurprised.setScatterShapeSize(50f);
+            setSurprised.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
 
-            ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+            ArrayList<IScatterDataSet> dataSets = new ArrayList<IScatterDataSet>();
             dataSets.add(setSad);
             dataSets.add(setHappy);
             dataSets.add(setShame);
@@ -444,7 +424,7 @@ public class SummaryTabFragment extends Fragment implements
             dataSets.add(setConfused);
             dataSets.add(setSurprised);
 
-            LineData data = new LineData(dataSets);
+            ScatterData data = new ScatterData(dataSets);
             data.setValueTextSize(10f);
 
             mChart.setData(data);
@@ -466,7 +446,7 @@ public class SummaryTabFragment extends Fragment implements
         if (val != null)
             yVals.add(new Entry(day, val.toFloat()));
         else
-            yVals.add(new Entry(day, 0));
+            yVals.add(new Entry(day, 0));   // TODO: not have this
 
     }
 
@@ -474,6 +454,7 @@ public class SummaryTabFragment extends Fragment implements
      * Set chart properties
      */
     private void setChartProperties() {
+        // TODO add title, x, y axis description
         mChart.getDescription().setEnabled(false);
         mChart.setMaxVisibleValueCount(60);
         mChart.setPinchZoom(false);
