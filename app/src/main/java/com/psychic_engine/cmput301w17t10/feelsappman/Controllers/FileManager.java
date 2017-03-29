@@ -19,6 +19,7 @@ import java.lang.reflect.Type;
 /**
  * Created by jyuen1 on 3/15/17.
  * Original code by adong
+ * Comments by adong on 3/28/2017.
  */
 
 public class FileManager {

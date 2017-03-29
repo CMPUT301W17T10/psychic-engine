@@ -10,13 +10,15 @@ import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.mapping.PutMapping;
 
 /**
- * Created by Airer on 3/25/2017.
+ * Created by adong on 3/25/2017.
+ * Comments by adong on 3/28/2017.
  */
 
 /**
  * Elastic master controller that has the ability to reset the elastic server. Adding another
  * participant or mood event will automatically create another index and type for whatever you
  * want to add.
+ * @author adong
  * @see ElasticController
  * @see ElasticMoodController
  * @see ElasticParticipantController
@@ -25,6 +27,13 @@ public class ElasticMasterController extends ElasticController {
 
     private static final String INDEX = "cmput301w17t10";
 
+    /**
+     * ResetElasticServer is a command that will reset the elastic server by deleting our index
+     * which contains all of our participants and types. More designed to be for an easy way
+     * to reset the database and create new data through the use of the generate data button in the
+     * login activity. Upon addition of new data into the elastic server, a new index and their
+     * types will also be recreated
+     */
     public static class ResetElasticServer extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {

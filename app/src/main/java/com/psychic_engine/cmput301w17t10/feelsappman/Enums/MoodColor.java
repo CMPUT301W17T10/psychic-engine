@@ -1,9 +1,17 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Enums;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 /**
  * Created by jyuen1 on 2/27/17.
  */
 
+/**
+ * MoodColor determines a mood states respective colour. Each mood state will have their own colour
+ * to represent their mood. This colour will be displayed as a background when a participant
+ * views the mood event. Mood color is part of the class Mood which also contains its mood state
+ * @see Mood
+ * @see MoodState
+ */
 public enum MoodColor {
     // Colors obtained from https://material.io/guidelines/style/color.html#color-color-palette
     BLUE,
@@ -15,6 +23,12 @@ public enum MoodColor {
     BROWN,
     YELLOW;
 
+    /**
+     * An override method to get the string form of some color we would like, that was obtained
+     * from the mood classes.
+     * @see Mood
+     * @return String version of the color
+     */
     @Override
     public String toString() {
         switch(this) {
@@ -30,6 +44,11 @@ public enum MoodColor {
         }
     }
 
+    /**
+     * getBGColor will return a hex code that will be read to be a certain colour. This will determine
+     * the background colour of some mood event.
+     * @return
+     */
     public String getBGColor() {
         switch(this) {
             case BLUE: return "#1A237E";

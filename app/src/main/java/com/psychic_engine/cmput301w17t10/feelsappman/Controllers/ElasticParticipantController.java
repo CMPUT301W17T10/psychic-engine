@@ -14,14 +14,10 @@ import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
-    //able to add participant on signup
-    //able to follow a participant's recent mood event on follow request
-    //able to search for a participant's name and their recent mood event
-    //update participant at anytime if information is changed by edit
-
 /**
  * ElasticParticipantController handles all elastic requests in regards to participants. Tasks will
  * be used to update, add, and find participants to find other participants using the app.
+ * Comments by adong on 3/28/2017.
  * @author adong
  */
 public class ElasticParticipantController extends ElasticController {
@@ -144,6 +140,12 @@ public class ElasticParticipantController extends ElasticController {
         }
     }
 
+    /**
+     * Similar to the FindParticipantTask, this method will search for all participants that have
+     * registered themselves into the server. This method is crucial for obtaining the most up to
+     * date database of participants names when trying to login or sign up for a new account. This ensures
+     * that unique names are always created (case insensitive).
+     */
     public static class FindAllParticipantsTask extends AsyncTask<Void, Void, ArrayList<Participant>> {
         @Override
         protected ArrayList<Participant> doInBackground(Void... params) {

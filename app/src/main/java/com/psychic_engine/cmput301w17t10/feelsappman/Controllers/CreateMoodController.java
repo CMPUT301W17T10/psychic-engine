@@ -14,6 +14,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 
 /**
  * Created by jyuen1 on 3/7/17.
+ * Comments by adong on 3/28/2017
  */
 
 /**

@@ -15,10 +15,29 @@ import java.util.Date;
 
 /**
  * Created by jyuen1 on 3/8/2017.
+ * Comments by adong on 3/28/2017.
  */
 
+/**
+ * EditMoodController is similar to CreateMoodController in that it will update the mood event
+ * list of the participant with a new mood event. Since a new date is created, it is counted as
+ * the most recent mood event to be changed by the participant. Since we change the details of the
+ * mood event, we would need to update the mood event in the elastic server. A change in mood event
+ * for the participant also requires a participant update to the server.
+ */
 public class EditMoodController {
 
+    /**
+     * Parameters are obtained from the the activity where we edit the moods. All changes would be
+     * applied to including the choice of adding your current location at this time.
+     * @param moodEvent
+     * @param moodString
+     * @param socialSettingString
+     * @param trigger
+     * @param photo
+     * @param location
+     * @throws TriggerTooLongException
+     */
     public static void updateMoodEventList(MoodEvent moodEvent, String moodString, String socialSettingString, String trigger, Photograph photo, MoodLocation location) throws TriggerTooLongException {
 
         Mood mood = null;
@@ -83,6 +102,11 @@ public class EditMoodController {
         // update the most recent mood event
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         participant.setMostRecentMoodEvent(moodEvent);
+
+        // update the participant in the elastic server
+        ElasticParticipantController.UpdateParticipantTask upt = new ElasticParticipantController
+                .UpdateParticipantTask();
+        upt.execute(participant);
 
         // update the most recent mood event in elastic
         ElasticMoodController.UpdateMoodTask updateMoodTask = new ElasticMoodController.UpdateMoodTask();

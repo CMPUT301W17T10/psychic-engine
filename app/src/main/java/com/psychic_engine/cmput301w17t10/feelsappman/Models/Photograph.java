@@ -5,8 +5,14 @@ import android.os.Build;
 
 /**
  * Created by hnkhan on 2/27/17. Edited by pslin 03/10/17
+ * Commented by adong on 3/29/2017
  */
 
+/**
+ * The photograph model contain the bitmap used to display the images that the participant would
+ * like to add. The photograph will need to restricted to the uncompressed size of 65536 bytes.
+ * This enables the photograph to be stored in the elastic server and retrieved when needed.
+ */
 public class Photograph {
 
     //TODO: getByteSizeCount not accurate. Decoded memory vs compressed size
@@ -26,19 +32,28 @@ public class Photograph {
         }
     }
 
+    /**
+     * Setter method to set the bitmap
+     * @param map Bitmap to be set in
+     */
     public void setMap(Bitmap map) {
         this.map = map;
     }
 
+    /**
+     * Getter method to return the size of 65536 bytes that is necessary for proper elastic server storage
+     * @return limitSize which is 65536
+     */
     public Boolean getLimitSize() {
         return limitSize;
     }
 
+    /**
+     * Getter method to return the bitmap of the photograph.
+     * @return Bitmap of the photograph
+     */
     public Bitmap getImage() {
         return this.map;
     }
 
-    public void deleteImage() {
-
-    }
 }

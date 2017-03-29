@@ -19,6 +19,7 @@ import static android.graphics.Color.parseColor;
 
 /**
  * Created by jyuen1 on 3/12/2017.
+ * Comments by adong on 3/28/2017.
  */
 
 /**

@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.SelfNewsFeedActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.EditMoodActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.FilterMapActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.ViewMoodEventActivity;
@@ -43,6 +44,16 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Comments by adong on 3/28/2017.
+ * HistoryTabFragment holds the information stored in the history tab shown in the SelfNewsFeedActivity.
+ * Information such as the pariticpant's mood event history as well as options to filter their mood
+ * events are shown. A participant will be able to filter in combination with each other offline.
+ * When the app user does not have internet connection, they will be unable to sync with the elastic
+ * server. However, they will be able to manipulate their own mood events as needed and upon reconnection,
+ * the app will automatically sync their changed information with the server.
+ * @see SelfNewsFeedActivity
+ */
 public class HistoryTabFragment extends Fragment {
 
     private ListView moodEventsListView;
@@ -176,6 +187,12 @@ public class HistoryTabFragment extends Fragment {
     }
 
     //TODO USE THIS for filtered mapview
+
+    /**
+     * This method is used to determine the mood events that satisfies the filter that the participant
+     * has set. The application will be able to filter locally without the use of an internet
+     * connection.
+     */
     private void filter() {
         filteredMoodList.clear();
 
@@ -229,7 +246,9 @@ public class HistoryTabFragment extends Fragment {
             Collections.sort(filteredMoodList, new CustomComparator());
     }
 
-
+    /**
+     * This method determines what filters have been selected by the participant to be utilized.
+     */
     private void checkFilterSelected() {
 
         // Check if the date filter is selected
@@ -248,6 +267,10 @@ public class HistoryTabFragment extends Fragment {
 
     }
 
+    /**
+     * Override the onStart method to initialize the adapter that will display data set changes with
+     * the filterMoodList that will be displayed with or without filters applied.
+     */
     @Override
     public void onStart() {
         super.onStart();

@@ -8,6 +8,9 @@ import java.util.Comparator;
  * Created by Hussain on 3/13/2017.
  */
 
+/**
+ * CustomComparator just compares the date between two mood events, in attempt to sort them by date.
+ */
 public class CustomComparator implements Comparator<MoodEvent> {
     @Override
     public int compare(MoodEvent o1, MoodEvent o2) {

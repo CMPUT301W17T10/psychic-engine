@@ -2,6 +2,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Fragments;
 
 /**
  * Created by jordi on 2017-03-09.
+ *
  */
 
 import android.os.Bundle;
@@ -51,7 +52,6 @@ import static android.graphics.Color.parseColor;
 
 /**
  * @Author Jennifer Yuen
- *
  * @References:
  * https://github.com/PhilJay/MPAndroidChart/issues/789
  * http://stackoverflow.com/questions/17192776/get-value-of-day-month-form-date-object-in-android

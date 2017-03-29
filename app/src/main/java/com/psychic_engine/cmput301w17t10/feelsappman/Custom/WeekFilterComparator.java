@@ -8,6 +8,10 @@ import java.util.Comparator;
  * Created by Hussain on 3/13/2017.
  */
 
+/**
+ * WeekFilterComparator just compares the date between two mood events, in attempt to filter them by
+ * recent week.
+ */
 public class WeekFilterComparator implements Comparator<MoodEvent> {
     @Override
     public int compare(MoodEvent o1, MoodEvent o2) {

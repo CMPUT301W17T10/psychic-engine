@@ -35,13 +35,15 @@ public class ParticipantSingletonTest extends ActivityInstrumentationTestCase2{
 
     public void testAddParticipant() {
         ParticipantSingleton instance = ParticipantSingleton.getInstance();
-        assertTrue(instance.addParticipant("oi"));
+        Participant test = new Participant("oi");
+        assertTrue(instance.addParticipant(test));
     }
 
     public void testGetParticipantCount() {
+        Participant test = new Participant("meep");
         ParticipantSingleton instance = ParticipantSingleton.getInstance();
         assertTrue("count not 1", instance.getParticipantCount() == 1);
-        assertTrue(instance.addParticipant("meep"));
+        assertTrue(instance.addParticipant(test));
         assertTrue("count not 2", instance.getParticipantCount() == 2);
     }
 
@@ -76,16 +78,4 @@ public class ParticipantSingletonTest extends ActivityInstrumentationTestCase2{
         assertEquals("self participant not 'oi'",instance.getSelfParticipant().getLogin(), "oi");
     }
 
-    // Currently only removes its own account from the file
-    // Later on if needed, will remove other participants such as followers
-    /*
-    public void testRemoveParticipant() {
-        ParticipantSingleton instance = ParticipantSingleton.getInstance();
-        assertTrue("count not 2", instance.getParticipantCount() == 2);
-        assertTrue("failed remove",instance.removeParticipant());
-        assertTrue("count is not 1", instance.getParticipantCount() == 1);
-        Participant thisParticipant = instance.searchParticipant("oi");
-        assertEquals(instance.getParticipantList().indexOf(thisParticipant), -1);
-    }
-    */
 }

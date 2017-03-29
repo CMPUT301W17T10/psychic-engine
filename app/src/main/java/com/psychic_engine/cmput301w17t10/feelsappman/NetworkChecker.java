@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 
 /**
  * Created by adong on 2017-03-20.
+ * Commented by adong on 3/29/2017
  */
 
 public class NetworkChecker {

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 /**
  * Created by jyuen1 on 3/8/17.
+ * Commented by adong
  */
 
 /**
@@ -118,24 +119,6 @@ public class ParticipantSingleton {
         }
     }
 
-    /**
-     * Method to remove a participant from the storage. Not really called at the moment unless
-     * the user would like to delete their account. Temporarily out of service until later use.
-     */
-    /*
-    public Boolean removeParticipant() {
-
-        try {
-            participantList.remove(selfParticipant);
-            instance.setSelfParticipant(null);
-            participantCount--;
-            return true;
-        }
-        catch (Throwable e) {
-            return false;
-        }
-    }
-    */
     /**
      * Method to determine whether or not there is an instance or not. Used in the Singleton class
      * to determine whether or not it should initialize another ParticipantSingleton class

@@ -9,6 +9,7 @@ import java.util.Date;
 
 /**
  * Created by jyuen1 on 3/17/17.
+ * Comments by adong on 3/28/2017
  */
 
 /**
@@ -18,7 +19,8 @@ import java.util.Date;
 public class DeleteMoodController {
 
     /**
-     * Removes the specified moodEvent from the self participant's mood list.
+     * Removes the specified moodEvent from the self participant's mood list. Update the new
+     * participent details in the elastic server
      * @param moodEvent
      */
     public static void remove(MoodEvent moodEvent) {

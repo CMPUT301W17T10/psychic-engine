@@ -2,6 +2,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Fragments;
 
 /**
  * Created by jordi on 2017-03-09.
+ * Comments by adong on 3/28/2017.
  */
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,7 +18,6 @@ import android.widget.TextView;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.EditMoodActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.ViewMoodEventActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.DeleteMoodController;
-import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
@@ -25,7 +25,13 @@ import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
 import static android.graphics.Color.parseColor;
 
-
+/**
+ * RecentTabFragment contain the details of the most recent mood event that the participant has
+ * edited or added. The background of the fragment will correspond to the mood state's corresponding
+ * color. It is similar to the ViewMoodActivity, where you would be able to view any mood event,
+ * even though it is not the most recent mood event for that participant.
+ * @see ViewMoodEventActivity
+ */
 public class RecentTabFragment extends Fragment {
 
     private TextView date;
@@ -51,19 +57,18 @@ public class RecentTabFragment extends Fragment {
         participant = ParticipantSingleton.getInstance().getSelfParticipant();
         moodEvent = participant.getMostRecentMoodEvent();
 
+        // set the delete button to remove mood events and update affected classes accordingly
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (moodEvent != null) {
                     DeleteMoodController.remove(moodEvent);
-                    ElasticMoodController.DeleteMoodEventTask deleteMoodEventTask = new
-                            ElasticMoodController.DeleteMoodEventTask();
-                    deleteMoodEventTask.execute(moodEvent);
                     display();
                 }
             }
         });
 
+        // set the edit button to send the user to the EditMoodActivity
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,6 +76,7 @@ public class RecentTabFragment extends Fragment {
             }
         });
 
+        // set the imageview to send the user to the details of the mood event in ViewMoodActivity
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,7 +87,11 @@ public class RecentTabFragment extends Fragment {
         return rootView;
     }
 
-
+    /**
+     * This method will display the information about the most recent mood event of the participant.
+     * Information about the mood event that was not given upon the edition or addition of the event
+     * will not be displayed.
+     */
     private void display() {
         moodEvent = participant.getMostRecentMoodEvent();
 
@@ -128,6 +138,9 @@ public class RecentTabFragment extends Fragment {
         }
     }
 
+    /**
+     * Override onStart method to display the recent mood event upon the start of the fragment
+     */
     @Override
     public void onStart() {
         super.onStart();

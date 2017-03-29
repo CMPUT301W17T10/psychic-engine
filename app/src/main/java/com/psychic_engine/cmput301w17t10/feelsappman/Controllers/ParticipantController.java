@@ -11,12 +11,23 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Created by adong on 3/20/17.
+ * Comments by adong on 3/28/2017.
  */
 
 public class ParticipantController {
 
     private ParticipantController(){}
 
+    /**
+     * checkUniqueParticipant is a method that will determine whether or not a certain participant
+     * name is taken upon sign up or log in. When you sign up, we need this method to be false, to
+     * ensure that there are no other names in the server and that the unique quality is satisfied.
+     * When you log in, the method should be true, to ensure that there is a participant stored
+     * in the server and its information can be retrieved for use in the app.
+     * @param participantName
+     * @return true if name is found
+     * @return false if name is not found
+     */
     public static boolean checkUniqueParticipant(String participantName) {
         Log.i("Check", "Checking for uniqueness in " + participantName);
         Participant foundParticipant = null;
@@ -29,23 +40,6 @@ public class ParticipantController {
         }
         return foundParticipant == null;
     }
-
-    //TODO: Delete mood event from your mood event list
-
-    public static void deleteMoodEvent(MoodEvent moodEvent) {
-        ElasticMoodController.DeleteMoodEventTask deleteMoodEventTask = new ElasticMoodController
-                .DeleteMoodEventTask();
-        deleteMoodEventTask.execute(moodEvent);
-    }
-
-    //TODO: Update mood event from the mood event list
-    /*
-    public static void editMoodEvent(MoodEvent moodEvent) {
-        ElasticMoodController.EditMoodEventTask editMoodEventTask = new ElasticMoodController
-                .EditMoodEventTask();
-        editMoodEventTask.execute(moodEvent);
-    }
-    */
 
     /**
      * updateSingletonList will attempt to pull the most up to date list of participants from the
