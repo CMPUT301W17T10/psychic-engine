@@ -68,7 +68,10 @@ public class LoginActivity extends AppCompatActivity {
 
         loadInstance();
         instance = ParticipantSingleton.getInstance();
-
+        ParticipantController.updateSingletonList();
+        for (Participant stored : instance.getParticipantList()) {
+            Log.i("Stored", "Stored login: " + stored.getLogin());
+        }
         /**
          * A login button action is used to pull the name from the EditText given in the activity.
          * The program will then check that the username has been taken already (ie. stored) as well
@@ -198,7 +201,7 @@ public class LoginActivity extends AppCompatActivity {
                 .AddMoodEventTask();
 
         // instantiate participants
-        Participant testParticipant = new Participant("USER");
+        Participant testParticipant = new Participant("user");
         Participant test1 = new Participant("testHappy1");
         Participant test2 = new Participant("testSad2");
         Participant test3 = new Participant("testConfused3");

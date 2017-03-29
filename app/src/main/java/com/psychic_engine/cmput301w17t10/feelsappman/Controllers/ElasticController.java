@@ -24,3 +24,43 @@ public class ElasticController {
         }
     }
 }
+/*
+Future Queries
+
+Pulls all mood events with locations
+{
+  "query": {
+    "filtered": {
+      "filter": {
+        "bool": {
+          "must_not": [
+            {
+              "missing": {
+                "field": "location"
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+
+Pulls all mood events sorted by most recent to oldest (as mood owner pierre)
+{
+    "query" : {
+            "term" : { "moodOwner" : "pierre" }
+    },
+    "sort": { "date": { "order": "desc" }}
+}
+
+Search bar to find followers
+Find all participants that have some thing in the edittext as their name  on click
+term for case sensitive (will not return hits if you search for Pierre when you have pierre)
+match for non case sensitive (will return hits if you search for Pierre when you have pierre)
+{
+    "query": {
+        "match" : { "login" : _____ }
+    }
+}
+ */

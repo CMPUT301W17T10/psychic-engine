@@ -5,6 +5,9 @@ import android.util.Log;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
@@ -67,7 +70,7 @@ public class ElasticParticipantController extends ElasticController {
         @Override
         protected Participant doInBackground(String... params) {
             verifySettings();
-            Participant singleParticipant = null;
+            Participant participantFound = null;
 
             // set a query to find 1 hit of a participant with the login name
             String query = "{\"size\" : 1,\"query\" : {\"match\" : { \"login\" : \"" +params[0] + "\" }}}";
@@ -78,24 +81,19 @@ public class ElasticParticipantController extends ElasticController {
 
             try {
                 Log.i("Attempt", "Search for " + params[0] + " Query: "+ query);
+
                 SearchResult result = client.execute(search);
 
                 // successful hit
                 if (result.isSucceeded()) {
-                    singleParticipant = result.getSourceAsObject(Participant.class);
-                    Log.i("Found", "Found the participant name: "+ singleParticipant.getLogin());
+                    participantFound = result.getSourceAsObject(Participant.class);
+                    Log.i("F Participant", participantFound.getLogin());
                 }
-
-                // no participant found
-                else {
-                    return null;
-                }
-
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
-            return singleParticipant;
+            return participantFound;
         }
     }
 
@@ -143,6 +141,34 @@ public class ElasticParticipantController extends ElasticController {
             }
 
             return null;
+        }
+    }
+
+    public static class FindAllParticipantsTask extends AsyncTask<Void, Void, ArrayList<Participant>> {
+        @Override
+        protected ArrayList<Participant> doInBackground(Void... params) {
+            verifySettings();
+            ArrayList<Participant> participantList = new ArrayList<>();
+
+            String query = "{\"size\" : 100,\"query\" : {\"match_all\" : {}}}";
+            Log.i("Attempt", "Search for all participants: " + query);
+            Search search = new Search.Builder(query)
+                    .addIndex("cmput301w17t10")
+                    .addType("participant")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    List<Participant> resultList = result.getSourceAsObjectList(Participant.class);
+                    Log.i("Size List", "Size of list: "+ String.valueOf(resultList.size()));
+                    participantList.addAll(resultList);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+            return participantList;
         }
     }
 }

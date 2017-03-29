@@ -175,4 +175,68 @@ public class ElasticMoodController extends ElasticController{
             return null;
         }
     }
+
+    /**
+     * FindMoodLocationsTask find all mood events of any participant that has entered a mood event
+     * that has location enabled when they made their mood
+     */
+    public static class FindMoodLocationsTask extends AsyncTask<Void, Void, ArrayList<MoodEvent>> {
+
+        @Override
+        protected ArrayList<MoodEvent> doInBackground(Void... params) {
+            verifySettings();
+            ArrayList<MoodEvent> foundMoods = new ArrayList<>();
+            String query = "{\"size\": 10000,\"query\" : {\"filtered\" : { \"filter\" : " +
+                    "{ \"bool\" : {\"must_not\""+
+                    ": [ {\"missing\": {\"field\" : \"location\"}}]}}}}}";
+
+            Search search = new Search.Builder(query)
+                    .addIndex("cmput301w17t10")
+                    .addType("moodevent")
+                    .build();
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    List<MoodEvent> resultList = result.getSourceAsObjectList(MoodEvent.class);
+                    foundMoods.addAll(resultList);
+                    Log.i("Success", "Successfully pulled mood events with locations");
+                }
+            } catch (Exception e) {
+                Log.i("Fail", "Failed to obtain mood events with locations");
+            }
+            return foundMoods;
+        }
+    }
+
+    /**
+     *  Find all mood events in the elastic server to then be sorted through locally with each
+     *  participant's most recent mood event and display the event if it does have a location. The
+     *  mood events are sorted in descending order (most recent)
+     */
+    public static class FindMoodEventsTask extends AsyncTask<Void, Void, ArrayList<MoodEvent>> {
+
+        @Override
+        protected ArrayList<MoodEvent> doInBackground(Void... params) {
+            verifySettings();
+            ArrayList<MoodEvent> foundMoods = new ArrayList<>();
+            String query = "{\"size\": 10000 , \"query\":{\"sort\" : { \"date\" : { \"order\": \"desc\"}}}}";
+
+            Search search = new Search.Builder(query)
+                    .addIndex("cmput301w17t10")
+                    .addType("moodevent")
+                    .build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    List<MoodEvent> resultList = result.getSourceAsObjectList(MoodEvent.class);
+                    foundMoods.addAll(resultList);
+                    Log.i("Success", "Successfully pulled mood events with locations");
+                }
+            } catch (Exception e) {
+                Log.i("Fail", "Failed to obtain mood events with locations");
+            }
+            return foundMoods;
+        }
+    }
 }
