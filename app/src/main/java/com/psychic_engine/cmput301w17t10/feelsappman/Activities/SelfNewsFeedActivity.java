@@ -36,7 +36,7 @@ import java.util.List;
 
 public class SelfNewsFeedActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
-    private Spinner spinner;
+    private Spinner menuSpinner;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -61,6 +61,8 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(instance.getSelfParticipant().getLogin());
+
+        initializeSpinner();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -90,7 +92,6 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
             }
         });
 
-        setupspinners();
     }
 
     @Override
@@ -177,50 +178,52 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
             return null;
         }
     }
-    void setupspinners(){
-        spinner = (Spinner) (findViewById(R.id.dropdown));
 
-        List<String>managefollow = new ArrayList<String>();
-        managefollow.add("");
-        Follows[] followses = Follows.values();
-        for (Follows follows : followses) {
-            managefollow.add(follows.toString());
-        }
+    public void initializeSpinner(){
+        //initalize menu items for spinner
+        List<String> menuItems = new ArrayList<String>();
+        menuItems.add("My Feed");
+        menuItems.add("My Profile");
+        menuItems.add("Followers");
+        menuItems.add("Following");
+        menuItems.add("Follower Requests");
 
+        menuSpinner = (Spinner) (findViewById(R.id.spinnerMyProfile));
 
+        //set adapter for spinner
+        ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, menuItems);
+        menuSpinner.setAdapter(adapterSpinner);
+        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,managefollow);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //set default spinner item to current activity
+        int spinnerPosition = adapterSpinner.getPosition("My Profile");
+        menuSpinner.setSelection(spinnerPosition);
 
-        spinner.setAdapter(adapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        //set onclick for spinner
+        menuSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
-                    case 1:
-                        Intent intent = new Intent(SelfNewsFeedActivity.this,FollowersActivity.class);
-                        startActivity(intent);
-                        break;
-                    case 2:
-                        Intent following = new Intent(SelfNewsFeedActivity.this,FollowingActivity.class);
-                        startActivity(following);
-                        break;
-                    case 3:
-                        Intent followrequest = new Intent(SelfNewsFeedActivity.this,FollowRequestActivity.class);
-                        startActivity(followrequest);
-                        break;
-            }
-            }
+                String selectedItem = parent.getItemAtPosition(position).toString();
 
+                if(selectedItem.equals("My Feed")) {
+                    Intent myProfileActivity = new Intent(SelfNewsFeedActivity.this, SelfNewsFeedActivity.class);
+                    startActivity(myProfileActivity);
+                } else if(selectedItem.equals("Followers")) {
+                    Intent followersActivity = new Intent(SelfNewsFeedActivity.this, FollowersActivity.class);
+                    startActivity(followersActivity);
+                } else if(selectedItem.equals("Following")) {
+                    Intent followingActivity = new Intent(SelfNewsFeedActivity.this, FollowingActivity.class);
+                    startActivity(followingActivity);
+                } else if(selectedItem.equals("Follower Requests")) {
+                    Intent followerRequestActivity = new Intent(SelfNewsFeedActivity.this, FollowRequestActivity.class);
+                    startActivity(followerRequestActivity);
+                }
+            }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
-
-
-
     }
 
     /**
@@ -230,7 +233,6 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         FileManager.saveInFile(this);
-        spinner.setSelection(0);
     }
 
     /**

@@ -25,7 +25,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <Spinner
-                android:id="@+id/dropdown"
+                android:id="@+id/spinnerMyProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:overlapAnchor="false">
