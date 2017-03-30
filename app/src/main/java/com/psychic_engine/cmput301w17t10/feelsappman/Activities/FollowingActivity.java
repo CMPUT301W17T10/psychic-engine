@@ -27,7 +27,6 @@ public class FollowingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_following);
 
-
         instance = ParticipantSingleton.getInstance();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFollowing);
