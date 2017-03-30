@@ -1,7 +1,9 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -9,6 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
@@ -22,6 +25,8 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
@@ -31,6 +36,7 @@ import java.util.ArrayList;
  */
 
 public class FilterMapActivity extends Activity {
+    //Initializing Arraylist of OverlayItems
     private ArrayList<OverlayItem> sadEvents;
     private ArrayList<OverlayItem> happyEvents;
     private ArrayList<OverlayItem> shameEvents;
@@ -57,6 +63,8 @@ public class FilterMapActivity extends Activity {
 
         ArrayList<MoodEvent> moodList = (ArrayList<MoodEvent>) getIntent().getExtras().getSerializable("moodEventList");
 
+        //Initializing arrays of OverlayItems
+        //each item in the array will be a moodEvent with the corresponding moodState
         sadEvents = new ArrayList<OverlayItem>();
         happyEvents = new ArrayList<OverlayItem>();
         shameEvents = new ArrayList<OverlayItem>();
@@ -66,14 +74,78 @@ public class FilterMapActivity extends Activity {
         disgustEvents = new ArrayList<OverlayItem>();
         confusedEvents = new ArrayList<OverlayItem>();
 
+        //For each item in the filteredMoodList
         for (MoodEvent mood : moodList) {
-            String moodType = mood.getMood().getMood().toString();
+            //if has location
+            if (mood.getLocation() != null) {
+                //get moodstate
+                String moodType = mood.getMood().getMood().toString();
 
+                if (moodType == "Sad") {
+                    //Taken from http://stackoverflow.com/questions/10533071/osmdroid-add-custom-icons-to-itemizedoverlay
+                    //March 29. 2017
+                    //Initialize the item with the moodType, trigger and set a new Geopoint for it
+                    OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
+                    //gets custom icon
+                    Drawable sadMarker = this.getResources().getDrawable(R.drawable.sadmarker);
+                    //set the icon of the overlayItem as the custom icon
+                    item.setMarker(sadMarker);
+                    //puts it in the arrayList of OverlayItems for this mood
+                    sadEvents.add(item);
+                }
+                if (moodType == "Happy") {
 
+                    OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
+                    Drawable happyMarker = this.getResources().getDrawable(R.drawable.happymarker);
+                    item.setMarker(happyMarker);
+                    happyEvents.add(item);
+                }
+                if (moodType == "Shame") {
+
+                    OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
+                    Drawable shameMarker = this.getResources().getDrawable(R.drawable.shamemarker);
+                    item.setMarker(shameMarker);
+                    shameEvents.add(item);
+                }
+                if (moodType == "Fear") {
+
+                    OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
+                    Drawable fearMarker = this.getResources().getDrawable(R.drawable.fearmarker);
+                    item.setMarker(fearMarker);
+                    fearEvents.add(item);
+                }
+                if (moodType == "Anger") {
+
+                    OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
+                    Drawable angerMarker = this.getResources().getDrawable(R.drawable.angermarker);
+                    item.setMarker(angerMarker);
+                    angerEvents.add(item);
+                }
+                if (moodType == "Surprised") {
+
+                    OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
+                    Drawable surprisedMarker = this.getResources().getDrawable(R.drawable.surprisedmarker);
+                    item.setMarker(surprisedMarker);
+                    surprisedEvents.add(item);
+                }
+                if (moodType == "Disgust") {
+
+                    OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
+                    Drawable disgustMarker = this.getResources().getDrawable(R.drawable.disgustmarker);
+                    item.setMarker(disgustMarker);
+                    disgustEvents.add(item);
+                }
+                if (moodType == "Confused") {
+
+                    OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
+                    Drawable confusedMarker = this.getResources().getDrawable(R.drawable.confusedmarker);
+                    item.setMarker(confusedMarker);
+                    confusedEvents.add(item);
+                }
+            }
         }
-
+        //find current location using GPS provider
         Location coords = new Location("GPS");
-
         coords = getCurrentLocation(coords);
 
         //This while loop is to keep trying to get a location from the GPS provider
@@ -85,15 +157,66 @@ public class FilterMapActivity extends Activity {
         double lat = coords.getLatitude();
         double lon = coords.getLongitude();
 
-
+        //Create new geopoint from current location
         GeoPoint center = new GeoPoint(lat, lon);
 
+        //Center mapview on current location
         mController.setCenter(center);
+        mController.setZoom(17);
+
+        //Taken from http://stackoverflow.com/questions/41090639/add-marker-to-osmdroid-5-5-map
+        //March 29, 2017
+
+        //Creates our custom GestureListener so that when we tap on a marker, it displays
+        //the trigger and the mood
+        ItemizedIconOverlay.OnItemGestureListener customGlistener = new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+            @Override
+            public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
+                //do something
+                AlertDialog.Builder dialog = new AlertDialog.Builder(FilterMapActivity.this);
+                dialog.setTitle(item.getTitle());
+                dialog.setMessage(item.getSnippet());
+                dialog.show();
+                return true;
+            }
+            @Override
+            public boolean onItemLongPress(final int index, final OverlayItem item) {
+                return false;
+            }
+        };
+
+        //Each mood is represented by an ItemizedOverlayWithFocus
+        //this is because each overlay can only have one icon
+        ItemizedOverlayWithFocus<OverlayItem> sadOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this, sadEvents,  //  <--------- added Context this as first parameter
+                customGlistener);
+        ItemizedOverlayWithFocus<OverlayItem> happyOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this, happyEvents,
+                customGlistener);
+        ItemizedOverlayWithFocus<OverlayItem> shameOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this, shameEvents,
+                customGlistener);
+        ItemizedOverlayWithFocus<OverlayItem> fearOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this, fearEvents,
+                customGlistener);
+        ItemizedOverlayWithFocus<OverlayItem> angerOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this, angerEvents,
+                customGlistener);
+        ItemizedOverlayWithFocus<OverlayItem> surprisedOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this, surprisedEvents,
+                customGlistener);
+        ItemizedOverlayWithFocus<OverlayItem> disgustOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this, disgustEvents,
+                customGlistener);
+        ItemizedOverlayWithFocus<OverlayItem> confusedOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this, confusedEvents,
+                customGlistener);
 
 
-        mController.setZoom(15);
+        //add the overlays for each mood to the mapView
+        map.getOverlays().add(sadOverlay);
+        map.getOverlays().add(happyOverlay);
+        map.getOverlays().add(shameOverlay);
+        map.getOverlays().add(fearOverlay);
+        map.getOverlays().add(angerOverlay);
+        map.getOverlays().add(surprisedOverlay);
+        map.getOverlays().add(disgustOverlay);
+        map.getOverlays().add(confusedOverlay);
+        //so that the markers will update
+        map.invalidate();
     }
-
 
     public Location getCurrentLocation(Location coords) {
         //Taken from http://stackoverflow.com/questions/17584374/check-if-gps-and-or-mobile-network-location-is-enabled
@@ -141,5 +264,16 @@ public class FilterMapActivity extends Activity {
 
         }
         return coords;
+    }
+
+    //Taken from https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library
+    //March 29, 2017
+    public void onResume(){
+        super.onResume();
+        //this will refresh the osmdroid configuration on resuming.
+        //if you make changes to the configuration, use
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //Configuration.getInstance().save(this, prefs);
+        Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
     }
 }
