@@ -3,6 +3,8 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Models;
 import android.graphics.Bitmap;
 import android.os.Build;
 
+import java.io.Serializable;
+
 /**
  * Created by hnkhan on 2/27/17. Edited by pslin 03/10/17
  * Commented by adong on 3/29/2017
@@ -13,12 +15,12 @@ import android.os.Build;
  * like to add. The photograph will need to restricted to the uncompressed size of 65536 bytes.
  * This enables the photograph to be stored in the elastic server and retrieved when needed.
  */
-public class Photograph {
+public class Photograph implements Serializable {
 
     //TODO: getByteSizeCount not accurate. Decoded memory vs compressed size
     private static Integer BYTE;
     private Boolean limitSize;
-    private Bitmap map;
+    private transient Bitmap map;
     public Photograph(Bitmap image) {
         this.map = image;
         //getAllocationByteCount exclusive to API>18
