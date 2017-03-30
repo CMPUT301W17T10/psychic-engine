@@ -69,9 +69,7 @@ public class LoginActivity extends AppCompatActivity {
         loadInstance();
         instance = ParticipantSingleton.getInstance();
         ParticipantController.updateSingletonList();
-        for (Participant stored : instance.getParticipantList()) {
-            Log.i("Stored", "Stored login: " + stored.getLogin());
-        }
+
         /**
          * A login button action is used to pull the name from the EditText given in the activity.
          * The program will then check that the username has been taken already (ie. stored) as well
@@ -81,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
          * Note that the text used to find a participant within the server is case insensitive.
          * @see SelfNewsFeedActivity
          */
+        // TODO: Update the mood list of the person logging in
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String participantName = participantEditText.getText().toString();
@@ -88,7 +87,16 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         Participant self = instance.searchParticipant(participantName);
                         instance.setSelfParticipant(self);
+                        Log.i("Logging", "Logging in as "+instance.getSelfParticipant().getLogin());
 
+                        // test - print out all users that were in the singleton list
+                        for (Participant stored : instance.getParticipantList()) {
+                            Log.i("Stored", "Stored login: " + stored.getLogin());
+                        }
+                        // test - print out all moods connected to the participant... should be in sync
+                        for (MoodEvent storedMoods : instance.getSelfParticipant().getMoodList()) {
+                            Log.i("Stored", "Stored mood ID "+ storedMoods.getMood().getMood());
+                        }
                         Intent intent = new Intent(LoginActivity.this, MyFeedActivity.class);
                         startActivity(intent);
                     } catch (Exception e) {

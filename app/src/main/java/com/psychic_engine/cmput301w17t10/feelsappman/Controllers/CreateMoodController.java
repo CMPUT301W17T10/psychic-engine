@@ -106,6 +106,7 @@ public class CreateMoodController {
         participant.setMostRecentMoodEvent(moodEvent);
 
         // update the participant in the elastic server to show the new/recent mood event
+        Log.i("Update", "Updating participant in CreateMoodController");
         ElasticParticipantController.UpdateParticipantTask updateParticipantTask = new ElasticParticipantController.UpdateParticipantTask();
         updateParticipantTask.execute(participant);
 
