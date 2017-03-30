@@ -51,8 +51,7 @@ public class FilterMapActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         Context ctx = getApplicationContext();
-        //important! set your user agent to prevent getting banned from the osm servers
-        //Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        
         setContentView(R.layout.activity_filter_map);
 
         MapView map = (MapView) findViewById(R.id.mapview);
