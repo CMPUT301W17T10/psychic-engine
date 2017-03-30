@@ -122,9 +122,9 @@ public class ElasticMoodController extends ElasticController{
 
             // for every mood needing to be deleted
             for (MoodEvent mood : deleteMoods) {
+                String moodID = mood.getId();
+                Log.i("Delete", "Currently deleting mood " + moodID);
                 try {
-                    // get the id given when they were added to the elastic server
-                    String moodID = mood.getId();
                     client.execute(new Delete.Builder(moodID).index("cmput301w17t10").type("moodevent").build());
                 } catch (Exception e) {
                     Log.i("Error", "Error deleting moods");
@@ -144,7 +144,7 @@ public class ElasticMoodController extends ElasticController{
 
         @Override
         protected Void doInBackground(MoodEvent... updateEvent) {
-
+            Log.i("Update", "Attempt to update mood event");
             // for every mood event that is added
             for (MoodEvent updatingMood : updateEvent) {
                 String updateID = updatingMood.getId();

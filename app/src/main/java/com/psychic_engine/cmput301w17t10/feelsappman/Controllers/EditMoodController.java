@@ -99,6 +99,10 @@ public class EditMoodController {
         moodEvent.setPicture(photo);
         moodEvent.setLocation(location);
 
+        // update the most recent mood event in elastic
+        ElasticMoodController.UpdateMoodTask updateMoodTask = new ElasticMoodController.UpdateMoodTask();
+        updateMoodTask.execute(moodEvent);
+
         // update the most recent mood event
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         participant.setMostRecentMoodEvent(moodEvent);
@@ -108,8 +112,5 @@ public class EditMoodController {
                 .UpdateParticipantTask();
         upt.execute(participant);
 
-        // update the most recent mood event in elastic
-        ElasticMoodController.UpdateMoodTask updateMoodTask = new ElasticMoodController.UpdateMoodTask();
-        updateMoodTask.execute(moodEvent);
     }
 }

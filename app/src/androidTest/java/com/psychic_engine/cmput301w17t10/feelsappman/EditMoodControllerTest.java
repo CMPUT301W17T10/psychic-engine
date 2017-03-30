@@ -3,6 +3,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.EditMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
@@ -22,9 +23,10 @@ import java.util.ArrayList;
  * Usually, the moodEvent that will be edited.
  * @see EditMoodController
  */
+// TODO: Arrange asserts so that it is properly tested
 public class EditMoodControllerTest extends TestCase {
 
-    public void testEditMoodController () {
+    public void test1_EditMoodController () {
         //Initialize parameters used in the update method.
         Participant selfParticipant = new Participant("alex");
         String moodString = "Sad";
@@ -44,9 +46,15 @@ public class EditMoodControllerTest extends TestCase {
                 .getSelfParticipant().getMoodList();
         int position = moodEventsRecent.size() - 1;
 
+
         // test if the update was unsuccessful
-        //assertTrue("update unsuccessful", EditMoodController.updateMoodEventList
-          //         (position, moodString, socialSettingString, trigger, null, null));
+        /*
+        try {
+            EditMoodController.updateMoodEventList
+                       (moodEventsRecent.get(position), moodString, socialSettingString, trigger, null, null);
+        } catch (TriggerTooLongException e) {
+            e.printStackTrace();
+        }*/
         assertEquals("empty, update fail", instance.getSelfParticipant().getMoodList()
         .get(0).getMood().getMood(),
         MoodState.SAD);
