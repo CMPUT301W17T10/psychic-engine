@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                         Participant self = instance.searchParticipant(participantName);
                         instance.setSelfParticipant(self);
 
-                        Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, MyFeedActivity.class);
                         startActivity(intent);
                     } catch (Exception e) {
                         Log.i("Error", "Error logging in");

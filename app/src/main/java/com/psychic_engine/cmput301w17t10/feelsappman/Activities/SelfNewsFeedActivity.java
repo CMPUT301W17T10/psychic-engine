@@ -207,7 +207,7 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
                 String selectedItem = parent.getItemAtPosition(position).toString();
 
                 if(selectedItem.equals("My Feed")) {
-                    Intent myProfileActivity = new Intent(SelfNewsFeedActivity.this, SelfNewsFeedActivity.class);
+                    Intent myProfileActivity = new Intent(SelfNewsFeedActivity.this, MyFeedActivity.class);
                     startActivity(myProfileActivity);
                 } else if(selectedItem.equals("Followers")) {
                     Intent followersActivity = new Intent(SelfNewsFeedActivity.this, FollowersActivity.class);

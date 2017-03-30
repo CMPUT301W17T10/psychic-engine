@@ -10,31 +10,29 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.psychic_engine.cmput301w17t10.feelsappman.Enums.Followers;
-import com.psychic_engine.cmput301w17t10.feelsappman.Enums.Follows;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FollowersActivity extends AppCompatActivity {
+public class MyFeedActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
     private Spinner menuSpinner;
-    private ListView followerList;
+    private ListView myFeedList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_followers);
+        setContentView(R.layout.activity_my_feed);
 
         instance = ParticipantSingleton.getInstance();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFollowers);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarMyFeed);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Followers");
+        getSupportActionBar().setTitle("My Feed");
 
-        followerList = (ListView) findViewById(R.id.listViewFollowers);
+        myFeedList = (ListView) findViewById(R.id.listViewMyFeed);
 
         initializeSpinner();
     }
@@ -48,7 +46,7 @@ public class FollowersActivity extends AppCompatActivity {
         menuItems.add("Following");
         menuItems.add("Follower Requests");
 
-        menuSpinner = (Spinner) (findViewById(R.id.spinnerFollowers));
+        menuSpinner = (Spinner) (findViewById(R.id.spinnerMyFeed));
 
         //set adapter for spinner
         ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(
@@ -57,7 +55,7 @@ public class FollowersActivity extends AppCompatActivity {
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         //set default spinner item to current activity
-        int spinnerPosition = adapterSpinner.getPosition("Followers");
+        int spinnerPosition = adapterSpinner.getPosition("My Feed");
         menuSpinner.setSelection(spinnerPosition);
 
         //set onclick for spinner
@@ -66,17 +64,17 @@ public class FollowersActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
 
-                if(selectedItem.equals("My Feed")) {
-                    Intent myFeedActivity = new Intent(FollowersActivity.this, MyFeedActivity.class);
-                    startActivity(myFeedActivity);
-                } else if(selectedItem.equals("My Profile")) {
-                    Intent myProfileActivity = new Intent(FollowersActivity.this, SelfNewsFeedActivity.class);
+                if(selectedItem.equals("My Profile")) {
+                    Intent myProfileActivity = new Intent(MyFeedActivity.this, SelfNewsFeedActivity.class);
                     startActivity(myProfileActivity);
+                } else if(selectedItem.equals("Followers")) {
+                    Intent followersActivity = new Intent(MyFeedActivity.this, FollowersActivity.class);
+                    startActivity(followersActivity);
                 } else if(selectedItem.equals("Following")) {
-                    Intent followingActivity = new Intent(FollowersActivity.this, FollowingActivity.class);
+                    Intent followingActivity = new Intent(MyFeedActivity.this, FollowingActivity.class);
                     startActivity(followingActivity);
                 } else if(selectedItem.equals("Follower Requests")) {
-                    Intent followerRequestActivity = new Intent(FollowersActivity.this, FollowRequestActivity.class);
+                    Intent followerRequestActivity = new Intent(MyFeedActivity.this, FollowRequestActivity.class);
                     startActivity(followerRequestActivity);
                 }
             }
@@ -86,6 +84,3 @@ public class FollowersActivity extends AppCompatActivity {
         });
     }
 }
-
-
-
