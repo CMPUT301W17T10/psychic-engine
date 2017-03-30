@@ -20,75 +20,70 @@ import java.util.List;
 
 public class FollowersActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
-    private ListView followerlist;
-    private Spinner spinner1;
+    private Spinner menuSpinner;
+    private ListView followerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_followers);
 
-
         instance = ParticipantSingleton.getInstance();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFollowers);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Followers");
-        followerlist = (ListView) findViewById(R.id.listView);
 
+        followerList = (ListView) findViewById(R.id.listViewFollowers);
 
-
-
-
-       setupspinners();
-
-
+        initializeSpinner();
     }
 
-    void setupspinners(){
-        spinner1 = (Spinner) (findViewById(R.id.dropdown1));
+    public void initializeSpinner(){
+        //initalize menu items for spinner
+        List<String> menuItems = new ArrayList<String>();
+        menuItems.add("My Feed");
+        menuItems.add("My Profile");
+        menuItems.add("Followers");
+        menuItems.add("Following");
+        menuItems.add("Follower Requests");
 
-        List<String> followers = new ArrayList<String>();
-        followers.add("");
-        followers.add(instance.getSelfParticipant().getLogin());
-        Followers[] followerses = Followers.values();
-        for (Followers followers1 : followerses) {
-            followers.add(followers1.toString());
-        }
+        menuSpinner = (Spinner) (findViewById(R.id.spinnerFollowers));
 
+        //set adapter for spinner
+        ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, menuItems);
+        menuSpinner.setAdapter(adapterSpinner);
+        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        //set default spinner item to current activity
+        int spinnerPosition = adapterSpinner.getPosition("Followers");
+        menuSpinner.setSelection(spinnerPosition);
 
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,followers);
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner1.setAdapter(adapter1);
-
-        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        //set onclick for spinner
+        menuSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 1:
-                        Intent intent = new Intent(FollowersActivity.this, SelfNewsFeedActivity.class);
-                        startActivity(intent);
-                        break;
-                    case 2:
-                        Intent following = new Intent(FollowersActivity.this, FollowingActivity.class);
-                        startActivity(following);
-                        break;
-                    case 3:
-                        Intent followrequest = new Intent(FollowersActivity.this, FollowRequestActivity.class);
-                        startActivity(followrequest);
-                        break;
+                String selectedItem = parent.getItemAtPosition(position).toString();
+
+                if(selectedItem.equals("My Feed")) {
+                    Intent myFeedActivity = new Intent(FollowersActivity.this, SelfNewsFeedActivity.class);
+                    startActivity(myFeedActivity);
+                } else if(selectedItem.equals("My Profile")) {
+                    Intent myProfileActivity = new Intent(FollowersActivity.this, SelfNewsFeedActivity.class);
+                    startActivity(myProfileActivity);
+                } else if(selectedItem.equals("Following")) {
+                    Intent followingActivity = new Intent(FollowersActivity.this, FollowingActivity.class);
+                    startActivity(followingActivity);
+                } else if(selectedItem.equals("Follower Requests")) {
+                    Intent followerRequestActivity = new Intent(FollowersActivity.this, FollowRequestActivity.class);
+                    startActivity(followerRequestActivity);
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
-
-
     }
 }
 

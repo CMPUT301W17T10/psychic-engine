@@ -1,28 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar3"
+        android:id="@+id/toolbarFollowing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
+        android:theme="?attr/actionBarTheme"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/listViewFollowing" >
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="14dp"
-        android:layout_alignBottom="@+id/toolbar3"
-        android:layout_alignParentStart="true" />
+        <Spinner
+            android:id="@+id/spinnerFollowing"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="87dp"
+            android:layout_above="@+id/listViewFollowing"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="20dp" />
+
+    </android.support.v7.widget.Toolbar>
 
     <ListView
+        android:id="@+id/listViewFollowing"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar3"
+        android:layout_height="500dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
+
 </RelativeLayout>
