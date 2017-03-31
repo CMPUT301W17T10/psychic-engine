@@ -1,7 +1,9 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.RecentMapActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
@@ -219,17 +221,27 @@ public class ElasticMoodController extends ElasticController{
     public static class FindMoodEventsTask extends AsyncTask<Void, Void, ArrayList<MoodEvent>> {
 
         private RecentMapActivity activity;
+        private ProgressDialog pdia;
         ArrayList<MoodEvent> foundMoods = new ArrayList<>();
 
         public FindMoodEventsTask(RecentMapActivity activity) {
             this.activity = activity;
         }
 
+        //Taken from http://stackoverflow.com/questions/3893626/how-to-use-asynctask-to-show-a-progressdialog-while-doing-background-work-in-and
+        //March 30, 2017
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            pdia = new ProgressDialog(activity);
+            pdia.setMessage("Loading...");
+            pdia.show();
+        }
+
         @Override
         protected ArrayList<MoodEvent> doInBackground(Void... params) {
             verifySettings();
-
-
+            Log.i("DOINBACKGROUND", "DO IN BACKGROUND IS GETTING EXECUTED");
             // construct query
             String query = "{\"size\": 100 , \"query\":{\"sort\" : { \"date\" : { \"order\": \"desc\"}}}}";
             Search search = new Search.Builder(query)
@@ -256,6 +268,7 @@ public class ElasticMoodController extends ElasticController{
         protected void onPostExecute(ArrayList<MoodEvent> result) {
             super.onPostExecute(result);
             activity.setMoodList(result);
+            pdia.dismiss();
         }
 
     }

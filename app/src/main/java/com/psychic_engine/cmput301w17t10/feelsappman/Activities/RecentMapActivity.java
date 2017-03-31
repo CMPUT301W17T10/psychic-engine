@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -83,7 +84,14 @@ public class RecentMapActivity extends Activity {
 //            e.printStackTrace();
 //        }
 
-        new ElasticMoodController.FindMoodEventsTask(this).execute();
+        try {
+            new ElasticMoodController.FindMoodEventsTask(this).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        //map.invalidate();
 
         //Initializing arrays of OverlayItems
         //each item in the array will be a moodEvent with the corresponding moodState
@@ -97,6 +105,7 @@ public class RecentMapActivity extends Activity {
         confusedEvents = new ArrayList<OverlayItem>();
 
         //For each item in the filteredMoodList
+        Log.i("myTag", "Before Moodlist");
         for (MoodEvent mood : moodList) {
             Log.i("myTag", "Getting Moodlist");
             //if has location
