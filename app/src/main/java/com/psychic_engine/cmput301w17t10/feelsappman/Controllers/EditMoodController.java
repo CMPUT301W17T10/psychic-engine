@@ -1,5 +1,7 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 
+import android.util.Log;
+
 import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
@@ -99,17 +101,20 @@ public class EditMoodController {
         moodEvent.setPicture(photo);
         moodEvent.setLocation(location);
 
+        // update the most recent mood event in elastic
+        Log.i("Update", "Updating mood in the EditMoodController");
+        ElasticMoodController.UpdateMoodTask updateMoodTask = new ElasticMoodController.UpdateMoodTask();
+        updateMoodTask.execute(moodEvent);
+
         // update the most recent mood event
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         participant.setMostRecentMoodEvent(moodEvent);
 
         // update the participant in the elastic server
+        Log.i("Update", "Updating participant in the EditMoodController");
         ElasticParticipantController.UpdateParticipantTask upt = new ElasticParticipantController
                 .UpdateParticipantTask();
         upt.execute(participant);
 
-        // update the most recent mood event in elastic
-        ElasticMoodController.UpdateMoodTask updateMoodTask = new ElasticMoodController.UpdateMoodTask();
-        updateMoodTask.execute(moodEvent);
     }
 }

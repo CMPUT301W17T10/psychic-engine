@@ -106,38 +106,38 @@ public class ElasticParticipantController extends ElasticController {
 
         @Override
         protected Void doInBackground(Participant... updated) {
+            Log.i("Update", "Attempting to update participants");
             verifySettings();
-            Participant updatingParticipant = updated[0];
-
-            // need to delete the participant first
-            String updateID = updatingParticipant.getId();
-            try {
-                client.execute(new Delete.Builder(updateID).index("cmput301w17t10").type("participant").build());
-                Log.i("Success", "Deleted the participant");
-            } catch (Exception e) {
-                Log.i("Error", "Unable to add follower into the server");
-            }
-
-            // then add the updated participant with the newer info (keep id)
-            // create new index in the elastic with the same id before that was deleted
-            Index index = new Index.Builder(updatingParticipant)
-                    .index("cmput301w17t10")
-                    .type("participant")
-                    .id(updateID)
-                    .build();
-            try {
-                //execute the index command
-                DocumentResult result = client.execute(index);
-                if (result.isSucceeded()) {
-                    updatingParticipant.setId(result.getId());
-                    Log.i("Success", "Successful addition again");
+            for (Participant updatingParticipant : updated) {
+                // need to delete the participant first
+                String updateID = updatingParticipant.getId();
+                try {
+                    client.execute(new Delete.Builder(updateID).index("cmput301w17t10").type("participant").build());
+                    Log.i("Success", "Deleted the participant");
+                } catch (Exception e) {
+                    Log.i("Error", "Unable to add follower into the server");
                 }
-            } catch (Exception e) {
-                Log.i("Error", "Error updating in elastic");
-            }
 
+                // then add the updated participant with the newer info (keep id)
+                // create new index in the elastic with the same id before that was deleted
+                Index index = new Index.Builder(updatingParticipant)
+                        .index("cmput301w17t10")
+                        .type("participant")
+                        .id(updateID)
+                        .build();
+                try {
+                    //execute the index command
+                    DocumentResult result = client.execute(index);
+                    if (result.isSucceeded()) {
+                        updatingParticipant.setId(result.getId());
+                        Log.i("Success", "Successful addition again");
+                    }
+                } catch (Exception e) {
+                    Log.i("Error", "Error updating in elastic");
+                }
+            }
             return null;
-        }
+            }
     }
 
     /**

@@ -56,7 +56,7 @@ public class ElasticMoodController extends ElasticController{
 
             // would not need to filter by reason if the trigger had no reason in the edit text
             // would change the method if there was no filter by reason intended.
-            query = "{\"query\": {\"match\":{\"moodOwner\":\"" +
+            query = "{\"size\": 100, \"query\": {\"match\":{\"moodOwner\":\"" +
                     "" + self + "\"}},\"filter\":{\"term\":{\"trigger\":\""+reason+"\"}}}";
 
             Log.i ("QUERY", query);
@@ -94,6 +94,7 @@ public class ElasticMoodController extends ElasticController{
             verifySettings();
 
             // handling multiple mood events that need to be added
+            Log.i("AddMoodEventTask", "Attempt to add mood event into es");
             for (MoodEvent moodEvent : moodEvents) {
                 Index index = new Index.Builder(moodEvent).index("cmput301w17t10")
                         .type("moodevent").build();
@@ -124,9 +125,9 @@ public class ElasticMoodController extends ElasticController{
 
             // for every mood needing to be deleted
             for (MoodEvent mood : deleteMoods) {
+                String moodID = mood.getId();
+                Log.i("Delete", "Currently deleting mood " + moodID);
                 try {
-                    // get the id given when they were added to the elastic server
-                    String moodID = mood.getId();
                     client.execute(new Delete.Builder(moodID).index("cmput301w17t10").type("moodevent").build());
                 } catch (Exception e) {
                     Log.i("Error", "Error deleting moods");
@@ -146,7 +147,7 @@ public class ElasticMoodController extends ElasticController{
 
         @Override
         protected Void doInBackground(MoodEvent... updateEvent) {
-
+            Log.i("UpdateMoodTask", "Attempt to update mood event");
             // for every mood event that is added
             for (MoodEvent updatingMood : updateEvent) {
                 String updateID = updatingMood.getId();
@@ -188,7 +189,7 @@ public class ElasticMoodController extends ElasticController{
         protected ArrayList<MoodEvent> doInBackground(Void... params) {
             verifySettings();
             ArrayList<MoodEvent> foundMoods = new ArrayList<>();
-            String query = "{\"size\": 10000,\"query\" : {\"filtered\" : { \"filter\" : " +
+            String query = "{\"size\": 100,\"query\" : {\"filtered\" : { \"filter\" : " +
                     "{ \"bool\" : {\"must_not\""+
                     ": [ {\"missing\": {\"field\" : \"location\"}}]}}}}}";
 
@@ -230,7 +231,7 @@ public class ElasticMoodController extends ElasticController{
 
 
             // construct query
-            String query = "{\"size\": 10000 , \"query\":{\"sort\" : { \"date\" : { \"order\": \"desc\"}}}}";
+            String query = "{\"size\": 100 , \"query\":{\"sort\" : { \"date\" : { \"order\": \"desc\"}}}}";
             Search search = new Search.Builder(query)
                     .addIndex("cmput301w17t10")
                     .addType("moodevent")

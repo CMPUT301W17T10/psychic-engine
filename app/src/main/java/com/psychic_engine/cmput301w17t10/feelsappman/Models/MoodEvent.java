@@ -136,6 +136,9 @@ public class MoodEvent extends ModelFrame implements Serializable{
      * @throws TriggerTooLongException
      */
     public void setTrigger(String trigger) throws TriggerTooLongException {
+        if (trigger.length() > 20 || trigger.trim().split("\\s+").length > 3) {
+            throw new TriggerTooLongException();
+        }
         this.trigger = trigger;
     }
 

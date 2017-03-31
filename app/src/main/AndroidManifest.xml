@@ -47,7 +47,7 @@
             android:name=".Activities.ViewMoodEventActivity"
             android:label="ViewMoodEventActivity">
             <intent-filter>
-                <action android:name="com.psychic_engine.cmput301w17t10.feelsappman.ViewMoodEventActivity" />
+                <action android:name="com.psychic_engine.cmput301w17t10.feelsappman.ViewMoodEventActivityTest" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

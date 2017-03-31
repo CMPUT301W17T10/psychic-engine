@@ -56,28 +56,31 @@ public class MoodTest extends TestCase {
      */
     public void testGetIcon() {
         Mood moodHappy = new Mood(MoodState.HAPPY);
-        //assertEquals(moodHappy.getIcon(), "happyicon.png");
+        assertEquals(moodHappy.getIconName(), "happy");
 
         Mood moodSad = new Mood(MoodState.SAD);
-        //assertEquals(moodSad.getIcon(), "sadicon.png");
+        assertEquals(moodSad.getIconName(), "sad");
 
         Mood moodShame = new Mood(MoodState.SHAME);
-        //assertEquals(moodShame.getIcon(), "shameicon.png");
+        assertEquals(moodShame.getIconName(), "shame");
 
         Mood moodSurprised = new Mood(MoodState.SURPRISED);
-        //assertEquals(moodSurprised.getIcon(), "surprisedicon.png");
+        assertEquals(moodSurprised.getIconName(), "surprised");
 
         Mood moodDisgust = new Mood(MoodState.DISGUST);
-        //sassertEquals(moodDisgust.getIcon(), "disgusticon.png");
+        assertEquals(moodDisgust.getIconName(), "disgust");
 
         Mood moodConfused = new Mood(MoodState.CONFUSED);
-        //assertEquals(moodConfused.getIcon(), "confusedicon.png");
+        assertEquals(moodConfused.getIconName(), "confused");
 
         Mood moodFear = new Mood(MoodState.FEAR);
-        //assertEquals(moodFear.getIcon(), "fearicon.png");
+        assertEquals(moodFear.getIconName(), "fear");
 
         Mood moodAnger = new Mood(MoodState.ANGER);
-        //assertEquals(moodAnger.getIcon(), "angericon.png");
+        assertEquals(moodAnger.getIconName(), "anger");
+
+        Mood moodDefault = new Mood(null);
+        assertEquals("", moodDefault.getIconName());
     }
 
     /**
@@ -114,7 +117,6 @@ public class MoodTest extends TestCase {
      * Test the setter method to make sure that the mood that the participant wants to edit to is
      * correct.
      */
-
     public void testSetMood() {
         Mood mood = new Mood(MoodState.HAPPY);
         assertEquals(mood.getMood(), MoodState.HAPPY);
