@@ -10,11 +10,11 @@ import com.robotium.solo.Solo;
  * Created by adong on 2017-03-10.
  */
 
-public class SelfNewsFeedActivityTest extends ActivityInstrumentationTestCase2 {
+public class MyProfileActivityTest extends ActivityInstrumentationTestCase2 {
     private Solo solo;
     ParticipantSingleton instance;
 
-    public SelfNewsFeedActivityTest(Class activityClass) {
+    public MyProfileActivityTest(Class activityClass) {
         super(activityClass);
     }
 

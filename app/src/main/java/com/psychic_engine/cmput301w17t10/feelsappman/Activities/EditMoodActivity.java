@@ -249,7 +249,7 @@ public class EditMoodActivity extends AppCompatActivity{
                     Toast.LENGTH_LONG).show();
         }
 
-        Intent intent = new Intent(EditMoodActivity.this, SelfNewsFeedActivity.class);
+        Intent intent = new Intent(EditMoodActivity.this, MyProfileActivity.class);
         startActivity(intent);
     }
 

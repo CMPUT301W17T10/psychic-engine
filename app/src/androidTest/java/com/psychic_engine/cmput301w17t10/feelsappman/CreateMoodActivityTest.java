@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.CreateMoodActivity;
-import com.psychic_engine.cmput301w17t10.feelsappman.Activities.SelfNewsFeedActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.MyProfileActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
@@ -140,9 +140,9 @@ public class CreateMoodActivityTest extends ActivityInstrumentationTestCase2<Cre
 
     /**
      * Test the create button to ensure that when you click on the button, you will be sent to
-     * the SelfNewsFeedActivity upon completion. If it does not create the mood properly, then either
-     * the app will crash or you will not be sent to the SelfNewsFeedActivity.
-     * @see SelfNewsFeedActivity
+     * the MyProfileActivity upon completion. If it does not create the mood properly, then either
+     * the app will crash or you will not be sent to the MyProfileActivity.
+     * @see MyProfileActivity
      */
     public void testCreateButton() {
         solo.assertCurrentActivity("Wrong Activity", CreateMoodActivity.class);
@@ -155,7 +155,7 @@ public class CreateMoodActivityTest extends ActivityInstrumentationTestCase2<Cre
         ParticipantSingleton.getInstance().setSelfParticipant(self);
         // Press create button
         solo.clickOnText("Create");
-        solo.assertCurrentActivity("Wrong Activity", SelfNewsFeedActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", MyProfileActivity.class);
     }
 
     // close activity

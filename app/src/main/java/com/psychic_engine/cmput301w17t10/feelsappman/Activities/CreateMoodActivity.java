@@ -29,13 +29,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.CreateMoodController;
-import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodLocation;
-import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
-import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodLocation;
-import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
@@ -204,7 +200,7 @@ public class CreateMoodActivity extends AppCompatActivity {
                             "Trigger has to be 3 words.",
                             Toast.LENGTH_LONG).show();
             } else {
-                Intent intent = new Intent(CreateMoodActivity.this, SelfNewsFeedActivity.class);
+                Intent intent = new Intent(CreateMoodActivity.this, MyProfileActivity.class);
                 startActivity(intent);
             }
 

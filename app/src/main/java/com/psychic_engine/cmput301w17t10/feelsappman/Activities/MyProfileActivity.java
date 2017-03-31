@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,14 +17,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
-import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
-import com.psychic_engine.cmput301w17t10.feelsappman.Enums.Follows;
-import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.HistoryTabFragment;
-import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
-import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.RecentTabFragment;
@@ -34,7 +27,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Fragments.SummaryTabFragmen
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelfNewsFeedActivity extends AppCompatActivity {
+public class MyProfileActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
     private Spinner menuSpinner;
     /**
@@ -118,7 +111,7 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
-            Intent intent = new Intent(SelfNewsFeedActivity.this,CreateMoodActivity.class);
+            Intent intent = new Intent(MyProfileActivity.this,CreateMoodActivity.class);
             startActivity(intent);
         }
 
@@ -207,16 +200,16 @@ public class SelfNewsFeedActivity extends AppCompatActivity {
                 String selectedItem = parent.getItemAtPosition(position).toString();
 
                 if(selectedItem.equals("My Feed")) {
-                    Intent myProfileActivity = new Intent(SelfNewsFeedActivity.this, MyFeedActivity.class);
+                    Intent myProfileActivity = new Intent(MyProfileActivity.this, MyFeedActivity.class);
                     startActivity(myProfileActivity);
                 } else if(selectedItem.equals("Followers")) {
-                    Intent followersActivity = new Intent(SelfNewsFeedActivity.this, FollowersActivity.class);
+                    Intent followersActivity = new Intent(MyProfileActivity.this, FollowersActivity.class);
                     startActivity(followersActivity);
                 } else if(selectedItem.equals("Following")) {
-                    Intent followingActivity = new Intent(SelfNewsFeedActivity.this, FollowingActivity.class);
+                    Intent followingActivity = new Intent(MyProfileActivity.this, FollowingActivity.class);
                     startActivity(followingActivity);
                 } else if(selectedItem.equals("Follower Requests")) {
-                    Intent followerRequestActivity = new Intent(SelfNewsFeedActivity.this, FollowRequestActivity.class);
+                    Intent followerRequestActivity = new Intent(MyProfileActivity.this, FollowRequestActivity.class);
                     startActivity(followerRequestActivity);
                 }
             }

@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.CreateMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMasterController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
@@ -31,7 +30,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.R;
  * not been taken will need to be signed up before logging on. Names that have been taken will not
  * be able to sign up (unique name). Upon logging in, the person will be directed to their news feed
  * (ie. profile screen).
- * @see SelfNewsFeedActivity
+ * @see MyProfileActivity
  * @see ParticipantSingleton
  * @see Participant
  */
@@ -77,36 +76,40 @@ public class LoginActivity extends AppCompatActivity {
          * direct the user to their own profile page. If the name does not exist (ie. not stored),
          * then the program will prompt the user that the name does not exist and they should sign up.
          * Note that the text used to find a participant within the server is case insensitive.
-         * @see SelfNewsFeedActivity
+         * @see MyProfileActivity
          */
         // TODO: Update the mood list of the person logging in
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String participantName = participantEditText.getText().toString();
-                if (!ParticipantController.checkUniqueParticipant(participantName)) {
-                    try {
-                        Participant self = instance.searchParticipant(participantName);
-                        instance.setSelfParticipant(self);
-                        Log.i("Logging", "Logging in as "+instance.getSelfParticipant().getLogin());
-
-                        // test - print out all users that were in the singleton list
-                        for (Participant stored : instance.getParticipantList()) {
-                            Log.i("Stored", "Stored login: " + stored.getLogin());
-                        }
-                        // test - print out all moods connected to the participant... should be in sync
-                        for (MoodEvent storedMoods : instance.getSelfParticipant().getMoodList()) {
-                            Log.i("Stored", "Stored mood ID "+ storedMoods.getMood().getMood());
-                        }
-                        Intent intent = new Intent(LoginActivity.this, MyFeedActivity.class);
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        Log.i("Error", "Error logging in");
-                    }
+                if (participantName.matches("")) {
+                    Toast.makeText(LoginActivity.this, "Invalid input", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(LoginActivity.this,
-                            "This participant does not exist, please sign up"
-                            , Toast.LENGTH_SHORT).show();
+                    if (!ParticipantController.checkUniqueParticipant(participantName)) {
+                        try {
+                            Participant self = instance.searchParticipant(participantName);
+                            instance.setSelfParticipant(self);
+
+                            // test - print out all users that were in the singleton list
+                            for (Participant stored : instance.getParticipantList()) {
+                                Log.i("Stored", "Stored login: " + stored.getLogin());
+                            }
+                            // test - print out all moods connected to the participant... should be in sync
+                            for (MoodEvent storedMoods : instance.getSelfParticipant().getMoodList()) {
+                                Log.i("Stored", "Stored mood ID " + storedMoods.getMood().getMood());
+                            }
+                            Intent intent = new Intent(LoginActivity.this, MyFeedActivity.class);
+                            Log.i("Logging", "Logging in as " + instance.getSelfParticipant().getLogin());
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            Log.i("Error", "Error logging in");
+                        }
+                    } else {
+                        Toast.makeText(LoginActivity.this,
+                                "This participant does not exist, please sign up"
+                                , Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }
@@ -123,29 +126,33 @@ public class LoginActivity extends AppCompatActivity {
         signupButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String participantName = participantEditText.getText().toString();
-                if (ParticipantController.checkUniqueParticipant(participantName)) {
-                    Participant newParticipant = new Participant(participantName);
-
-                    // add participant into the server
-                    ElasticParticipantController.AddParticipantTask addParticipantTask = new
-                            ElasticParticipantController.AddParticipantTask();
-                    addParticipantTask.execute(newParticipant);
-
-                    // add participant into the singleton locally
-                    instance.addParticipant(newParticipant);
-                    instance.setSelfParticipant(newParticipant);
-
-                    // confirm creation message
-                    Toast.makeText(LoginActivity.this, participantName
-                            + " has been added!", Toast.LENGTH_SHORT).show();
-
-                    // move user to news feed activity
-                    Intent intent = new Intent(LoginActivity.this, SelfNewsFeedActivity.class);
-                    startActivity(intent);
+                if (participantName.matches("")) {
+                    Toast.makeText(LoginActivity.this, "Invalid input", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(LoginActivity.this, "Unable to sign up as " + participantName
-                    , Toast.LENGTH_SHORT).show();
+                    if (ParticipantController.checkUniqueParticipant(participantName)) {
+                        Participant newParticipant = new Participant(participantName);
+
+                        // add participant into the server
+                        ElasticParticipantController.AddParticipantTask addParticipantTask = new
+                                ElasticParticipantController.AddParticipantTask();
+                        addParticipantTask.execute(newParticipant);
+
+                        // add participant into the singleton locally
+                        instance.addParticipant(newParticipant);
+                        instance.setSelfParticipant(newParticipant);
+
+                        // confirm creation message
+                        Toast.makeText(LoginActivity.this, participantName
+                                + " has been added!", Toast.LENGTH_SHORT).show();
+
+                        // move user to news feed activity
+                        Intent intent = new Intent(LoginActivity.this, MyFeedActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Unable to sign up as " + participantName
+                                , Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

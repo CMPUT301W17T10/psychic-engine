@@ -10,8 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.psychic_engine.cmput301w17t10.feelsappman.Enums.Followers;
-import com.psychic_engine.cmput301w17t10.feelsappman.Enums.Follows;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
@@ -70,7 +68,7 @@ public class FollowersActivity extends AppCompatActivity {
                     Intent myFeedActivity = new Intent(FollowersActivity.this, MyFeedActivity.class);
                     startActivity(myFeedActivity);
                 } else if(selectedItem.equals("My Profile")) {
-                    Intent myProfileActivity = new Intent(FollowersActivity.this, SelfNewsFeedActivity.class);
+                    Intent myProfileActivity = new Intent(FollowersActivity.this, MyProfileActivity.class);
                     startActivity(myProfileActivity);
                 } else if(selectedItem.equals("Following")) {
                     Intent followingActivity = new Intent(FollowersActivity.this, FollowingActivity.class);

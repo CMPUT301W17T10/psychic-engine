@@ -2,12 +2,10 @@ package com.psychic_engine.cmput301w17t10.feelsappman;
 
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import android.widget.EditText;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.LoginActivity;
-import com.psychic_engine.cmput301w17t10.feelsappman.Activities.SelfNewsFeedActivity;
-import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.MyFeedActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.robotium.solo.Solo;
 
@@ -25,18 +23,12 @@ import com.robotium.solo.Solo;
  */
 public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginActivity> {
     private Solo solo;
-    ParticipantSingleton instance;
     public LoginActivityTest() {
         super(LoginActivity.class);
-
-        if (ParticipantSingleton.getInstance().getParticipantList() != null) {
-            ParticipantSingleton.getInstance().getParticipantList().clear();
-        }
     }
 
     public void setUp() throws Exception {
         solo = new Solo(getInstrumentation(), getActivity());
-        instance = ParticipantSingleton.getInstance();
     }
 
     public void testStart() throws Exception {
@@ -44,102 +36,74 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
     }
 
     /**
-     * The first test determines the functionality of simply signing up with a valid, free name.
-     * System will say that the username has been added and thus stored
-     * Input: TestParticipant11 into the EditText and then presses "Sign up"
+     * The first test determines the functionality of the sign up button. Tests to see that the
+     * participant addition into the server is successful, unique participant names, and handling
+     * empty fields. Since the elastic server actually registers these participants, it will only work
+     * when the participants are not already in the server.
      */
-    // Note: Singleton may store its participants that has been there before, so the count may
-    // not be the same as before
-    // TODO: Worry about the storage of the participants until elastic search can be done
-    public void test1_SignupAvailableName() {
+    public void test1_SignUpButton() {
+
+        // setup test
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
         assertNotNull(ParticipantSingleton.getInstance());
         solo.clearEditText((EditText) solo.getView(R.id.nameEditText));
-        solo.sleep(1000);
+
+        // simple sign up without any errors
         solo.enterText((EditText) solo.getView(R.id.nameEditText), "TestParticipant11");
         solo.clickOnText("Sign Up");
         assertTrue(solo.searchText("TestParticipant11 has been added!"));
-    }
+        solo.assertCurrentActivity("Not directed", MyFeedActivity.class);
 
-    /**
-     * The second test determines the functionality of signing up another participant with its
-     * own valid and free name.
-     * Input: TestParticipant12 into the EditText and then presses "Sign Up"
-     */
-    public void test2_SignupAnotherName() {
+        // test multiple additions
+        solo.goBackToActivity("LoginActivity");
         solo.clearEditText((EditText) solo.getView(R.id.nameEditText));
         solo.enterText((EditText) solo.getView(R.id.nameEditText), "TestParticipant12");
-        // Test if activity added a duplicate username or not (unique name) US 03.01.01
+        solo.sleep(1000);
         solo.clickOnText("Sign Up");
         assertTrue(solo.searchText("TestParticipant12 has been added"));
-    }
+        solo.assertCurrentActivity("Not directed", MyFeedActivity.class);
 
-    /**
-     * The third test determines the functionality of attempting to add a participant into the
-     * system when this participant has the same name as another participant in the system.
-     * Input: TestParticipant12 into the EditText and then pressing "Sign Up"
-     * System should block the request and prompt the app user that the name has already been
-     * taken
-     */
-    public void test3_SignupNameTaken() {
-        solo.clearEditText((EditText) solo.getView(R.id.nameEditText));
-        solo.enterText((EditText) solo.getView(R.id.nameEditText), "TestParticipant12");
-        // Test if activity added a duplicate username or not (unique name) US 03.01.01
+        // test unique name blocking
+        solo.goBackToActivity("LoginActivity");
+        solo.sleep(1000);
         solo.clickOnText("Sign Up");
-        assertTrue(solo.searchText("The username is already taken"));
-    }
+        assertTrue(solo.searchText("Unable to sign up as TestParticipant12"));
 
-    /**
-     * The fourth test determines the functionality of attempting to signup with an invalid name.
-     * The invalid name is subjective for the time being (special characters/symbols etc.)
-     * Input: An empty field in the EditText and attempting to sign up.
-     * System should block the request and prompt the app user that it is invalid input and to
-     * try again.
-     */
-    public void test4_SignupNameInvalid() {
+        // test empty text field handling
         solo.clearEditText((EditText) solo.getView(R.id.nameEditText));
-        // Test if activity added a duplicate username or not (unique name) US 03.01.01
+        solo.sleep(1000);
         solo.clickOnText("Sign Up");
-        assertTrue(solo.searchText("Input invalid, please try again"));
+        assertTrue(solo.searchText("Invalid input"));
     }
 
+
     /**
-     * The fifth test determines whether or not the system will continue even when there is no
-     * such participant in the system.
-     * Input: TestParticipant13 into EditText (not yet signed up)
-     * System will prompt the app user that the participant does not exist, and to sign up instead
+     * The test determines whether or not the system will continue even when there is no
+     * such participant in the system. Initially test that the button functionality properly rejects
+     * entry into the app if the name has not been found. Next, test the functionality of allowing
+     * entry into the app when there is a stored name.
      */
-    public void test5_LoginWithoutStoredName() {
+    public void test2_LoginButton() {
+
+        // test empty input handling
+        solo.clearEditText((EditText) solo.getView(R.id.nameEditText));
+        solo.clickOnText("Login");
+        assertTrue(solo.waitForText("Invalid input"));
+
+        // test non registered user
         solo.clearEditText((EditText) solo.getView(R.id.nameEditText));
         solo.enterText((EditText) solo.getView(R.id.nameEditText), "TestParticipant13");
         solo.clickOnText("Login");
         assertTrue(solo.waitForText("This participant does not exist, please sign up"));
-    }
 
-    /**
-     * The sixth test determines the ideal scenario where there is a valid name in the system and
-     * the participant attempts to login to the app
-     * Input: TestParticipant11 (already signed up in the system)
-     * The system will bring the user to the SelfNewsFeedActivity where their personal profile is
-     * shown.
-     * @see SelfNewsFeedActivity
-     */
-    public void test6_LoginWithStoredName() {
+        // test proper login
         solo.clearEditText((EditText) solo.getView(R.id.nameEditText));
         solo.enterText((EditText) solo.getView(R.id.nameEditText), "TestParticipant11");
         assertNotNull("Participant not found", ParticipantSingleton.getInstance().searchParticipant("TestParticipant11"));
-        for (Participant participant : instance.getParticipantList()) {
-            Log.d("Participants", participant.getLogin());
-        }
         solo.clickOnText("Login");
-        solo.searchText("Welcome TestParticipant11");
-        solo.assertCurrentActivity("Did not pass login activity", SelfNewsFeedActivity.class);
+        solo.assertCurrentActivity("Did not pass login activity", MyFeedActivity.class);
     }
 
-    /**
-     * Fin.
-     * @throws Exception
-     */
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();
     }

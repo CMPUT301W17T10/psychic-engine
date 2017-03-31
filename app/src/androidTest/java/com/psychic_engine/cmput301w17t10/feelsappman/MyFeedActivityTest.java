@@ -7,6 +7,8 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Activities.FollowRequestAct
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.FollowersActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.FollowingActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.MyFeedActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.robotium.solo.Solo;
 
 /**
@@ -24,6 +26,11 @@ public class MyFeedActivityTest extends ActivityInstrumentationTestCase2<MyFeedA
 
     public void setUp() throws Exception {
         solo = new Solo(getInstrumentation(), getActivity());
+        Participant tester = new Participant("MyFeedActivityTester");
+        if (ParticipantSingleton.getInstance().searchParticipant("MyFeedActivityTester") == tester) {
+            ParticipantSingleton.getInstance().addParticipant(tester);
+        }
+        ParticipantSingleton.getInstance().setSelfParticipant(tester);
     }
 
     public void testStart() throws Exception {

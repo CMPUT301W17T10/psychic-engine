@@ -29,7 +29,6 @@ public class ParticipantController {
      * @return false if name is not found
      */
     public static boolean checkUniqueParticipant(String participantName) {
-        Log.i("Check", "Checking for uniqueness in " + participantName);
         Participant foundParticipant = null;
         ElasticParticipantController.FindParticipantTask spt = new ElasticParticipantController.FindParticipantTask();
 

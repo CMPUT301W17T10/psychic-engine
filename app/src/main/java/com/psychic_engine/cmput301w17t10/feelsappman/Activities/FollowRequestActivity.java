@@ -68,7 +68,7 @@ public class FollowRequestActivity extends AppCompatActivity {
                     Intent myFeedActivity = new Intent(FollowRequestActivity.this, MyFeedActivity.class);
                     startActivity(myFeedActivity);
                 } else if(selectedItem.equals("My Profile")) {
-                    Intent myProfileActivity = new Intent(FollowRequestActivity.this, SelfNewsFeedActivity.class);
+                    Intent myProfileActivity = new Intent(FollowRequestActivity.this, MyProfileActivity.class);
                     startActivity(myProfileActivity);
                 } else if(selectedItem.equals("Followers")) {
                     Intent followersActivity = new Intent(FollowRequestActivity.this, FollowersActivity.class);

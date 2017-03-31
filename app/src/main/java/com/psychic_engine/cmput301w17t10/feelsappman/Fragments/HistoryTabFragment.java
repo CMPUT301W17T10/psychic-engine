@@ -3,7 +3,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Fragments;
 /**
  *  Created by Hussain Khan     Modified by jyuen1
  *  HistoryTabFragment is the History tab that can be
- *  seen from SelfNewsFeedActivity. It shows a list view
+ *  seen from MyProfileActivity. It shows a list view
  *  of all the Mood Events created. From this page, you
  *  can apply one or more filters to search for a particular
  *  Mood Event
@@ -26,7 +26,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.psychic_engine.cmput301w17t10.feelsappman.Activities.SelfNewsFeedActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.MyProfileActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.EditMoodActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.FilterMapActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.ViewMoodEventActivity;
@@ -37,8 +37,6 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
-import org.osmdroid.views.MapView;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -46,13 +44,13 @@ import java.util.List;
 
 /**
  * Comments by adong on 3/28/2017.
- * HistoryTabFragment holds the information stored in the history tab shown in the SelfNewsFeedActivity.
+ * HistoryTabFragment holds the information stored in the history tab shown in the MyProfileActivity.
  * Information such as the pariticpant's mood event history as well as options to filter their mood
  * events are shown. A participant will be able to filter in combination with each other offline.
  * When the app user does not have internet connection, they will be unable to sync with the elastic
  * server. However, they will be able to manipulate their own mood events as needed and upon reconnection,
  * the app will automatically sync their changed information with the server.
- * @see SelfNewsFeedActivity
+ * @see MyProfileActivity
  */
 public class HistoryTabFragment extends Fragment {
 
