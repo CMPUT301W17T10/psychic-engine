@@ -16,10 +16,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
 import org.osmdroid.api.IMapController;
@@ -51,6 +53,7 @@ public class RecentMapActivity extends Activity {
     private ArrayList<OverlayItem> disgustEvents;
     private ArrayList<OverlayItem> confusedEvents;
     private ArrayList<MoodEvent> moodList = new ArrayList<MoodEvent>();
+    private ArrayList<Participant> partipantList = new ArrayList<Participant>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,109 +76,6 @@ public class RecentMapActivity extends Activity {
         //ArrayList<MoodEvent> moodList = new ArrayList<>();
 
 
-//        try {
-//            Log.i("myTag", "setting Moodlist");
-//            moodList = controllerList.execute().get();
-//        } catch (InterruptedException e) {
-//            Log.i("myTag", "Error");
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            Log.i("myTag", "Error");
-//            e.printStackTrace();
-//        }
-
-        try {
-            new ElasticMoodController.FindMoodEventsTask(this).execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        //map.invalidate();
-
-        //Initializing arrays of OverlayItems
-        //each item in the array will be a moodEvent with the corresponding moodState
-        sadEvents = new ArrayList<OverlayItem>();
-        happyEvents = new ArrayList<OverlayItem>();
-        shameEvents = new ArrayList<OverlayItem>();
-        fearEvents = new ArrayList<OverlayItem>();
-        angerEvents = new ArrayList<OverlayItem>();
-        surprisedEvents = new ArrayList<OverlayItem>();
-        disgustEvents = new ArrayList<OverlayItem>();
-        confusedEvents = new ArrayList<OverlayItem>();
-
-        //For each item in the filteredMoodList
-        Log.i("myTag", "Before Moodlist");
-        for (MoodEvent mood : moodList) {
-            Log.i("myTag", "Getting Moodlist");
-            //if has location
-            if (mood.getLocation() != null) { //TODO IMPLEMENT CHECK DISTANCE
-                //get moodstate
-                String moodType = mood.getMood().getMood().toString();
-
-                if (moodType == "Sad") {
-                    //Taken from http://stackoverflow.com/questions/10533071/osmdroid-add-custom-icons-to-itemizedoverlay
-                    //March 29. 2017
-                    //Initialize the item with the moodType, trigger and set a new Geopoint for it
-                    OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
-                    //gets custom icon
-                    Drawable sadMarker = this.getResources().getDrawable(R.drawable.sadmarker);
-                    //set the icon of the overlayItem as the custom icon
-                    item.setMarker(sadMarker);
-                    //puts it in the arrayList of OverlayItems for this mood
-                    sadEvents.add(item);
-                }
-                if (moodType == "Happy") {
-
-                    OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
-                    Drawable happyMarker = this.getResources().getDrawable(R.drawable.happymarker);
-                    item.setMarker(happyMarker);
-                    happyEvents.add(item);
-                }
-                if (moodType == "Shame") {
-
-                    OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
-                    Drawable shameMarker = this.getResources().getDrawable(R.drawable.shamemarker);
-                    item.setMarker(shameMarker);
-                    shameEvents.add(item);
-                }
-                if (moodType == "Fear") {
-
-                    OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
-                    Drawable fearMarker = this.getResources().getDrawable(R.drawable.fearmarker);
-                    item.setMarker(fearMarker);
-                    fearEvents.add(item);
-                }
-                if (moodType == "Anger") {
-
-                    OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
-                    Drawable angerMarker = this.getResources().getDrawable(R.drawable.angermarker);
-                    item.setMarker(angerMarker);
-                    angerEvents.add(item);
-                }
-                if (moodType == "Surprised") {
-
-                    OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
-                    Drawable surprisedMarker = this.getResources().getDrawable(R.drawable.surprisedmarker);
-                    item.setMarker(surprisedMarker);
-                    surprisedEvents.add(item);
-                }
-                if (moodType == "Disgust") {
-
-                    OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
-                    Drawable disgustMarker = this.getResources().getDrawable(R.drawable.disgustmarker);
-                    item.setMarker(disgustMarker);
-                    disgustEvents.add(item);
-                }
-                if (moodType == "Confused") {
-
-                    OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
-                    Drawable confusedMarker = this.getResources().getDrawable(R.drawable.confusedmarker);
-                    item.setMarker(confusedMarker);
-                    confusedEvents.add(item);
-                }
-            }
-        }
         //find current location using GPS provider
         Location coords = new Location("GPS");
         coords = getCurrentLocation(coords);
@@ -191,6 +91,112 @@ public class RecentMapActivity extends Activity {
 
         //Create new geopoint from current location
         GeoPoint center = new GeoPoint(lat, lon);
+
+        try {
+            new ElasticParticipantController.FindAllParticipantsTask(this).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        //map.invalidate();
+        for (Participant user: partipantList) {
+            Log.i("myTag", user.toString());
+            moodList.add(user.getMostRecentMoodEvent());
+        }
+
+        //Initializing arrays of OverlayItems
+        //each item in the array will be a moodEvent with the corresponding moodState
+        sadEvents = new ArrayList<OverlayItem>();
+        happyEvents = new ArrayList<OverlayItem>();
+        shameEvents = new ArrayList<OverlayItem>();
+        fearEvents = new ArrayList<OverlayItem>();
+        angerEvents = new ArrayList<OverlayItem>();
+        surprisedEvents = new ArrayList<OverlayItem>();
+        disgustEvents = new ArrayList<OverlayItem>();
+        confusedEvents = new ArrayList<OverlayItem>();
+
+        //For each item in the filteredMoodList
+        
+        for (MoodEvent mood : moodList) {
+
+            //if has location
+            if (mood != null) {
+                if (mood.getLocation() != null) { //TODO IMPLEMENT CHECK DISTANCE
+                    Location currentMoodLocation = new Location("");
+                    currentMoodLocation.setLatitude(mood.getLocation().getLoc().getLatitude());
+                    currentMoodLocation.setLongitude(mood.getLocation().getLoc().getLongitude());
+                    float distance = coords.distanceTo(currentMoodLocation);
+                    if (distance < 5000.0) {
+                        //get moodstate
+                        String moodType = mood.getMood().getMood().toString();
+
+                        if (moodType == "Sad") {
+                            //Taken from http://stackoverflow.com/questions/10533071/osmdroid-add-custom-icons-to-itemizedoverlay
+                            //March 29. 2017
+                            //Initialize the item with the moodType, trigger and set a new Geopoint for it
+                            OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
+                            //gets custom icon
+                            Drawable sadMarker = this.getResources().getDrawable(R.drawable.sadmarker);
+                            //set the icon of the overlayItem as the custom icon
+                            item.setMarker(sadMarker);
+                            //puts it in the arrayList of OverlayItems for this mood
+                            sadEvents.add(item);
+                        }
+                        if (moodType == "Happy") {
+
+                            OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
+                            Drawable happyMarker = this.getResources().getDrawable(R.drawable.happymarker);
+                            item.setMarker(happyMarker);
+                            happyEvents.add(item);
+                        }
+                        if (moodType == "Shame") {
+
+                            OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
+                            Drawable shameMarker = this.getResources().getDrawable(R.drawable.shamemarker);
+                            item.setMarker(shameMarker);
+                            shameEvents.add(item);
+                        }
+                        if (moodType == "Fear") {
+
+                            OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
+                            Drawable fearMarker = this.getResources().getDrawable(R.drawable.fearmarker);
+                            item.setMarker(fearMarker);
+                            fearEvents.add(item);
+                        }
+                        if (moodType == "Anger") {
+
+                            OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
+                            Drawable angerMarker = this.getResources().getDrawable(R.drawable.angermarker);
+                            item.setMarker(angerMarker);
+                            angerEvents.add(item);
+                        }
+                        if (moodType == "Surprised") {
+
+                            OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
+                            Drawable surprisedMarker = this.getResources().getDrawable(R.drawable.surprisedmarker);
+                            item.setMarker(surprisedMarker);
+                            surprisedEvents.add(item);
+                        }
+                        if (moodType == "Disgust") {
+
+                            OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
+                            Drawable disgustMarker = this.getResources().getDrawable(R.drawable.disgustmarker);
+                            item.setMarker(disgustMarker);
+                            disgustEvents.add(item);
+                        }
+                        if (moodType == "Confused") {
+
+                            OverlayItem item = new OverlayItem(moodType, mood.getTrigger(), mood.getLocation().getLoc());
+                            Drawable confusedMarker = this.getResources().getDrawable(R.drawable.confusedmarker);
+                            item.setMarker(confusedMarker);
+                            confusedEvents.add(item);
+                        }
+                    }
+                }
+            }
+        }
+
 
         //Center mapview on current location
         mController.setCenter(center);
@@ -250,9 +256,9 @@ public class RecentMapActivity extends Activity {
         map.invalidate();
     }
 
-    public void setMoodList(ArrayList<MoodEvent> listResults) {
-        this.moodList = listResults;
-        Log.i("myTag", "setting Moodlist");
+    public void setMoodList(ArrayList<Participant> listResults) {
+        this.partipantList = listResults;
+        //Log.i("myTag", "setting Moodlist");
     }
 
     public Location getCurrentLocation(Location coords) {

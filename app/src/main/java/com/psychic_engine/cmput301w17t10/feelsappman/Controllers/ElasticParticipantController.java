@@ -3,6 +3,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.RecentMapActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 
 import java.util.ArrayList;
@@ -147,6 +148,16 @@ public class ElasticParticipantController extends ElasticController {
      * that unique names are always created (case insensitive).
      */
     public static class FindAllParticipantsTask extends AsyncTask<Void, Void, ArrayList<Participant>> {
+
+        private RecentMapActivity activity;
+
+        public FindAllParticipantsTask() {
+
+        }
+        public FindAllParticipantsTask(RecentMapActivity activity) {
+            this.activity = activity;
+        }
+
         @Override
         protected ArrayList<Participant> doInBackground(Void... params) {
             verifySettings();
@@ -165,6 +176,7 @@ public class ElasticParticipantController extends ElasticController {
                     List<Participant> resultList = result.getSourceAsObjectList(Participant.class);
                     Log.i("Size List", "Size of list: "+ String.valueOf(resultList.size()));
                     participantList.addAll(resultList);
+                    activity.setMoodList(participantList);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
