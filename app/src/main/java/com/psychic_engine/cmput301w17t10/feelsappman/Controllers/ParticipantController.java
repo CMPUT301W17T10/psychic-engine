@@ -62,6 +62,10 @@ public class ParticipantController {
         } catch (Exception e) {
             Log.i("Error", "Unable to update singleton list with elastic");
         }
+    }
 
+    public static void addMoodEvent(MoodEvent moodEvent) {
+        Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
+        participant.getMoodList().add(moodEvent);
     }
 }

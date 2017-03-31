@@ -94,8 +94,8 @@ public class CreateMoodController {
 
         // add to participant locally
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
-        Log.i("Add", "Adding to the self participant "+ ParticipantSingleton.getInstance().getSelfParticipant().getLogin());
-        participant.addMoodEvent(moodEvent);
+        //participant.addMoodEvent(moodEvent);
+        ParticipantController.addMoodEvent(moodEvent);
 
         // add to the elastic server
         ElasticMoodController.AddMoodEventTask addMoodEventTask = new ElasticMoodController

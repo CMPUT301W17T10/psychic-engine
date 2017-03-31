@@ -22,11 +22,10 @@ import java.util.UUID;
 public class Participant extends ModelFrame{
     private String login;
     private MoodEvent mostRecentMoodEvent;
-    private int mostRecentMoodEventIndex;
     private ArrayList<MoodEvent> moodEvents;
     private ArrayList<String> followers;
     private ArrayList<String> following;
-    private ArrayList<Participant> pendingRequests;
+    private ArrayList<String> pendingRequests;
     private String uniqueID;
 
 
@@ -87,7 +86,7 @@ public class Participant extends ModelFrame{
      * Getter method to get the pending requests list. Will return NULL pointer if called empty.
      * @return
      */
-    public ArrayList<Participant> getPendingRequests() {
+    public ArrayList<String> getPendingRequests() {
         return this.pendingRequests;
     }
 
@@ -96,16 +95,6 @@ public class Participant extends ModelFrame{
      * @return
      */
     public MoodEvent getMostRecentMoodEvent() { return this.mostRecentMoodEvent; }
-
-
-    /**
-     * Adds a new mood event to the mood event list
-     * @param moodEvent
-     */
-    public void addMoodEvent(MoodEvent moodEvent) {
-        moodEvents.add(moodEvent);
-    }
-
 
     /**
      * Set the most recent mood event
