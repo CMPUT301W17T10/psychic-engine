@@ -1,10 +1,8 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Models;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.LoginActivity;
-import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ModelFrame;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * Created by adong on 2/27/17.
@@ -19,7 +17,7 @@ import java.util.UUID;
  * pull profile of the names that they would have picked
  * @see LoginActivity
  */
-public class Participant extends ModelFrame{
+public class Participant {
     private String login;
     private MoodEvent mostRecentMoodEvent;
     private ArrayList<MoodEvent> moodEvents;
@@ -43,7 +41,7 @@ public class Participant extends ModelFrame{
         this.pendingRequests = new ArrayList<>();
         this.uniqueID = "";
     }
-    public void setId(String ID) {this.uniqueID = ID;}
+    public void setId(String id) {this.uniqueID = id;}
     /**
      * Getter method to get the ID that was set by the elastic search server
      */
