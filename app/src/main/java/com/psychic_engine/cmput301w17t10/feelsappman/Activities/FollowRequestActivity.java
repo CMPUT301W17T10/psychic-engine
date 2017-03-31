@@ -64,18 +64,23 @@ public class FollowRequestActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
 
-                if(selectedItem.equals("My Feed")) {
-                    Intent myFeedActivity = new Intent(FollowRequestActivity.this, MyFeedActivity.class);
-                    startActivity(myFeedActivity);
-                } else if(selectedItem.equals("My Profile")) {
-                    Intent myProfileActivity = new Intent(FollowRequestActivity.this, MyProfileActivity.class);
-                    startActivity(myProfileActivity);
-                } else if(selectedItem.equals("Followers")) {
-                    Intent followersActivity = new Intent(FollowRequestActivity.this, FollowersActivity.class);
-                    startActivity(followersActivity);
-                } else if(selectedItem.equals("Following")) {
-                    Intent followingActivity = new Intent(FollowRequestActivity.this, FollowingActivity.class);
-                    startActivity(followingActivity);
+                switch (selectedItem) {
+                    case "My Feed":
+                        Intent myFeedActivity = new Intent(FollowRequestActivity.this, MyFeedActivity.class);
+                        startActivity(myFeedActivity);
+                        break;
+                    case "My Profile":
+                        Intent myProfileActivity = new Intent(FollowRequestActivity.this, MyProfileActivity.class);
+                        startActivity(myProfileActivity);
+                        break;
+                    case "Followers":
+                        Intent followersActivity = new Intent(FollowRequestActivity.this, FollowersActivity.class);
+                        startActivity(followersActivity);
+                        break;
+                    case "Following":
+                        Intent followingActivity = new Intent(FollowRequestActivity.this, FollowingActivity.class);
+                        startActivity(followingActivity);
+                        break;
                 }
             }
             @Override

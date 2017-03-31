@@ -64,18 +64,23 @@ public class FollowersActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
 
-                if(selectedItem.equals("My Feed")) {
-                    Intent myFeedActivity = new Intent(FollowersActivity.this, MyFeedActivity.class);
-                    startActivity(myFeedActivity);
-                } else if(selectedItem.equals("My Profile")) {
-                    Intent myProfileActivity = new Intent(FollowersActivity.this, MyProfileActivity.class);
-                    startActivity(myProfileActivity);
-                } else if(selectedItem.equals("Following")) {
-                    Intent followingActivity = new Intent(FollowersActivity.this, FollowingActivity.class);
-                    startActivity(followingActivity);
-                } else if(selectedItem.equals("Follower Requests")) {
-                    Intent followerRequestActivity = new Intent(FollowersActivity.this, FollowRequestActivity.class);
-                    startActivity(followerRequestActivity);
+                switch (selectedItem) {
+                    case "My Feed":
+                        Intent myFeedActivity = new Intent(FollowersActivity.this, MyFeedActivity.class);
+                        startActivity(myFeedActivity);
+                        break;
+                    case "My Profile":
+                        Intent myProfileActivity = new Intent(FollowersActivity.this, MyProfileActivity.class);
+                        startActivity(myProfileActivity);
+                        break;
+                    case "Following":
+                        Intent followingActivity = new Intent(FollowersActivity.this, FollowingActivity.class);
+                        startActivity(followingActivity);
+                        break;
+                    case "Follower Requests":
+                        Intent followerRequestActivity = new Intent(FollowersActivity.this, FollowRequestActivity.class);
+                        startActivity(followerRequestActivity);
+                        break;
                 }
             }
             @Override
