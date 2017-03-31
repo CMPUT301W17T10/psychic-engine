@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.EditMoodActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.RecentMapActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.ViewMoodEventActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.DeleteMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
@@ -42,6 +43,7 @@ public class RecentTabFragment extends Fragment {
     private Button edit;
     private Participant participant;
     private MoodEvent moodEvent;
+    private Button displayRecentMap;
 
 
     @Override
@@ -54,6 +56,7 @@ public class RecentTabFragment extends Fragment {
         viewmood = (TextView) rootView.findViewById(R.id.mood);
         location = (TextView) rootView.findViewById(R.id.location);
         imageView = (ImageView) rootView.findViewById(R.id.picture);
+        displayRecentMap = (Button) rootView.findViewById(R.id.recentmap);
         participant = ParticipantSingleton.getInstance().getSelfParticipant();
         moodEvent = participant.getMostRecentMoodEvent();
 
@@ -81,6 +84,14 @@ public class RecentTabFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 viewMood();
+            }
+        });
+
+        displayRecentMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RecentMapActivity.class);
+                startActivity(intent);
             }
         });
 

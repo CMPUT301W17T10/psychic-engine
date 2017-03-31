@@ -1,6 +1,7 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Activities;
 
 import android.app.Activity;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
@@ -31,12 +33,13 @@ import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.TilesOverlay;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 /**
- * Created by Pierre Lin on 3/28/2017.
+ * Created by Pierre Lin on 3/30/2017.
  */
 
-public class FilterMapActivity extends Activity {
+public class RecentMapActivity extends Activity {
     //Initializing Arraylist of OverlayItems
     private ArrayList<OverlayItem> sadEvents;
     private ArrayList<OverlayItem> happyEvents;
@@ -46,6 +49,7 @@ public class FilterMapActivity extends Activity {
     private ArrayList<OverlayItem> surprisedEvents;
     private ArrayList<OverlayItem> disgustEvents;
     private ArrayList<OverlayItem> confusedEvents;
+    private ArrayList<MoodEvent> moodList = new ArrayList<MoodEvent>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +57,7 @@ public class FilterMapActivity extends Activity {
 
         Context ctx = getApplicationContext();
 
-        setContentView(R.layout.activity_filter_map);
+        setContentView(R.layout.activity_recent_map);
 
         MapView map = (MapView) findViewById(R.id.mapview);
 
@@ -64,7 +68,22 @@ public class FilterMapActivity extends Activity {
         TilesOverlay x=map.getOverlayManager().getTilesOverlay();
         x.setOvershootTileCache(x.getOvershootTileCache() * 2);
 
-        ArrayList<MoodEvent> moodList = (ArrayList<MoodEvent>) getIntent().getExtras().getSerializable("moodEventList");
+        //ElasticMoodController.FindMoodEventsTask controllerList = new ElasticMoodController.FindMoodEventsTask();
+        //ArrayList<MoodEvent> moodList = new ArrayList<>();
+
+
+//        try {
+//            Log.i("myTag", "setting Moodlist");
+//            moodList = controllerList.execute().get();
+//        } catch (InterruptedException e) {
+//            Log.i("myTag", "Error");
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            Log.i("myTag", "Error");
+//            e.printStackTrace();
+//        }
+
+        new ElasticMoodController.FindMoodEventsTask(this).execute();
 
         //Initializing arrays of OverlayItems
         //each item in the array will be a moodEvent with the corresponding moodState
@@ -79,8 +98,9 @@ public class FilterMapActivity extends Activity {
 
         //For each item in the filteredMoodList
         for (MoodEvent mood : moodList) {
+            Log.i("myTag", "Getting Moodlist");
             //if has location
-            if (mood.getLocation() != null) {
+            if (mood.getLocation() != null) { //TODO IMPLEMENT CHECK DISTANCE
                 //get moodstate
                 String moodType = mood.getMood().getMood().toString();
 
@@ -176,7 +196,7 @@ public class FilterMapActivity extends Activity {
             @Override
             public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
                 //do something
-                AlertDialog.Builder dialog = new AlertDialog.Builder(FilterMapActivity.this);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(RecentMapActivity.this);
                 dialog.setTitle(item.getTitle());
                 dialog.setMessage(item.getSnippet());
                 dialog.show();
@@ -219,6 +239,11 @@ public class FilterMapActivity extends Activity {
         map.getOverlays().add(confusedOverlay);
         //so that the markers will update
         map.invalidate();
+    }
+
+    public void setMoodList(ArrayList<MoodEvent> listResults) {
+        this.moodList = listResults;
+        Log.i("myTag", "setting Moodlist");
     }
 
     public Location getCurrentLocation(Location coords) {
@@ -268,6 +293,7 @@ public class FilterMapActivity extends Activity {
         }
         return coords;
     }
+
 
     //Taken from https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library
     //March 29, 2017

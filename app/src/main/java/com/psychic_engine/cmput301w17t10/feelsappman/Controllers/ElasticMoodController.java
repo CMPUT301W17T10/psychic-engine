@@ -3,11 +3,13 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Activities.RecentMapActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
@@ -215,10 +217,17 @@ public class ElasticMoodController extends ElasticController{
      */
     public static class FindMoodEventsTask extends AsyncTask<Void, Void, ArrayList<MoodEvent>> {
 
+        private RecentMapActivity activity;
+        ArrayList<MoodEvent> foundMoods = new ArrayList<>();
+
+        public FindMoodEventsTask(RecentMapActivity activity) {
+            this.activity = activity;
+        }
+
         @Override
         protected ArrayList<MoodEvent> doInBackground(Void... params) {
             verifySettings();
-            ArrayList<MoodEvent> foundMoods = new ArrayList<>();
+
 
             // construct query
             String query = "{\"size\": 10000 , \"query\":{\"sort\" : { \"date\" : { \"order\": \"desc\"}}}}";
@@ -241,5 +250,12 @@ public class ElasticMoodController extends ElasticController{
             }
             return foundMoods;
         }
+
+        @Override
+        protected void onPostExecute(ArrayList<MoodEvent> result) {
+            super.onPostExecute(result);
+            activity.setMoodList(result);
+        }
+
     }
 }
