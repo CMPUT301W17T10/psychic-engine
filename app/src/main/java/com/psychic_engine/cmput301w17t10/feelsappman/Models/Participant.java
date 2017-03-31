@@ -20,14 +20,14 @@ import java.util.UUID;
  * @see LoginActivity
  */
 public class Participant extends ModelFrame{
-    public String login;
-    public MoodEvent mostRecentMoodEvent;
-    public int mostRecentMoodEventIndex;
-    public ArrayList<MoodEvent> moodEvents;
-    public ArrayList<String> followers;
-    public ArrayList<String> following;
-    public ArrayList<Participant> pendingRequests;
-    public String uniqueID;
+    private String login;
+    private MoodEvent mostRecentMoodEvent;
+    private int mostRecentMoodEventIndex;
+    private ArrayList<MoodEvent> moodEvents;
+    private ArrayList<String> followers;
+    private ArrayList<String> following;
+    private ArrayList<Participant> pendingRequests;
+    private String uniqueID;
 
 
     /**
