@@ -2,6 +2,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 
 import android.util.Log;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.EmptyMoodException;
 import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
@@ -43,14 +44,18 @@ public class EditMoodController extends MoodController{
     public static void editMoodEvent(MoodEvent moodEvent, String moodString,
                                      String socialSettingString, String trigger,
                                      Photograph photo, MoodLocation location)
-            throws TriggerTooLongException {
+            throws EmptyMoodException, TriggerTooLongException {
 
         // find mood and social setting
         Mood mood = selectMood(moodString);
         SocialSetting socialSetting = selectSocialSetting(socialSettingString);
 
         // editMoodEvent properties of the mood event
-        moodEvent.setMood(mood);
+        try {
+            moodEvent.setMood(mood);
+        } catch (EmptyMoodException e) {
+            throw new EmptyMoodException();
+        }
         moodEvent.setDate(new Date());
         moodEvent.setSocialSetting(socialSetting);
         try {

@@ -35,7 +35,7 @@ abstract class MoodController {
                 mood = new Mood(MoodState.CONFUSED);
                 break;
             default:
-                return null;
+                mood = null;
         }
         return mood;
     }

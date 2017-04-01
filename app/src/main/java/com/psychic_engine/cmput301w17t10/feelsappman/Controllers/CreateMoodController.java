@@ -3,9 +3,10 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 import android.util.Log;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.CreateMoodActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.EmptyMoodException;
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
-import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodLocation;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
@@ -31,38 +32,39 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
  */
 public class CreateMoodController extends MoodController {
 
-    public static int createMoodEvent(String moodString, String socialSettingString, String trigger, Photograph photo, MoodLocation location) {
+    public static void createMoodEvent(String moodString, String socialSettingString,
+                                       String trigger, Photograph photo, MoodLocation location)
+            throws EmptyMoodException, TriggerTooLongException {
+
         Mood mood = selectMood(moodString);
-        if (mood == null) {
-            return -1;
-        }
         SocialSetting socialSetting = selectSocialSetting(socialSettingString);
 
-        // test the reason to see if its within the length and word count
-        int numWords = trigger.trim().split("\\s+").length;
-        if (numWords > 3)
-            return -2;
-
         // initialize the mood event with the given specifications
-        MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
+        try {
+            MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
 
-        // add to participant locally
-        Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
-        ParticipantController.addMoodEvent(moodEvent);
+            // add to participant locally
+            Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
+            ParticipantController.addMoodEvent(moodEvent);
 
-        // add to the elastic server
-        ElasticMoodController.AddMoodEventTask addMoodEventTask = new ElasticMoodController
-                .AddMoodEventTask();
-        addMoodEventTask.execute(moodEvent);
+            // add to the elastic server
+            ElasticMoodController.AddMoodEventTask addMoodEventTask = new ElasticMoodController
+                    .AddMoodEventTask();
+            addMoodEventTask.execute(moodEvent);
 
-        // editMoodEvent most recent mood event to be this mood event
-        participant.setMostRecentMoodEvent(moodEvent);
+            // editMoodEvent most recent mood event to be this mood event
+            participant.setMostRecentMoodEvent(moodEvent);
 
-        // editMoodEvent the participant in the elastic server to show the new/recent mood event
-        Log.i("Update", "Updating participant in CreateMoodController");
-        ElasticParticipantController.UpdateParticipantTask updateParticipantTask = new ElasticParticipantController.UpdateParticipantTask();
-        updateParticipantTask.execute(participant);
+            // editMoodEvent the participant in the elastic server to show the new/recent mood event
+            Log.i("Update", "Updating participant in CreateMoodController");
+            ElasticParticipantController.UpdateParticipantTask updateParticipantTask =
+                    new ElasticParticipantController.UpdateParticipantTask();
+            updateParticipantTask.execute(participant);
 
-        return 0;
+        } catch (EmptyMoodException e) {
+            throw new EmptyMoodException();
+        } catch (TriggerTooLongException e) {
+            throw new TriggerTooLongException();
+        }
     }
 }

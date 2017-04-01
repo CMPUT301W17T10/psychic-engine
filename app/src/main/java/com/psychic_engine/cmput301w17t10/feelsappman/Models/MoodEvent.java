@@ -3,6 +3,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Models;
 import android.location.Location;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.EmptyMoodException;
 import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 
 import java.io.Serializable;
@@ -44,14 +45,15 @@ public class MoodEvent implements Serializable{
      * @param picture
      * @param location
      */
-    public MoodEvent(Mood mood, SocialSetting socialSetting, String trigger, Photograph picture, MoodLocation location) {
+    public MoodEvent(Mood mood, SocialSetting socialSetting, String trigger, Photograph picture,
+                     MoodLocation location) throws EmptyMoodException, TriggerTooLongException {
         this.id = "";
+        setMood(mood);
         this.followers = new ArrayList<>();
-        this.mood = mood;
         this.socialSetting = socialSetting;
         this.date = new Date();
         this.moodOwner = ParticipantSingleton.getInstance().getSelfParticipant().getLogin();
-        this.trigger = trigger;
+        setTrigger(trigger);
         this.picture = picture;
         this.location = location;
     }
@@ -113,7 +115,10 @@ public class MoodEvent implements Serializable{
      * Setter method to set the mood to the parameter. Used when editing the mood event
      * @param mood
      */
-    public void setMood(Mood mood) {
+    public void setMood(Mood mood) throws EmptyMoodException {
+        if (mood == null) {
+            throw new EmptyMoodException();
+        }
         this.mood = mood;
     }
 
