@@ -71,7 +71,7 @@ public class HistoryTabFragment extends Fragment {
     private ArrayList<MoodEvent> filteredMoodList;
     private ArrayList<MoodEvent> unfilteredMoodList;
     private ArrayAdapter<MoodEvent> adapter;
-    private final long oneWeek = 604800000L;    // one weeks time
+    private final long ONEWEEK = 604800000L;    // one weeks time
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -235,7 +235,7 @@ public class HistoryTabFragment extends Fragment {
 
             // check if mood event satisfies date filter
             if (weekFilterSelected && moodEvent.getDate().before(
-                    new Date(new Date().getTime() - oneWeek)))
+                    new Date(new Date().getTime() - ONEWEEK)))
                 satisfiesDate = false;
 
             // add mood event to the list to be displayed if it satisfies all conditions

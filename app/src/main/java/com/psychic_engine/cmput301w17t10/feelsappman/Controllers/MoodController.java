@@ -40,9 +40,9 @@ abstract class MoodController {
         return mood;
     }
 
-    static SocialSetting selectSocialSetting(String socialSettingString) {
+    static SocialSetting selectSocialSetting(String settingString) {
         SocialSetting socialSetting;
-        switch (socialSettingString) {
+        switch (settingString) {
             case "Alone":
                 socialSetting = SocialSetting.ALONE;
                 break;

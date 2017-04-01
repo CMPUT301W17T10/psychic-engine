@@ -69,8 +69,7 @@ public class SummaryTabFragment extends Fragment implements
         SeekBar.OnSeekBarChangeListener, OnChartGestureListener, OnChartValueSelectedListener {
 
 
-    Participant participant;
-    ArrayList<MoodEvent> moodEventList;
+    private ArrayList<MoodEvent> moodEventList;
 
     private ScatterChart mChart;
     private SeekBar mSeekBarDensity, mSeekBarStart;
@@ -81,7 +80,7 @@ public class SummaryTabFragment extends Fragment implements
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.summary, container, false);
 
-        participant = ParticipantSingleton.getInstance().getSelfParticipant();
+        Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         moodEventList = participant.getMoodList();
 
         tvX = (TextView) rootView.findViewById(R.id.tvXMax);
