@@ -1,7 +1,5 @@
 package com.psychic_engine.cmput301w17t10.feelsappman;
 
-import android.util.Log;
-
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.CreateMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
@@ -20,8 +18,8 @@ import org.junit.Before;
  */
 
 /**
- * Tests whether or not the CreateMoodController is able to update the participant's mood list
- * upon creation of the mood they wish to create in the CreateMoodActivity.
+ * Tests whether or not the CreateMoodController is able to editMoodEvent the participant's mood list
+ * upon creation of the mood they wish to createMoodEvent in the CreateMoodActivity.
  * @see CreateMoodController
  */
 public class CreateMoodControllerTest extends TestCase {
@@ -53,16 +51,16 @@ public class CreateMoodControllerTest extends TestCase {
             }
         }
             catch (NullPointerException e) {
-                assertEquals("update unsuccessful", CreateMoodController.updateMoodEventList
+                assertEquals("editMoodEvent unsuccessful", CreateMoodController.createMoodEvent
                         (moodString, socialSettingString, trigger, null, null), 0);
-                assertEquals("empty, update fail", instance.getSelfParticipant().getMoodList()
+                assertEquals("empty, editMoodEvent fail", instance.getSelfParticipant().getMoodList()
                         .get(0).getMood().getMood(),
                         moodEvent.getMood().getMood());
             }
-        // test if the update was unsuccessful
-        assertEquals("update unsuccessful", CreateMoodController.updateMoodEventList
+        // test if the editMoodEvent was unsuccessful
+        assertEquals("editMoodEvent unsuccessful", CreateMoodController.createMoodEvent
                 (moodString, socialSettingString, trigger, null, null), 0);
-        assertEquals("empty, update fail", instance.getSelfParticipant().getMoodList()
+        assertEquals("empty, editMoodEvent fail", instance.getSelfParticipant().getMoodList()
                         .get(0).getMood().getMood(),
                 moodEvent.getMood().getMood());
     }

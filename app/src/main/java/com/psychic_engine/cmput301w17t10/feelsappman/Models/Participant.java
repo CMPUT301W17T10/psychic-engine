@@ -1,10 +1,8 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Models;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.LoginActivity;
-import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ModelFrame;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
  * Created by adong on 2/27/17.
@@ -19,14 +17,13 @@ import java.util.UUID;
  * pull profile of the names that they would have picked
  * @see LoginActivity
  */
-public class Participant extends ModelFrame{
+public class Participant {
     private String login;
     private MoodEvent mostRecentMoodEvent;
-    private int mostRecentMoodEventIndex;
     private ArrayList<MoodEvent> moodEvents;
     private ArrayList<String> followers;
     private ArrayList<String> following;
-    private ArrayList<Participant> pendingRequests;
+    private ArrayList<String> pendingRequests;
     private String uniqueID;
 
 
@@ -44,7 +41,7 @@ public class Participant extends ModelFrame{
         this.pendingRequests = new ArrayList<>();
         this.uniqueID = "";
     }
-    public void setId(String ID) {this.uniqueID = ID;}
+    public void setId(String id) {this.uniqueID = id;}
     /**
      * Getter method to get the ID that was set by the elastic search server
      */
@@ -87,7 +84,7 @@ public class Participant extends ModelFrame{
      * Getter method to get the pending requests list. Will return NULL pointer if called empty.
      * @return
      */
-    public ArrayList<Participant> getPendingRequests() {
+    public ArrayList<String> getPendingRequests() {
         return this.pendingRequests;
     }
 
@@ -96,16 +93,6 @@ public class Participant extends ModelFrame{
      * @return
      */
     public MoodEvent getMostRecentMoodEvent() { return this.mostRecentMoodEvent; }
-
-
-    /**
-     * Adds a new mood event to the mood event list
-     * @param moodEvent
-     */
-    public void addMoodEvent(MoodEvent moodEvent) {
-        moodEvents.add(moodEvent);
-    }
-
 
     /**
      * Set the most recent mood event

@@ -36,43 +36,43 @@ import static android.graphics.Color.parseColor;
 public class RecentTabFragment extends Fragment {
 
     private TextView date;
-    private TextView viewmood;
+    private TextView viewMood;
     private TextView location;
     private ImageView imageView;
-    private Button delete;
-    private Button edit;
+    private Button deleteButton;
+    private Button editButton;
     private Participant participant;
     private MoodEvent moodEvent;
-    private Button displayRecentMap;
+    private Button displayRecentMapButton;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.recent, container, false);
-        delete = (Button)rootView.findViewById(R.id.deletebutton);
-        edit = (Button)rootView.findViewById(R.id.editbutton);
+        deleteButton = (Button)rootView.findViewById(R.id.deletebutton);
+        editButton = (Button)rootView.findViewById(R.id.editbutton);
         date = (TextView) rootView.findViewById(R.id.date);
-        viewmood = (TextView) rootView.findViewById(R.id.mood);
+        viewMood = (TextView) rootView.findViewById(R.id.mood);
         location = (TextView) rootView.findViewById(R.id.location);
         imageView = (ImageView) rootView.findViewById(R.id.picture);
-        displayRecentMap = (Button) rootView.findViewById(R.id.recentmap);
+        displayRecentMapButton = (Button) rootView.findViewById(R.id.recentmap);
         participant = ParticipantSingleton.getInstance().getSelfParticipant();
         moodEvent = participant.getMostRecentMoodEvent();
 
-        // set the delete button to remove mood events and update affected classes accordingly
-        delete.setOnClickListener(new View.OnClickListener() {
+        // set the deleteButton button to deleteMoodEvent mood events and editMoodEvent affected classes accordingly
+        deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (moodEvent != null) {
-                    DeleteMoodController.remove(moodEvent);
+                    DeleteMoodController.deleteMoodEvent(moodEvent);
                     display();
                 }
             }
         });
 
-        // set the edit button to send the user to the EditMoodActivity
-        edit.setOnClickListener(new View.OnClickListener() {
+        // set the editButton button to send the user to the EditMoodActivity
+        editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editMood();
@@ -87,7 +87,7 @@ public class RecentTabFragment extends Fragment {
             }
         });
 
-        displayRecentMap.setOnClickListener(new View.OnClickListener() {
+        displayRecentMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), RecentMapActivity.class);
@@ -109,7 +109,7 @@ public class RecentTabFragment extends Fragment {
         if (moodEvent != null) {
             int color = parseColor(moodEvent.getMood().getColor().getBGColor());
             this.getView().setBackgroundColor(color);
-            viewmood.setText(moodEvent.getMood().toString());
+            viewMood.setText(moodEvent.getMood().toString());
             date.setText(moodEvent.getDate().toString());
             if (moodEvent.getPicture() != null) {
                 imageView.setImageBitmap(moodEvent.getPicture().getImage());
@@ -118,7 +118,7 @@ public class RecentTabFragment extends Fragment {
                 location.setText(moodEvent.getLocation().getLatitudeStr().concat(moodEvent.getLocation().getLongitudeStr()));
         } else {
             this.getView().setBackgroundColor(Color.BLACK);
-            viewmood.setText("");
+            viewMood.setText("");
             date.setText("There's No Mood Event Yet! Why Don't you add one!");
             //location.setText("");
             imageView.setImageBitmap(null);
@@ -126,7 +126,7 @@ public class RecentTabFragment extends Fragment {
     }
 
     /**
-     * Launch the edit mood event activity
+     * Launch the editButton mood event activity
      * passing it the uniqueID of the mood event to be edited as extras
      */
     private void editMood() {

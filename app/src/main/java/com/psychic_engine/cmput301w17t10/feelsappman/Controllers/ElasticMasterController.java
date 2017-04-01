@@ -16,7 +16,7 @@ import io.searchbox.indices.mapping.PutMapping;
 
 /**
  * Elastic master controller that has the ability to reset the elastic server. Adding another
- * participant or mood event will automatically create another index and type for whatever you
+ * participant or mood event will automatically createMoodEvent another index and type for whatever you
  * want to add.
  * @author adong
  * @see ElasticController
@@ -30,7 +30,7 @@ public class ElasticMasterController extends ElasticController {
     /**
      * ResetElasticServer is a command that will reset the elastic server by deleting our index
      * which contains all of our participants and types. More designed to be for an easy way
-     * to reset the database and create new data through the use of the generate data button in the
+     * to reset the database and createMoodEvent new data through the use of the generate data button in the
      * login activity. Upon addition of new data into the elastic server, a new index and their
      * types will also be recreated
      */

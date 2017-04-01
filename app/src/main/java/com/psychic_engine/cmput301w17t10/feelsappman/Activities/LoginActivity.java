@@ -256,11 +256,11 @@ public class LoginActivity extends AppCompatActivity {
 
         // add mood events into the server
         addMoodEventTask.execute(testMood1, testMood2, testMood3, testMood4);
-        testParticipant.addMoodEvent(testMood1);
-        testParticipant.addMoodEvent(testMood2);
-        testParticipant.addMoodEvent(testMood3);
-        testParticipant.addMoodEvent(testMood4);
-        testParticipant.addMoodEvent(testMood5);
+        ParticipantController.addMoodEvent(testMood1);
+        ParticipantController.addMoodEvent(testMood2);
+        ParticipantController.addMoodEvent(testMood3);
+        ParticipantController.addMoodEvent(testMood4);
+        ParticipantController.addMoodEvent(testMood5);
 
     }
 }

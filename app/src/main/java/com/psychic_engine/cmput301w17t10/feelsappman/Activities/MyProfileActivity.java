@@ -97,7 +97,7 @@ public class MyProfileActivity extends AppCompatActivity {
     /**
      * Listener for any clicked widget. But if the widget is of where you would like to add
      * a mood event, then the app will direct the participant to the CreateMoodActivity where they
-     * will be able to create a mood event.
+     * will be able to createMoodEvent a mood event.
      * @see CreateMoodActivity
      * @param item
      * @return true if clicked

@@ -29,60 +29,14 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
  * @see ElasticParticipantController
  * @see ElasticMoodController
  */
-public class CreateMoodController {
+public class CreateMoodController extends MoodController {
 
-    public static int updateMoodEventList(String moodString, String socialSettingString, String trigger, Photograph photo, MoodLocation location) {
-
-        Mood mood;
-        SocialSetting socialSetting;
-
-        // determine mood state by the spinner's sent string
-        switch(moodString) {
-            case "Sad":
-                mood = new Mood(MoodState.SAD);
-                break;
-            case "Happy":
-                mood = new Mood(MoodState.HAPPY);
-                break;
-            case "Shame":
-                mood = new Mood(MoodState.SHAME);
-                break;
-            case "Fear":
-                mood = new Mood(MoodState.FEAR);
-                break;
-            case "Anger":
-                mood = new Mood(MoodState.ANGER);
-                break;
-            case "Surprised":
-                mood = new Mood(MoodState.SURPRISED);
-                break;
-            case "Disgust":
-                mood = new Mood(MoodState.DISGUST);
-                break;
-            case "Confused":
-                mood = new Mood(MoodState.CONFUSED);
-                break;
-            default:
-                return -1;
+    public static int createMoodEvent(String moodString, String socialSettingString, String trigger, Photograph photo, MoodLocation location) {
+        Mood mood = selectMood(moodString);
+        if (mood == null) {
+            return -1;
         }
-
-        // determine the social setting depending on what was chosen in the spinner
-        switch (socialSettingString) {
-            case "Alone":
-                socialSetting = SocialSetting.ALONE;
-                break;
-            case "One Other":
-                socialSetting = SocialSetting.ONEOTHER;
-                break;
-            case "Two To Several":
-                socialSetting = SocialSetting.TWOTOSEVERAL;
-                break;
-            case "Crowd":
-                socialSetting = SocialSetting.CROWD;
-                break;
-            default:
-                socialSetting = null;
-        }
+        SocialSetting socialSetting = selectSocialSetting(socialSettingString);
 
         // test the reason to see if its within the length and word count
         int numWords = trigger.trim().split("\\s+").length;
@@ -94,18 +48,17 @@ public class CreateMoodController {
 
         // add to participant locally
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
-        Log.i("Add", "Adding to the self participant "+ ParticipantSingleton.getInstance().getSelfParticipant().getLogin());
-        participant.addMoodEvent(moodEvent);
+        ParticipantController.addMoodEvent(moodEvent);
 
         // add to the elastic server
         ElasticMoodController.AddMoodEventTask addMoodEventTask = new ElasticMoodController
                 .AddMoodEventTask();
         addMoodEventTask.execute(moodEvent);
 
-        // update most recent mood event to be this mood event
+        // editMoodEvent most recent mood event to be this mood event
         participant.setMostRecentMoodEvent(moodEvent);
 
-        // update the participant in the elastic server to show the new/recent mood event
+        // editMoodEvent the participant in the elastic server to show the new/recent mood event
         Log.i("Update", "Updating participant in CreateMoodController");
         ElasticParticipantController.UpdateParticipantTask updateParticipantTask = new ElasticParticipantController.UpdateParticipantTask();
         updateParticipantTask.execute(participant);

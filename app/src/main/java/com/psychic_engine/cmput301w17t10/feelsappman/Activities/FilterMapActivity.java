@@ -217,7 +217,7 @@ public class FilterMapActivity extends Activity {
         map.getOverlays().add(surprisedOverlay);
         map.getOverlays().add(disgustOverlay);
         map.getOverlays().add(confusedOverlay);
-        //so that the markers will update
+        //so that the markers will editMoodEvent
         map.invalidate();
     }
 
