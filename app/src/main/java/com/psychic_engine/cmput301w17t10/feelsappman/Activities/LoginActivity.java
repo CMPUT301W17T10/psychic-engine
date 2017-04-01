@@ -16,6 +16,8 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ParticipantController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.EmptyMoodException;
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
@@ -243,16 +245,23 @@ public class LoginActivity extends AppCompatActivity {
         // mood events will be mainly in USER for filtering with combination of reason/date/mood
         // test1/2/3 will follow recent later
 
-        MoodEvent testMood1 = new MoodEvent(new Mood(MoodState.HAPPY), SocialSetting.ALONE,
-                "", null, null);
-        MoodEvent testMood2 = new MoodEvent(new Mood(MoodState.SAD), SocialSetting.ONEOTHER,
-                "test", null, null);
-        MoodEvent testMood3 = new MoodEvent(new Mood(MoodState.CONFUSED), SocialSetting.TWOTOSEVERAL,
-                "test", null, null);
-        MoodEvent testMood4 = new MoodEvent(new Mood(MoodState.HAPPY), SocialSetting.CROWD,
-                "test", null, null);
-        MoodEvent testMood5 = new MoodEvent(new Mood(MoodState.HAPPY), SocialSetting.CROWD,
-                "", null, null);
+        MoodEvent testMood1 = null, testMood2 = null, testMood3 = null, testMood4 = null, testMood5 = null;
+        try {
+            testMood1 = new MoodEvent(new Mood(MoodState.HAPPY), SocialSetting.ALONE,
+                    "", null, null);
+            testMood2 = new MoodEvent(new Mood(MoodState.SAD), SocialSetting.ONEOTHER,
+                    "test", null, null);
+            testMood3 = new MoodEvent(new Mood(MoodState.CONFUSED), SocialSetting.TWOTOSEVERAL,
+                    "test", null, null);
+            testMood4 = new MoodEvent(new Mood(MoodState.HAPPY), SocialSetting.CROWD,
+                    "test", null, null);
+            testMood5 = new MoodEvent(new Mood(MoodState.HAPPY), SocialSetting.CROWD,
+                    "", null, null);
+        } catch (EmptyMoodException e) {
+            e.printStackTrace();
+        } catch (TriggerTooLongException e) {
+            e.printStackTrace();
+        }
 
         // add mood events into the server
         addMoodEventTask.execute(testMood1, testMood2, testMood3, testMood4);

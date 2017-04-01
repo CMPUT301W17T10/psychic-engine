@@ -30,6 +30,8 @@ import android.widget.Toast;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.CreateMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.EmptyMoodException;
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodLocation;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
@@ -184,22 +186,24 @@ public class CreateMoodActivity extends AppCompatActivity {
             // pass
         }
 
-        //String location = locationEditText.getText().toString(); // TODO tentative, location type will change in part 5
 
-
-
-        if (photoSizeUnder) {
-            int rc = createMoodController.createMoodEvent(moodString, socialSettingString, trigger, photo, location);
-
-            if (rc == -1) {
+        if (photoSizeUnder) {   // TODO photo size limit exception
+            boolean thrown = false;
+            try {
+                createMoodController.createMoodEvent(moodString, socialSettingString, trigger, photo, location);
+            } catch (EmptyMoodException e) {
+                thrown = true;
                 Toast.makeText(CreateMoodActivity.this,
                         "Please specify a mood.",
                         Toast.LENGTH_LONG).show();
-            } else if (rc == -2) {
-                    Toast.makeText(CreateMoodActivity.this,
-                            "Trigger has to be 3 words.",
-                            Toast.LENGTH_LONG).show();
-            } else {
+            } catch (TriggerTooLongException e) {
+                thrown = true;
+                Toast.makeText(CreateMoodActivity.this,
+                        "Trigger has to be 3 words.",
+                        Toast.LENGTH_LONG).show();
+            }
+
+            if (!thrown) {
                 Intent intent = new Intent(CreateMoodActivity.this, MyProfileActivity.class);
                 startActivity(intent);
             }

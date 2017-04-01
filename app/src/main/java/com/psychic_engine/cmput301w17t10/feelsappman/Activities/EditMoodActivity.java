@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.EditMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.EmptyMoodException;
 import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
@@ -232,25 +233,34 @@ public class EditMoodActivity extends AppCompatActivity{
             // pass
         }
 
-        //String location = locationEditText.getText().toString(); // TODO change location type in part 5
-
         if (photoSizeUnder) {
+            boolean thrown = false;
             try {
                 EditMoodController.editMoodEvent(
                         moodEvent, moodString, socialSettingString, trigger, photo, location);
+            } catch (EmptyMoodException e) {
+                thrown = true;
+                Toast.makeText(EditMoodActivity.this,
+                        "Please specify a mood",
+                        Toast.LENGTH_LONG).show();
             } catch (TriggerTooLongException e) {
+                thrown = true;
                 Toast.makeText(EditMoodActivity.this,
                         "Trigger must be 3 words and under 20 chars!",
                         Toast.LENGTH_LONG).show();
             }
+
+            if (!thrown) {
+                Intent intent = new Intent(EditMoodActivity.this, MyProfileActivity.class);
+                startActivity(intent);
+            }
+
         } else {
             Toast.makeText(EditMoodActivity.this,
                     "Photo size is too large! (Max 65536 bytes)",
                     Toast.LENGTH_LONG).show();
         }
 
-        Intent intent = new Intent(EditMoodActivity.this, MyProfileActivity.class);
-        startActivity(intent);
     }
 
     public Location getCurrentLocation(Location coords) {
