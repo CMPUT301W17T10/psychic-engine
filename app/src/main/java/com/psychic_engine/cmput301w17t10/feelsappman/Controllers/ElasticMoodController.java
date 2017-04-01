@@ -37,57 +37,8 @@ import io.searchbox.core.SearchResult;
 public class ElasticMoodController extends ElasticController{
 
     /**
-     * FilterMoodByReasonTask takes in two parameters, the first one being the login name of participant
-     * currently using the app. The second parameter is the reason (trigger) for the mood event.
-     * The task filters the mood events that the participant has through the trigger field.
-     */
-    public static class FilterMoodByReasonTask extends AsyncTask<String, Void, ArrayList<MoodEvent>> {
-        @Override
-        protected ArrayList<MoodEvent> doInBackground(String ... params) {
-            verifySettings();
-            String query;
-            ArrayList<MoodEvent> foundMoodEvents = new ArrayList<>();
-
-            //if params[1] is null (trigger) : use the missing field
-            //if params[1] is not null (trigger) : use the second query with the reason text
-            // params[0] is the current participant filtering their moods
-            String self = params[0];
-            String reason = params[1];
-            Log.i("Self","Logged in as "+ self);
-            Log.i("Trigger", "Search for "+ reason);
-
-            // would not need to filter by reason if the trigger had no reason in the edit text
-            // would change the method if there was no filter by reason intended.
-            query = "{\"size\": 100, \"query\": {\"match\":{\"moodOwner\":\"" +
-                    "" + self + "\"}},\"filter\":{\"term\":{\"trigger\":\""+reason+"\"}}}";
-
-            Log.i ("QUERY", query);
-
-            Search search = new Search.Builder(query)
-                    .addIndex("cmput301w17t10")
-                    .addType("moodevent")
-                    .build();
-
-            try {
-                SearchResult result = client.execute(search);
-                if (result.isSucceeded()) {
-                    List<MoodEvent> foundEvents = result.getSourceAsObjectList(MoodEvent.class);
-                    Log.i("Size List", "Size of list: "+ String.valueOf(foundEvents.size()));
-                    foundMoodEvents.addAll(foundEvents);
-                } else {
-                    Log.i("None", "No mood events with this reason has been found");
-                }
-            } catch (Exception e) {
-                Log.i("Error", "Communication error with server");
-            }
-            return foundMoodEvents;
-        }
-
-    }
-
-    /**
      * AddMoodEventTask adds a mood event into the elastic server. Utilized when the participant
-     * would like to create a mood event in the CreateMoodActivity.
+     * would like to createMoodEvent a mood event in the CreateMoodActivity.
      */
     public static class AddMoodEventTask extends AsyncTask<MoodEvent, Void, Void> {
 
@@ -140,27 +91,27 @@ public class ElasticMoodController extends ElasticController{
     }
 
     /**
-     * Update task to update the mood events as you try to edit your mood. In offline mode, you
-     * would be able to edit your moods, but as there is connection, it will update every mood event
-     * that is in the participant's mood list, then update the entire participant with the updated
+     * Update task to editMoodEvent the mood events as you try to edit your mood. In offline mode, you
+     * would be able to edit your moods, but as there is connection, it will editMoodEvent every mood event
+     * that is in the participant's mood list, then editMoodEvent the entire participant with the updated
      * mood events.
      */
     public static class UpdateMoodTask extends AsyncTask<MoodEvent, Void, Void> {
 
         @Override
         protected Void doInBackground(MoodEvent... updateEvent) {
-            Log.i("UpdateMoodTask", "Attempt to update mood event");
+            Log.i("UpdateMoodTask", "Attempt to editMoodEvent mood event");
             // for every mood event that is added
             for (MoodEvent updatingMood : updateEvent) {
                 String updateID = updatingMood.getId();
                 try {
                     client.execute(new Delete.Builder(updateID).index("cmput301w17t10").type("moodevent").build());
                 } catch (Exception e) {
-                    Log.i("Error", "Unable to update mood into the server");
+                    Log.i("Error", "Unable to editMoodEvent mood into the server");
                 }
 
                 // then add the updated participant with the newer info (keep id)
-                // create new index in the elastic with the same id before that was deleted
+                // createMoodEvent new index in the elastic with the same id before that was deleted
                 Index index = new Index.Builder(updatingMood)
                         .index("cmput301w17t10")
                         .type("moodevent")
@@ -181,97 +132,4 @@ public class ElasticMoodController extends ElasticController{
         }
     }
 
-    /**
-     * FindMoodLocationsTask find all mood events of any participant that has entered a mood event
-     * that has location enabled when they made their mood
-     */
-    public static class FindMoodLocationsTask extends AsyncTask<Void, Void, ArrayList<MoodEvent>> {
-
-        @Override
-        protected ArrayList<MoodEvent> doInBackground(Void... params) {
-            verifySettings();
-            ArrayList<MoodEvent> foundMoods = new ArrayList<>();
-            String query = "{\"size\": 100,\"query\" : {\"filtered\" : { \"filter\" : " +
-                    "{ \"bool\" : {\"must_not\""+
-                    ": [ {\"missing\": {\"field\" : \"location\"}}]}}}}}";
-
-            Search search = new Search.Builder(query)
-                    .addIndex("cmput301w17t10")
-                    .addType("moodevent")
-                    .build();
-            try {
-                SearchResult result = client.execute(search);
-                if (result.isSucceeded()) {
-                    List<MoodEvent> resultList = result.getSourceAsObjectList(MoodEvent.class);
-                    foundMoods.addAll(resultList);
-                    Log.i("Success", "Successfully pulled mood events with locations");
-                }
-            } catch (Exception e) {
-                Log.i("Fail", "Failed to obtain mood events with locations");
-            }
-            return foundMoods;
-        }
-    }
-
-    /**
-     *  Find all mood events in the elastic server to then be sorted through locally with each
-     *  participant's most recent mood event and display the event if it does have a location. The
-     *  mood events are sorted in descending order (most recent)
-     */
-    public static class FindMoodEventsTask extends AsyncTask<Void, Void, ArrayList<MoodEvent>> {
-
-        private RecentMapActivity activity;
-        private ProgressDialog pdia;
-        ArrayList<MoodEvent> foundMoods = new ArrayList<>();
-
-        public FindMoodEventsTask(RecentMapActivity activity) {
-            this.activity = activity;
-        }
-
-        //Taken from http://stackoverflow.com/questions/3893626/how-to-use-asynctask-to-show-a-progressdialog-while-doing-background-work-in-and
-        //March 30, 2017
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-            pdia = new ProgressDialog(activity);
-            pdia.setMessage("Loading...");
-            pdia.show();
-        }
-
-        @Override
-        protected ArrayList<MoodEvent> doInBackground(Void... params) {
-            verifySettings();
-            Log.i("DOINBACKGROUND", "DO IN BACKGROUND IS GETTING EXECUTED");
-            // construct query
-            String query = "{\"size\": 100 , \"query\":{\"match_all\" : {}}, \"sort\" : [{ \"date\" : { \"order\": \"desc\"}}]}";
-            Search search = new Search.Builder(query)
-                    .addIndex("cmput301w17t10")
-                    .addType("moodevent")
-                    .build();
-
-            // execute query
-            try {
-                SearchResult result = client.execute(search);
-                if (result.isSucceeded()) {
-                    // save all results and add them to the array list
-                    List<MoodEvent> resultList = result.getSourceAsObjectList(MoodEvent.class);
-                    foundMoods.addAll(resultList);
-                    //activity.setMoodList(foundMoods);
-                    Log.i("Success", "Successfully pulled mood events with locations");
-                }
-            } catch (Exception e) {
-                Log.i("Fail", "Failed to obtain mood events with locations");
-            }
-            return foundMoods;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<MoodEvent> result) {
-            //Log.i("ONPOSTEXECUTE", Integer.toString(result.size()));
-            super.onPostExecute(result);
-            //activity.setMoodList(result);
-            pdia.dismiss();
-        }
-
-    }
 }

@@ -60,7 +60,7 @@ public class ParticipantController {
                 singletonList.add(storedParticipant);
             }
         } catch (Exception e) {
-            Log.i("Error", "Unable to update singleton list with elastic");
+            Log.i("Error", "Unable to editMoodEvent singleton list with elastic");
         }
     }
 

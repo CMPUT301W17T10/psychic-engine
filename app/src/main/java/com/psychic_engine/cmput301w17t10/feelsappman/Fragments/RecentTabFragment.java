@@ -60,12 +60,12 @@ public class RecentTabFragment extends Fragment {
         participant = ParticipantSingleton.getInstance().getSelfParticipant();
         moodEvent = participant.getMostRecentMoodEvent();
 
-        // set the delete button to remove mood events and update affected classes accordingly
+        // set the delete button to deleteMoodEvent mood events and editMoodEvent affected classes accordingly
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (moodEvent != null) {
-                    DeleteMoodController.remove(moodEvent);
+                    DeleteMoodController.deleteMoodEvent(moodEvent);
                     display();
                 }
             }

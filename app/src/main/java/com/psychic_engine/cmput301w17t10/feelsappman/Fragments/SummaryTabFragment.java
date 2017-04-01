@@ -224,7 +224,7 @@ public class SummaryTabFragment extends Fragment implements
 
             switch (moodEvent.getMood().getMood()) {
 
-                // For each mood, create mappings from days to mood count for that day
+                // For each mood, createMoodEvent mappings from days to mood count for that day
                 case SAD:
                     if (sadDayToCountMap.containsKey(days)) {
                         count = sadDayToCountMap.get(days);

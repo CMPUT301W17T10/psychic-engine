@@ -125,7 +125,7 @@ public class EditMoodActivity extends AppCompatActivity{
         // set up events that happen when user clicks browse button
         setUpBrowse();
 
-        // set up events that happen when user clicks create button
+        // set up events that happen when user clicks createMoodEvent button
         setUpSave();
 
         // set up events that happen when user clicks cancel button
@@ -236,7 +236,7 @@ public class EditMoodActivity extends AppCompatActivity{
 
         if (photoSizeUnder) {
             try {
-                EditMoodController.updateMoodEventList(
+                EditMoodController.editMoodEvent(
                         moodEvent, moodString, socialSettingString, trigger, photo, location);
             } catch (TriggerTooLongException e) {
                 Toast.makeText(EditMoodActivity.this,

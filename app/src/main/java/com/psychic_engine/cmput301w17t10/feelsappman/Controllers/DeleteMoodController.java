@@ -16,14 +16,14 @@ import java.util.Date;
  * DeleteMoodController will delete mood events from the participant's mood event list. This will
  * include
  */
-public class DeleteMoodController {
+public class DeleteMoodController extends MoodController {
 
     /**
      * Removes the specified moodEvent from the self participant's mood list. Update the new
      * participent details in the elastic server
      * @param moodEvent
      */
-    public static void remove(MoodEvent moodEvent) {
+    public static void deleteMoodEvent(MoodEvent moodEvent) {
 
         // delete the mood event from the server
         ElasticMoodController.DeleteMoodEventTask dmt = new ElasticMoodController.DeleteMoodEventTask();
@@ -33,11 +33,11 @@ public class DeleteMoodController {
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         ArrayList<MoodEvent> moodEventList = participant.getMoodList();
 
-        // remove the mood event from the participants mood event list
+        // deleteMoodEvent the mood event from the participants mood event list
         moodEventList.remove(moodEvent);
 
         MoodEvent mostRecent;
-        // update the most recent mood
+        // editMoodEvent the most recent mood
         if (moodEventList.size() > 0) {
             mostRecent = moodEventList.get(0);
             Date mostRecentDate = mostRecent.getDate();
@@ -53,7 +53,7 @@ public class DeleteMoodController {
         }
         participant.setMostRecentMoodEvent(mostRecent);
 
-        // update the participant to stay up to date with in the elastic server
+        // editMoodEvent the participant to stay up to date with in the elastic server
         ElasticParticipantController.UpdateParticipantTask upt = new ElasticParticipantController.UpdateParticipantTask();
         upt.execute(participant);
     }

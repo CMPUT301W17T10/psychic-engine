@@ -139,8 +139,8 @@ public class CreateMoodActivityTest extends ActivityInstrumentationTestCase2<Cre
     }
 
     /**
-     * Test the create button to ensure that when you click on the button, you will be sent to
-     * the MyProfileActivity upon completion. If it does not create the mood properly, then either
+     * Test the createMoodEvent button to ensure that when you click on the button, you will be sent to
+     * the MyProfileActivity upon completion. If it does not createMoodEvent the mood properly, then either
      * the app will crash or you will not be sent to the MyProfileActivity.
      * @see MyProfileActivity
      */
@@ -149,11 +149,11 @@ public class CreateMoodActivityTest extends ActivityInstrumentationTestCase2<Cre
         // Enter test mood as Sad
         solo.pressSpinnerItem(0, 1);
         assertTrue("mood spinner item Sad is not selected", solo.isSpinnerTextSelected(0,"Sad"));
-        // create test participant
+        // createMoodEvent test participant
         //ParticipantSingleton.getInstance().addParticipant("test");
         Participant self = ParticipantSingleton.getInstance().searchParticipant("test");
         ParticipantSingleton.getInstance().setSelfParticipant(self);
-        // Press create button
+        // Press createMoodEvent button
         solo.clickOnText("Create");
         solo.assertCurrentActivity("Wrong Activity", MyProfileActivity.class);
     }

@@ -148,11 +148,11 @@ public class EditMoodActivityTest  extends ActivityInstrumentationTestCase2<Edit
         // Enter test mood as Sad
         solo.pressSpinnerItem(0, 1);
         assertTrue("mood spinner item Sad is not selected", solo.isSpinnerTextSelected(0,"Sad"));
-        // create test participant
+        // createMoodEvent test participant
         //ParticipantSingleton.getInstance().addParticipant("test");
         Participant self = ParticipantSingleton.getInstance().searchParticipant("test");
         ParticipantSingleton.getInstance().setSelfParticipant(self);
-        // Press create button
+        // Press createMoodEvent button
         solo.clickOnText("Save");
         solo.assertCurrentActivity("Wrong Activity", MyProfileActivity.class);
     }

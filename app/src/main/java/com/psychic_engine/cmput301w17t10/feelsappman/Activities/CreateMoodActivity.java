@@ -53,7 +53,7 @@ import static java.lang.Boolean.TRUE;
 /**
  * CreateMoodActivity will be similar to the EditMoodActivity in such a way that the format will be
  * the same. However, one will be able to edit previously created events and one will only be able
- * to create new ones. The participant will be able to enter a variety of options where the mood
+ * to createMoodEvent new ones. The participant will be able to enter a variety of options where the mood
  * state is mandatory for entry, while others are optional.
  * @see EditMoodActivity
  */
@@ -102,7 +102,7 @@ public class CreateMoodActivity extends AppCompatActivity {
         // set up events that happen when user clicks location button
         setUpLocation();
 
-        // set up events that happen when user clicks create button
+        // set up events that happen when user clicks createMoodEvent button
         setUpCreate();
 
         // set up events that happen when user clicks cancel button
@@ -138,7 +138,7 @@ public class CreateMoodActivity extends AppCompatActivity {
     }
 
     /**
-     * Main method to call whenever the participant was to create their mood event after setting
+     * Main method to call whenever the participant was to createMoodEvent their mood event after setting
      * their options. The system will obtain all of the information (null or not), and then save
      * the mood event into the participants own arrays of mood events. Depending on the options,
      * the participant will be able to save it as a picture, which will have required a prompt to
@@ -189,7 +189,7 @@ public class CreateMoodActivity extends AppCompatActivity {
 
 
         if (photoSizeUnder) {
-            int rc = createMoodController.updateMoodEventList(moodString, socialSettingString, trigger, photo, location);
+            int rc = createMoodController.createMoodEvent(moodString, socialSettingString, trigger, photo, location);
 
             if (rc == -1) {
                 Toast.makeText(CreateMoodActivity.this,
@@ -262,7 +262,7 @@ public class CreateMoodActivity extends AppCompatActivity {
         return coords;
     }
     /**
-     * Setup method to create the spinners in the UI. This includes creating the adapters necessary
+     * Setup method to createMoodEvent the spinners in the UI. This includes creating the adapters necessary
      * for the spinners as well as the necessary settings and moods that will be contained in the
      * spinner.
      */
@@ -369,7 +369,7 @@ public class CreateMoodActivity extends AppCompatActivity {
     }
 
     /**
-     * Setup method for the create button, which will issue a command to create the mood event on
+     * Setup method for the createMoodEvent button, which will issue a command to createMoodEvent the mood event on
      * click.
      */
     void setUpCreate() {

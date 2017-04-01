@@ -17,7 +17,7 @@ import io.searchbox.core.SearchResult;
 
 /**
  * ElasticParticipantController handles all elastic requests in regards to participants. Tasks will
- * be used to update, add, and find participants to find other participants using the app.
+ * be used to editMoodEvent, add, and find participants to find other participants using the app.
  * Comments by adong on 3/28/2017.
  * @author adong
  */
@@ -39,7 +39,7 @@ public class ElasticParticipantController extends ElasticController {
                 Index index = new Index.Builder(participant).index("cmput301w17t10")
                         .type("participant").build();
 
-                // Attempt to create an index for the new participants to store into the server
+                // Attempt to createMoodEvent an index for the new participants to store into the server
                 try {
                     DocumentResult result = client.execute(index);
                     // Upon successful execution of index creation, attempt to save uniqueID to participant
@@ -95,9 +95,9 @@ public class ElasticParticipantController extends ElasticController {
     }
 
     /**
-     * Elastic task method used to update a participant. Use this method when you need to update
+     * Elastic task method used to editMoodEvent a participant. Use this method when you need to editMoodEvent
      * participant data, such as following, followers, and mood events. Let the parameter be
-     * the participant that you would like to update. Reindexing the participant is necessary
+     * the participant that you would like to editMoodEvent. Reindexing the participant is necessary
      * if there are significant changes that is not simply incrementing a value. Reindexing is done
      * by deleting the participant by ID and then adding the same participant again, preserving the
      * ID that was assigned to it previously.
@@ -107,7 +107,7 @@ public class ElasticParticipantController extends ElasticController {
 
         @Override
         protected Void doInBackground(Participant... updated) {
-            Log.i("Update", "Attempting to update participants");
+            Log.i("Update", "Attempting to editMoodEvent participants");
             verifySettings();
             for (Participant updatingParticipant : updated) {
                 // need to delete the participant first
@@ -120,7 +120,7 @@ public class ElasticParticipantController extends ElasticController {
                 }
 
                 // then add the updated participant with the newer info (keep id)
-                // create new index in the elastic with the same id before that was deleted
+                // createMoodEvent new index in the elastic with the same id before that was deleted
                 Index index = new Index.Builder(updatingParticipant)
                         .index("cmput301w17t10")
                         .type("participant")

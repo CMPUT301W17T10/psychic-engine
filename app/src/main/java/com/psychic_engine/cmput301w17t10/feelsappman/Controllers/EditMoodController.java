@@ -21,13 +21,13 @@ import java.util.Date;
  */
 
 /**
- * EditMoodController is similar to CreateMoodController in that it will update the mood event
+ * EditMoodController is similar to CreateMoodController in that it will editMoodEvent the mood event
  * list of the participant with a new mood event. Since a new date is created, it is counted as
  * the most recent mood event to be changed by the participant. Since we change the details of the
- * mood event, we would need to update the mood event in the elastic server. A change in mood event
- * for the participant also requires a participant update to the server.
+ * mood event, we would need to editMoodEvent the mood event in the elastic server. A change in mood event
+ * for the participant also requires a participant editMoodEvent to the server.
  */
-public class EditMoodController {
+public class EditMoodController extends MoodController{
 
     /**
      * Parameters are obtained from the the activity where we edit the moods. All changes would be
@@ -40,56 +40,16 @@ public class EditMoodController {
      * @param location
      * @throws TriggerTooLongException
      */
-    public static void updateMoodEventList(MoodEvent moodEvent, String moodString, String socialSettingString, String trigger, Photograph photo, MoodLocation location) throws TriggerTooLongException {
+    public static void editMoodEvent(MoodEvent moodEvent, String moodString,
+                                     String socialSettingString, String trigger,
+                                     Photograph photo, MoodLocation location)
+            throws TriggerTooLongException {
 
-        Mood mood = null;
-        SocialSetting socialSetting;
+        // find mood and social setting
+        Mood mood = selectMood(moodString);
+        SocialSetting socialSetting = selectSocialSetting(socialSettingString);
 
-        switch (moodString) {        // TODO refactor this - inside MoodState enum class?
-            case "Sad":
-                mood = new Mood(MoodState.SAD);
-                break;
-            case "Happy":
-                mood = new Mood(MoodState.HAPPY);
-                break;
-            case "Shame":
-                mood = new Mood(MoodState.SHAME);
-                break;
-            case "Fear":
-                mood = new Mood(MoodState.FEAR);
-                break;
-            case "Anger":
-                mood = new Mood(MoodState.ANGER);
-                break;
-            case "Surprised":
-                mood = new Mood(MoodState.SURPRISED);
-                break;
-            case "Disgust":
-                mood = new Mood(MoodState.DISGUST);
-                break;
-            case "Confused":
-                mood = new Mood(MoodState.CONFUSED);
-                break;
-        }
-
-        switch (socialSettingString) {
-            case "Alone":
-                socialSetting = SocialSetting.ALONE;
-                break;
-            case "One Other":
-                socialSetting = SocialSetting.ONEOTHER;
-                break;
-            case "Two To Several":
-                socialSetting = SocialSetting.TWOTOSEVERAL;
-                break;
-            case "Crowd":
-                socialSetting = SocialSetting.CROWD;
-                break;
-            default:
-                socialSetting = null;
-        }
-
-        // update properties of the mood event
+        // editMoodEvent properties of the mood event
         moodEvent.setMood(mood);
         moodEvent.setDate(new Date());
         moodEvent.setSocialSetting(socialSetting);
@@ -101,16 +61,16 @@ public class EditMoodController {
         moodEvent.setPicture(photo);
         moodEvent.setLocation(location);
 
-        // update the most recent mood event in elastic
+        // editMoodEvent the most recent mood event in elastic
         Log.i("Update", "Updating mood in the EditMoodController");
         ElasticMoodController.UpdateMoodTask updateMoodTask = new ElasticMoodController.UpdateMoodTask();
         updateMoodTask.execute(moodEvent);
 
-        // update the most recent mood event
+        // editMoodEvent the most recent mood event
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         participant.setMostRecentMoodEvent(moodEvent);
 
-        // update the participant in the elastic server
+        // editMoodEvent the participant in the elastic server
         Log.i("Update", "Updating participant in the EditMoodController");
         ElasticParticipantController.UpdateParticipantTask upt = new ElasticParticipantController
                 .UpdateParticipantTask();

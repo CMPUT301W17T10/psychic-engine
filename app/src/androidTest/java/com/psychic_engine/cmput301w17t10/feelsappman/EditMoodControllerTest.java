@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class EditMoodControllerTest extends TestCase {
 
     public void test1_EditMoodController () {
-        //Initialize parameters used in the update method.
+        //Initialize parameters used in the editMoodEvent method.
         Participant selfParticipant = new Participant("alex");
         String moodString = "Sad";
         String socialSettingString = "Alone";
@@ -47,15 +47,15 @@ public class EditMoodControllerTest extends TestCase {
         int position = moodEventsRecent.size() - 1;
 
 
-        // test if the update was unsuccessful
+        // test if the editMoodEvent was unsuccessful
         /*
         try {
-            EditMoodController.updateMoodEventList
+            EditMoodController.editMoodEvent
                        (moodEventsRecent.get(position), moodString, socialSettingString, trigger, null, null);
         } catch (TriggerTooLongException e) {
             e.printStackTrace();
         }*/
-        assertEquals("empty, update fail", instance.getSelfParticipant().getMoodList()
+        assertEquals("empty, editMoodEvent fail", instance.getSelfParticipant().getMoodList()
         .get(0).getMood().getMood(),
         MoodState.SAD);
 }
