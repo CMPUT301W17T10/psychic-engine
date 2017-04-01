@@ -117,7 +117,7 @@ public class RecentMapActivity extends Activity {
         confusedEvents = new ArrayList<OverlayItem>();
 
         //For each item in the filteredMoodList
-        
+
         for (MoodEvent mood : moodList) {
 
             //if has location
