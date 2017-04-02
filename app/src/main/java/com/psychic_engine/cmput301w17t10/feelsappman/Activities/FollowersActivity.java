@@ -85,7 +85,7 @@ public class FollowersActivity extends AppCompatActivity {
         switch(item.getItemId()) {
             case R.id.unfollow:
                 ElasticParticipantController.FindParticipantTask fpt1 = new ElasticParticipantController.FindParticipantTask();
-                fpt1.execute(ParticipantSingleton.getInstance().getSelfParticipant().getLogin());
+                fpt1.execute(followerArray.get(info.position));
 
                 try {
                     follower = fpt1.get();
@@ -96,7 +96,7 @@ public class FollowersActivity extends AppCompatActivity {
                 }
 
                 followerFollowingArray = follower.getFollowing();
-                followerFollowingArray.remove(followerArray.get(info.position));
+                followerFollowingArray.remove(participant.getLogin());
                 followerArray.remove(info.position);
 
                 ElasticParticipantController.UpdateParticipantTask upt = new ElasticParticipantController.UpdateParticipantTask();

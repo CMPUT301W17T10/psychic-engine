@@ -29,8 +29,10 @@ public class FollowingActivity extends AppCompatActivity {
     private ListView followingList;
     private Button search;
     private ArrayList<String> followingArray;
+    private ArrayList<String> followingFollowArray;
     private ArrayAdapter<String> adapter;
     private Participant participant;
+    private Participant following;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class FollowingActivity extends AppCompatActivity {
         registerForContextMenu(followingList);
 
         followingArray = new ArrayList<String>();
+        followingFollowArray = new ArrayList<String>();
 
         initializeSpinner();
 
@@ -91,6 +94,26 @@ public class FollowingActivity extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch(item.getItemId()) {
             case R.id.stopfollowing:
+                ElasticParticipantController.FindParticipantTask fpt1 = new ElasticParticipantController.FindParticipantTask();
+                fpt1.execute(followingArray.get(info.position));
+
+                try {
+                    following = fpt1.get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+                followingFollowArray = following.getFollowers();
+                followingFollowArray.remove(participant.getLogin());
+                followingArray.remove(info.position);
+
+                ElasticParticipantController.UpdateParticipantTask upt = new ElasticParticipantController.UpdateParticipantTask();
+                upt.execute(participant);
+
+                ElasticParticipantController.UpdateParticipantTask upt1 = new ElasticParticipantController.UpdateParticipantTask();
+                upt1.execute(following);
 
                 setResult(RESULT_OK);
                 adapter.notifyDataSetChanged();
