@@ -71,6 +71,8 @@ public class SummaryTabFragment extends Fragment implements
         OnChartGestureListener, OnChartValueSelectedListener {
 
     private static final String REFERENCE_DATE = "2017-01-01";
+    private static final int BOUND_DAY = 1822;
+
     private ArrayList<MoodEvent> moodEventList;
 
     private ScatterChart mChart;
@@ -194,6 +196,7 @@ public class SummaryTabFragment extends Fragment implements
                     daysSince -= range;
                 }
 
+                // check limits
                 if (daysSince >= 0) {           // >= REFERENCE_DATE
                     setData(range, daysSince);
                 }
@@ -221,7 +224,10 @@ public class SummaryTabFragment extends Fragment implements
                     daysSince += range;
                 }
 
-                setData(range, daysSince);
+                // check limits
+                if (daysSince <= BOUND_DAY - range) {
+                    setData(range, daysSince);
+                }
             }
         });
 
