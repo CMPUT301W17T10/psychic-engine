@@ -70,6 +70,7 @@ import static android.graphics.Color.parseColor;
 public class SummaryTabFragment extends Fragment implements
         OnChartGestureListener, OnChartValueSelectedListener {
 
+    private static final String REFERENCE_DATE = "2017-01-01";
     private ArrayList<MoodEvent> moodEventList;
 
     private ScatterChart mChart;
@@ -105,9 +106,7 @@ public class SummaryTabFragment extends Fragment implements
 
         // initialize start of graph view to current date
         Date now = new Date();
-        Date thisYear = parseDate("2017-01-01");
-        long diff = now.getTime() - thisYear.getTime();
-        daysSince = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;
+        daysSince = daysDiff(now);
 
         // Set chart, axis, and legend properties
         setChartProperties();
@@ -161,11 +160,8 @@ public class SummaryTabFragment extends Fragment implements
                        // standardize to days since 01/01/2017, used by the x-axis formatter
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                         String formatedDate = sdf.format(new Date(year - 1900, month, day));
-                        chartTitle.setText(formatedDate);   // TODO comment out
                         Date viewDate = parseDate(formatedDate);
-                        Date thisYear = parseDate("2017-01-01");
-                        long diff = viewDate.getTime() - thisYear.getTime();
-                        daysSince = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;   // DayAxisFormatter begins at day 0, 01/01/2017 is day 1
+                        daysSince = daysDiff(viewDate);
 
                         setData(range, daysSince);
                     }
@@ -331,17 +327,13 @@ public class SummaryTabFragment extends Fragment implements
         confusedDayToCountMap = new HashMap();
         surprisedDayToCountMap = new HashMap();
 
-
-        Date beginDate = parseDate("2017-01-01");
-        long diff;
         int days;
         MutableInteger count;
 
         for (MoodEvent moodEvent : moodEventList) {
 
             // standardize days to reference start day
-            diff = moodEvent.getDate().getTime() - beginDate.getTime();
-            days = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;    // formatter begins at 1
+            days = daysDiff(moodEvent.getDate());
 
             switch (moodEvent.getMood().getMood()) {
 
@@ -567,6 +559,17 @@ public class SummaryTabFragment extends Fragment implements
         } catch (ParseException e) {
             return null;
         }
+    }
+
+    /**
+     * Finds the difference in days since the beginning of the year
+     * @param date
+     * @return
+     */
+    private int daysDiff(Date date) {
+        Date refDate = parseDate(REFERENCE_DATE);
+        long diff = date.getTime() - refDate.getTime();
+        return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;    // DayAxisFormatter begins at day 0, 01/01/2017 is day 1
     }
 
 }
