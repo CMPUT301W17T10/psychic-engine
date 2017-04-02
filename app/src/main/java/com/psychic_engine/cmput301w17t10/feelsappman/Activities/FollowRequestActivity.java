@@ -34,6 +34,8 @@ public class FollowRequestActivity extends AppCompatActivity {
 
         followerRequestsList = (ListView) findViewById(R.id.listViewFollowerRequests);
 
+
+
         initializeSpinner();
     }
 

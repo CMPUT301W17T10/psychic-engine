@@ -236,8 +236,8 @@ public class EditMoodActivity extends AppCompatActivity{
         if (photoSizeUnder) {
             boolean thrown = false;
             try {
-                EditMoodController.editMoodEvent(
-                        moodEvent, moodString, socialSettingString, trigger, photo, location);
+                EditMoodController.editMoodEvent(moodEvent, moodString, socialSettingString
+                        , trigger, photo, location, getApplicationContext());
             } catch (EmptyMoodException e) {
                 thrown = true;
                 Toast.makeText(EditMoodActivity.this,

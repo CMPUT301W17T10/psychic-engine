@@ -16,6 +16,13 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <receiver android:name="com.psychic_engine.cmput301w17t10.feelsappman.Custom.CheckConnectivity">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
         <activity android:name=".Activities.LoginActivity">
             <supports-screens android:anyDensity="true" />
 
@@ -77,7 +84,8 @@
         <activity android:name=".Activities.FollowingActivity" />
         <activity android:name=".Activities.FollowersActivity" />
         <activity android:name=".Activities.FollowRequestActivity" />
-        <activity android:name=".Activities.MyFeedActivity"></activity>
+        <activity android:name=".Activities.MyFeedActivity" />
+        <activity android:name=".Activities.SearchActivity"></activity>
     </application>
 
 </manifest>
