@@ -113,6 +113,11 @@ public class RecentTabFragment extends Fragment {
             date.setText(moodEvent.getDate().toString());
             if (moodEvent.getPicture() != null) {
                 imageView.setImageBitmap(moodEvent.getPicture().getImage());
+            } else {
+                // set default mood image if photo is not specified
+                String defaultImage = moodEvent.getMood().getIconName();
+                int drawableResourceId = this.getResources().getIdentifier(defaultImage, "drawable", getActivity().getPackageName());
+                imageView.setImageResource(drawableResourceId);
             }
             if (moodEvent.getLocation() != null)
                 location.setText(moodEvent.getLocation().getLatitudeStr().concat(moodEvent.getLocation().getLongitudeStr()));
