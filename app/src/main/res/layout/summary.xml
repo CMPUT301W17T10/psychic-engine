@@ -40,17 +40,23 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/xLabel"
         android:layout_below="@+id/linearLayoutChartTop"
+        android:layout_toRightOf="@+id/yLabel"
         android:background="@color/white" />
 
     <TextView
         android:id="@+id/yLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="20dp"
         android:layout_height="match_parent"
         android:layout_above="@+id/xLabel"
+        android:layout_alignBottom="@+id/xLabel"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentRight="false"
+
         android:layout_below="@+id/linearLayoutChartTop"
-        android:layout_toLeftOf="@+id/chart"
+        android:rotation="-90"
         android:text="Mood Count"
-        android:layout_alignParentStart="true" />
+        android:textAllCaps="false"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/xLabel"

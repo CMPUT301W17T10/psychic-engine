@@ -125,7 +125,7 @@ public class SummaryTabFragment extends Fragment implements
         List<String> rangeSpinnerItems = new ArrayList<String>();
         rangeSpinnerItems.add("week");
         rangeSpinnerItems.add("month");
-        rangeSpinnerItems.add("year");
+        //rangeSpinnerItems.add("year");
 
         ArrayAdapter<String> rangeSpinnerAdapter = new ArrayAdapter<String>(
                 getActivity(), android.R.layout.simple_spinner_item, rangeSpinnerItems);
@@ -140,14 +140,11 @@ public class SummaryTabFragment extends Fragment implements
                 } else if (position == 1) {
                     // Set graph view to the beginning of the month
                     int month = DateConverter.determineMonth(daysSince);
-                    if (month == 3 || month == 5 || month == 8 || month == 10)
-                        range = 30;
-                    else
-                        range = 31;
-
                     int year = DateConverter.determineYear(daysSince);
+                    range = DateConverter.getDaysForMonth(month, year);
+
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    String formatedDate = sdf.format(new Date(year - 1900, month + 1, 1));
+                    String formatedDate = sdf.format(new Date(year - 1900, month, 1));
                     Date date = parseDate(formatedDate);
                     daysSince = daysDiff(date);
 
@@ -181,14 +178,11 @@ public class SummaryTabFragment extends Fragment implements
                 if (spinnerRange.getSelectedItemPosition() == 1) {
                     daysSince = daysSince - 1; // get the previous month
                     int month = DateConverter.determineMonth(daysSince);
-                    if (month == 3 || month == 5 || month == 8 || month == 10)
-                        range = 30;
-                    else
-                        range = 31;
-
                     int year = DateConverter.determineYear(daysSince);
+                    range = DateConverter.getDaysForMonth(month, year);
+
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    String formatedDate = sdf.format(new Date(year - 1900, month + 1, 1));
+                    String formatedDate = sdf.format(new Date(year - 1900, month, 1));
                     Date date = parseDate(formatedDate);
                     daysSince = daysDiff(date);
                 }
@@ -197,8 +191,11 @@ public class SummaryTabFragment extends Fragment implements
                 }
 
                 // check limits
-                if (daysSince >= 0) {           // >= REFERENCE_DATE
+                if (daysSince > 0) {           // > REFERENCE_DATE
                     setData(range, daysSince);
+                }
+                else {
+                    daysSince += range;
                 }
             }
         });
@@ -209,14 +206,11 @@ public class SummaryTabFragment extends Fragment implements
                 if (spinnerRange.getSelectedItemPosition() == 1) {
                     daysSince = daysSince + range; // get the next month
                     int month = DateConverter.determineMonth(daysSince);
-                    if (month == 3 || month == 5 || month == 8 || month == 10)
-                        range = 30;
-                    else
-                        range = 31;
-
                     int year = DateConverter.determineYear(daysSince);
+                    range = DateConverter.getDaysForMonth(month, year);
+
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    String formatedDate = sdf.format(new Date(year - 1900, month + 1, 1));
+                    String formatedDate = sdf.format(new Date(year - 1900, month, 1));
                     Date date = parseDate(formatedDate);
                     daysSince = daysDiff(date);
                 }
@@ -227,6 +221,8 @@ public class SummaryTabFragment extends Fragment implements
                 // check limits
                 if (daysSince <= BOUND_DAY - range) {
                     setData(range, daysSince);
+                } else {
+                    daysSince -= range;
                 }
             }
         });
@@ -281,10 +277,6 @@ public class SummaryTabFragment extends Fragment implements
         ArrayList<Entry> yValsConfused = new ArrayList<Entry>();
         ArrayList<Entry> yValsSurprised = new ArrayList<Entry>();
 
-
-        // the start of the window
-        //float start = 0;
-        //float start = mSeekBarStart.getProgress() + 1;
 
         // the density of the window
         for (int i = (int) startDay; i < startDay + num + 1; i++) {
@@ -656,8 +648,13 @@ public class SummaryTabFragment extends Fragment implements
      */
     private int daysDiff(Date date) {
         Date refDate = parseDate(REFERENCE_DATE);
+        return DateConverter.getDaysBetween(refDate, date) + 1;
+        /*
+        Date refDate = parseDate(REFERENCE_DATE);
         long diff = date.getTime() - refDate.getTime();
         return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;    // DayAxisFormatter begins at day 0, 01/01/2017 is day 1
+        */
+
     }
 
 }

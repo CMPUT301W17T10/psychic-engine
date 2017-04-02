@@ -4,8 +4,13 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Custom;
  * Created by Jen on 4/2/2017.
  */
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 /**
  * Taken from https://github.com/PhilJay/MPAndroidChart on 3/26/2017
+ * Taken from http://stackoverflow.com/questions/7976989/java-get-days-between-two-dates
  */
 
 public class DateConverter {
@@ -77,6 +82,43 @@ public class DateConverter {
         else
             return 2021;
 
+    }
+
+    public static int daysSince1900(Date date) {
+        Calendar c = new GregorianCalendar();
+        c.setTime(date);
+
+        int year = c.get(Calendar.YEAR);
+        if (year < 1900 || year > 2099) {
+            throw new IllegalArgumentException("daysSince1900 - Date must be between 1900 and 2099");
+        }
+        year -= 1900;
+        int month = c.get(Calendar.MONTH) + 1;
+        int days = c.get(Calendar.DAY_OF_MONTH);
+
+        if (month < 3) {
+            month += 12;
+            year--;
+        }
+        int yearDays = (int) (year * 365.25);
+        int monthDays = (int) ((month + 1) * 30.61);
+
+        return (yearDays + monthDays + days - 63);
+    }
+
+    public static Integer getDaysBetween(Date date1, Date date2) {
+        if (date1 == null || date2 == null) {
+            return null;
+        }
+
+        int days1 = daysSince1900(date1);
+        int days2 = daysSince1900(date2);
+
+        if (days1 < days2) {
+            return days2 - days1;
+        } else {
+            return days1 - days2;
+        }
     }
 
 }
