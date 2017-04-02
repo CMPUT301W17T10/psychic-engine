@@ -71,6 +71,10 @@ public class LoginActivity extends AppCompatActivity {
         instance = ParticipantSingleton.getInstance();
         ParticipantController.updateSingletonList();
 
+        // clear local lists in case of offline behaviour
+        instance.getOfflineCreatedMoodList().clear();
+        instance.getOfflineDeleteMoodsList().clear();
+
         /**
          * A login button action is used to pull the name from the EditText given in the activity.
          * The program will then check that the username has been taken already (ie. stored) as well

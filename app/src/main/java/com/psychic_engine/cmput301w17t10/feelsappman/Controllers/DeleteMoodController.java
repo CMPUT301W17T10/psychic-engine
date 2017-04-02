@@ -1,5 +1,7 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 
+import android.content.Context;
+
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
@@ -23,14 +25,17 @@ public class DeleteMoodController extends MoodController {
      * participent details in the elastic server
      * @param moodEvent
      */
-    public static void deleteMoodEvent(MoodEvent moodEvent) {
-
+    public static void deleteMoodEvent(MoodEvent moodEvent, Context context) {
+        ParticipantSingleton instance = ParticipantSingleton.getInstance();
         // delete the mood event from the server
-        ElasticMoodController.DeleteMoodEventTask dmt = new ElasticMoodController.DeleteMoodEventTask();
-        dmt.execute(moodEvent);
-
+        if (isConnected(context)) {
+            ElasticMoodController.DeleteMoodEventTask dmt = new ElasticMoodController.DeleteMoodEventTask();
+            dmt.execute(moodEvent);
+        } else {
+            instance.addDeleteOfflineMood(moodEvent);
+        }
         // get the participant's mood list to delete from locally
-        Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
+        Participant participant = instance.getSelfParticipant();
         ArrayList<MoodEvent> moodEventList = participant.getMoodList();
 
         // deleteMoodEvent the mood event from the participants mood event list
@@ -54,7 +59,9 @@ public class DeleteMoodController extends MoodController {
         participant.setMostRecentMoodEvent(mostRecent);
 
         // editMoodEvent the participant to stay up to date with in the elastic server
-        ElasticParticipantController.UpdateParticipantTask upt = new ElasticParticipantController.UpdateParticipantTask();
-        upt.execute(participant);
+        if (isConnected(context)) {
+            ElasticParticipantController.UpdateParticipantTask upt = new ElasticParticipantController.UpdateParticipantTask();
+            upt.execute(participant);
+        }
     }
 }

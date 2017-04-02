@@ -65,7 +65,7 @@ public class RecentTabFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (moodEvent != null) {
-                    DeleteMoodController.deleteMoodEvent(moodEvent);
+                    DeleteMoodController.deleteMoodEvent(moodEvent, getActivity().getApplicationContext());
                     display();
                 }
             }
