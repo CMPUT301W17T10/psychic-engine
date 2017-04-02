@@ -129,6 +129,7 @@ public class HistoryTabFragment extends Fragment {
         });
 
 
+
         // enable viewing mood event on tap of list item
         moodEventsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

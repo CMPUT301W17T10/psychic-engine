@@ -33,6 +33,8 @@ public class FollowingActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private Participant participant;
     private Participant following;
+    private Button maps;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class FollowingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Following");
         search = (Button) findViewById(R.id.search);
+        maps = (Button) findViewById(R.id.maps);
 
         followingList = (ListView) findViewById(R.id.listViewFollowing);
         registerForContextMenu(followingList);
@@ -74,6 +77,8 @@ public class FollowingActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
     }
 
     //http://stackoverflow.com/questions/17207366/creating-a-menu-after-a-long-click-event-on-a-list-view
@@ -121,6 +126,8 @@ public class FollowingActivity extends AppCompatActivity {
             default:
                 return super.onContextItemSelected(item);
         }
+
+
     }
 
     @Override

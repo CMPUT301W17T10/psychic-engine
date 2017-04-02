@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -32,6 +33,11 @@ public class MyFeedActivity extends AppCompatActivity {
     private ArrayAdapter<MoodEvent> adapter;
     private Participant participant;
     private Participant following;
+    private Button maps;
+    private Button reason;
+    private Button recent;
+    private Button mood;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +51,10 @@ public class MyFeedActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("My Feed");
 
         myFeedList = (ListView) findViewById(R.id.listViewMyFeed);
-
+        maps = (Button) findViewById(R.id.maps);
+        recent = (Button) findViewById(R.id.recentweek);
+        reason = (Button)findViewById(R.id.reason);
+        mood = (Button)findViewById(R.id.moodfilter);
         followingMoodsArray = new ArrayList<MoodEvent>();
         followingArray = new ArrayList<String>();
 
@@ -81,6 +90,40 @@ public class MyFeedActivity extends AppCompatActivity {
         Collections.sort(followingMoodsArray, new CustomComparator());
 
         initializeSpinner();
+
+        maps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyFeedActivity.this,FilterMapActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("moodEventList",followingMoodsArray);
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+
+            }
+        });
+
+        reason.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        mood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        recent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
 
 
