@@ -14,9 +14,11 @@ import android.widget.Toast;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 public class SearchActivity extends AppCompatActivity {
@@ -27,6 +29,7 @@ public class SearchActivity extends AppCompatActivity {
     private ArrayList<String> arrayList;
     private ArrayAdapter<String> adapter;
     private ArrayList<String>pendinglist;
+    private ParticipantSingleton participantSingleton;
 
 
 
@@ -36,7 +39,7 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
+        participantSingleton = ParticipantSingleton.getInstance();
         usersearch = (Button) findViewById(R.id.usersearch);
         usertext = (EditText) findViewById(R.id.userentry);
         results = (ListView) findViewById(R.id.resultslist);
@@ -74,7 +77,7 @@ public class SearchActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         pendinglist = participant.getPendingRequests();
 
-                        if(pendinglist.contains(participant.getLogin())){
+                        if (pendinglist.contains(participantSingleton.getSelfParticipant().getLogin())){
                             Toast.makeText(SearchActivity.this,"Request Already Sent!",Toast.LENGTH_SHORT).show();
                             arrayList.clear();
                             adapter.notifyDataSetChanged();
@@ -82,10 +85,11 @@ public class SearchActivity extends AppCompatActivity {
                         else {
                             Toast.makeText(SearchActivity.this, "Request Sent!", Toast.LENGTH_SHORT).show();
 
-                            pendinglist.add(participant.getLogin());
+                            pendinglist.add(participantSingleton.getSelfParticipant().getLogin());
                             arrayList.clear();
                             adapter.notifyDataSetChanged();
                         }
+                        
 
                     }
                 });

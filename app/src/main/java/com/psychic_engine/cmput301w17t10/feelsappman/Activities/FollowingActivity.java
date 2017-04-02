@@ -35,7 +35,6 @@ public class FollowingActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Following");
         search = (Button) findViewById(R.id.search);
 
-
         followingList = (ListView) findViewById(R.id.listViewFollowing);
 
         initializeSpinner();
