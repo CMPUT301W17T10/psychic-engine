@@ -5,6 +5,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Fragments;
  *
  */
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,28 +13,26 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SeekBar;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.ScatterChart;
-import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.ScatterData;
 import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.psychic_engine.cmput301w17t10.feelsappman.Custom.DayAxisValueFormatter;
 import com.psychic_engine.cmput301w17t10.feelsappman.Custom.MutableInteger;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodColor;
@@ -47,8 +46,10 @@ import com.psychic_engine.cmput301w17t10.feelsappman.R;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -66,14 +67,16 @@ import static android.graphics.Color.parseColor;
 
 
 public class SummaryTabFragment extends Fragment implements
-        SeekBar.OnSeekBarChangeListener, OnChartGestureListener, OnChartValueSelectedListener {
-
+        OnChartGestureListener, OnChartValueSelectedListener {
 
     private ArrayList<MoodEvent> moodEventList;
 
     private ScatterChart mChart;
-    private SeekBar mSeekBarDensity, mSeekBarStart;
-    private TextView tvX, tvY;
+    private TextView chartTitle;
+    private Spinner spinnerRange;
+    private ImageButton datePicker;
+
+    int daysSince, range;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,26 +86,76 @@ public class SummaryTabFragment extends Fragment implements
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         moodEventList = participant.getMoodList();
 
-        tvX = (TextView) rootView.findViewById(R.id.tvXMax);
-        tvY = (TextView) rootView.findViewById(R.id.tvYMax);
-
-        mSeekBarDensity = (SeekBar) rootView.findViewById(R.id.seekBar1);
-        mSeekBarStart = (SeekBar) rootView.findViewById(R.id.seekBar2);
+        spinnerRange = (Spinner) rootView.findViewById(R.id.spinnerTime1);
+        datePicker = (ImageButton) rootView.findViewById(R.id.datePicker);
 
         mChart = (ScatterChart) rootView.findViewById(R.id.chart);
+        chartTitle = (TextView) rootView.findViewById(R.id.chartTitle);
+
+        // initialize start of graph view to current date
+        Date now = new Date();
+        Date thisYear = parseDate("2017-01-01");
+        long diff = now.getTime() - thisYear.getTime();
+        daysSince = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;
 
         // Set chart, axis, and legend properties
         setChartProperties();
         setAxis();
         setLegend();
 
-        setData(1, 0);
+        List<String> rangeSpinnerItems = new ArrayList<String>();
+        rangeSpinnerItems.add("week");
+        rangeSpinnerItems.add("month");
+        rangeSpinnerItems.add("year");
 
-        mSeekBarStart.setProgress(0);
-        mSeekBarDensity.setProgress(0);
+        ArrayAdapter<String> rangeSpinnerAdapter = new ArrayAdapter<String>(
+                getActivity(), android.R.layout.simple_spinner_item, rangeSpinnerItems);
 
-        mSeekBarStart.setOnSeekBarChangeListener(this);
-        mSeekBarDensity.setOnSeekBarChangeListener(this);
+        spinnerRange.setAdapter(rangeSpinnerAdapter);
+
+        spinnerRange.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (position == 0) {
+                    range = 7;
+                } else if (position == 1) {
+                    range = 30;     // TODO as appropriate for month
+                } else if (position == 2) {
+                    range = 365;
+                }
+
+                setData(range, daysSince);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                //
+            }
+
+        });
+
+        datePicker.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Calendar mcurrentDate = Calendar.getInstance();
+
+                DatePickerDialog mDatePicker=new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int year, int month, int day) {
+                       // standardize to days since 01/01/2017, used by the x-axis formatter
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        String formatedDate = sdf.format(new Date(year - 1900, month, day));
+                        chartTitle.setText(formatedDate);   // TODO comment out
+                        Date viewDate = parseDate(formatedDate);
+                        Date thisYear = parseDate("2017-01-01");
+                        long diff = viewDate.getTime() - thisYear.getTime();
+                        daysSince = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;   // DayAxisFormatter begins at day 0, 01/01/2017 is day 1
+
+                        setData(range, daysSince);
+                    }
+                }, mcurrentDate.get(Calendar.YEAR), mcurrentDate.get(Calendar.MONTH), mcurrentDate.get(Calendar.DAY_OF_MONTH));
+                mDatePicker.setTitle("Select date");
+                mDatePicker.show();  }
+        });
+
 
         return rootView;
     }
@@ -114,91 +167,10 @@ public class SummaryTabFragment extends Fragment implements
      * @param num is the number of days to display
      * @param startDay is the start day to display
      */
-    private void setData(int num, float startDay) {
+    private void setData(int num, int startDay) {
 
-         /*~********************************************************
-        /                         TEST DATA                       /
-        *********************************************************/
-
-
-//        participant.getMoodList().clear();
-//
-//        Mood testSadMood = new Mood(MoodState.SAD);
-//        MoodEvent testSad1 = new MoodEvent(testSadMood, null, "", null, null);
-//        MoodEvent testSad2 = new MoodEvent(testSadMood, null, "", null, null);
-//        MoodEvent testSad3 = new MoodEvent(testSadMood, null, "", null, null);
-//        MoodEvent testSad4 = new MoodEvent(testSadMood, null, "", null, null);
-//        MoodEvent testSad5 = new MoodEvent(testSadMood, null, "", null, null);
-//        MoodEvent testSad6 = new MoodEvent(testSadMood, null, "", null, null);
-//        MoodEvent testSad7 = new MoodEvent(testSadMood, null, "", null, null);
-//        MoodEvent testSad8 = new MoodEvent(testSadMood, null, "", null, null);
-//
-//        testSad1.setDate(parseDate("2017-03-25"));
-//        testSad2.setDate(parseDate("2017-03-25"));
-//        testSad3.setDate(parseDate("2017-04-01"));
-//        testSad4.setDate(parseDate("2017-05-01"));
-//        testSad5.setDate(parseDate("2017-05-15"));
-//        testSad6.setDate(parseDate("2018-03-25"));
-//        testSad7.setDate(parseDate("2019-03-25"));
-//        testSad8.setDate(parseDate("2020-03-25"));
-//
-//        participant.addMoodEvent(testSad1);
-//        participant.addMoodEvent(testSad2);
-//        participant.addMoodEvent(testSad3);
-//        participant.addMoodEvent(testSad4);
-//        participant.addMoodEvent(testSad5);
-//        participant.addMoodEvent(testSad6);
-//        participant.addMoodEvent(testSad7);
-//        participant.addMoodEvent(testSad8);
-//
-//
-//
-//
-//
-//        Mood testHappyMood = new Mood(MoodState.HAPPY);
-//        MoodEvent testHappy1 = new MoodEvent(testHappyMood, null, "", null, null);
-//        MoodEvent testHappy2 = new MoodEvent(testHappyMood, null, "", null, null);
-//        MoodEvent testHappy3 = new MoodEvent(testHappyMood, null, "", null, null);
-//        MoodEvent testHappy4 = new MoodEvent(testHappyMood, null, "", null, null);
-//        MoodEvent testHappy5 = new MoodEvent(testHappyMood, null, "", null, null);
-//        MoodEvent testHappy6 = new MoodEvent(testHappyMood, null, "", null, null);
-//        MoodEvent testHappy7 = new MoodEvent(testHappyMood, null, "", null, null);
-//        MoodEvent testHappy8 = new MoodEvent(testHappyMood, null, "", null, null);
-//
-//        testHappy1.setDate(parseDate("2017-03-27"));
-//        testHappy2.setDate(parseDate("2017-03-27"));
-//        testHappy3.setDate(parseDate("2017-03-27"));
-//        testHappy4.setDate(parseDate("2017-04-25"));
-//        testHappy5.setDate(parseDate("2017-04-25"));
-//        testHappy6.setDate(parseDate("2017-04-28"));
-//        testHappy7.setDate(parseDate("2019-03-23"));
-//        testHappy8.setDate(parseDate("2020-03-25"));
-//
-//        participant.addMoodEvent(testHappy1);
-//        participant.addMoodEvent(testHappy2);
-//        participant.addMoodEvent(testHappy3);
-//        participant.addMoodEvent(testHappy4);
-//        participant.addMoodEvent(testHappy5);
-//        participant.addMoodEvent(testHappy6);
-//        participant.addMoodEvent(testHappy7);
-//        participant.addMoodEvent(testHappy8);
-//
-//
-//
-//        Mood testShameMood = new Mood(MoodState.SHAME);
-//
-//        MoodEvent testShame1 = new MoodEvent(testShameMood, null, "", null, null);
-//
-//        testShame1.setDate(parseDate("2017-03-29"));
-//
-//        participant.addMoodEvent(testShame1);
-
-
-        /*~*********************************************************
-         *                         TEST DATA                       /
-         *********************************************************/
-
-
+        // TODO initialize hashmaps once when the user enters summary
+        // shouldn't be called every time setData is called
         Map<Integer, MutableInteger> sadDayToCountMap = new HashMap();
         Map<Integer, MutableInteger> happyDayToCountMap = new HashMap();
         Map<Integer, MutableInteger> shameDayToCountMap = new HashMap();
@@ -219,7 +191,7 @@ public class SummaryTabFragment extends Fragment implements
             // TODO: look for better algorithm
             // standardize days to reference start day
             diff = moodEvent.getDate().getTime() - beginDate.getTime();
-            days = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 2;
+            days = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;    // formatter begins at 1
 
             switch (moodEvent.getMood().getMood()) {
 
@@ -313,10 +285,11 @@ public class SummaryTabFragment extends Fragment implements
 
 
         // the start of the window
-        float start = mSeekBarStart.getProgress() + 1;
+        //float start = 0;
+        //float start = mSeekBarStart.getProgress() + 1;
 
         // the density of the window
-        for (int i = (int) start; i < start + num + 1; i++) {
+        for (int i = (int) startDay; i < startDay + num + 1; i++) {
 
             addEntry(yValsSad, sadDayToCountMap, i);
             addEntry(yValsHappy, happyDayToCountMap, i);
@@ -382,8 +355,8 @@ public class SummaryTabFragment extends Fragment implements
             // Styling
             setSad.setColor(parseColor(MoodColor.BLUE.getBGColor()));
             setSad.setScatterShapeSize(50f);
-            setSad.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
-
+            //setSad.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
+            
             setHappy.setColor(parseColor(MoodColor.GREEN.getBGColor()));
             setHappy.setScatterShapeSize(50f);
             setHappy.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
@@ -429,6 +402,8 @@ public class SummaryTabFragment extends Fragment implements
             mChart.setData(data);
         }
 
+        mChart.invalidate();
+
     }
 
     /**
@@ -459,6 +434,9 @@ public class SummaryTabFragment extends Fragment implements
         mChart.setPinchZoom(false);
         mChart.setDrawGridBackground(false);
         mChart.setOnChartValueSelectedListener(this);
+        //mChart.setVisibleXRangeMaximum(7f);
+        //mChart.setVisibleXRangeMinimum(7f);
+        mChart.setVisibleXRange(7f, 7f);
 
     }
 
@@ -473,7 +451,7 @@ public class SummaryTabFragment extends Fragment implements
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f);
-        xAxis.setLabelCount(7);
+        //xAxis.setLabelCount(7);
         xAxis.setLabelRotationAngle(-45);
         xAxis.setValueFormatter(xAxisFormatter);
 
@@ -507,29 +485,6 @@ public class SummaryTabFragment extends Fragment implements
 
     }
 
-    /**
-     * Called when the user adjusts the seek bar progress
-     * @param seekBar
-     * @param progress
-     * @param fromUser
-     */
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-        setData(mSeekBarDensity.getProgress() + 1 , mSeekBarStart.getProgress());
-
-        mChart.invalidate();
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-        //
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        //
-    }
 
     @Override
     public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
@@ -598,3 +553,86 @@ public class SummaryTabFragment extends Fragment implements
 
 
 }
+
+
+         /*~********************************************************
+        /                         TEST DATA                       /
+        *********************************************************/
+
+
+//        participant.getMoodList().clear();
+//
+//        Mood testSadMood = new Mood(MoodState.SAD);
+//        MoodEvent testSad1 = new MoodEvent(testSadMood, null, "", null, null);
+//        MoodEvent testSad2 = new MoodEvent(testSadMood, null, "", null, null);
+//        MoodEvent testSad3 = new MoodEvent(testSadMood, null, "", null, null);
+//        MoodEvent testSad4 = new MoodEvent(testSadMood, null, "", null, null);
+//        MoodEvent testSad5 = new MoodEvent(testSadMood, null, "", null, null);
+//        MoodEvent testSad6 = new MoodEvent(testSadMood, null, "", null, null);
+//        MoodEvent testSad7 = new MoodEvent(testSadMood, null, "", null, null);
+//        MoodEvent testSad8 = new MoodEvent(testSadMood, null, "", null, null);
+//
+//        testSad1.setDate(parseDate("2017-03-25"));
+//        testSad2.setDate(parseDate("2017-03-25"));
+//        testSad3.setDate(parseDate("2017-04-01"));
+//        testSad4.setDate(parseDate("2017-05-01"));
+//        testSad5.setDate(parseDate("2017-05-15"));
+//        testSad6.setDate(parseDate("2018-03-25"));
+//        testSad7.setDate(parseDate("2019-03-25"));
+//        testSad8.setDate(parseDate("2020-03-25"));
+//
+//        participant.addMoodEvent(testSad1);
+//        participant.addMoodEvent(testSad2);
+//        participant.addMoodEvent(testSad3);
+//        participant.addMoodEvent(testSad4);
+//        participant.addMoodEvent(testSad5);
+//        participant.addMoodEvent(testSad6);
+//        participant.addMoodEvent(testSad7);
+//        participant.addMoodEvent(testSad8);
+//
+//
+//
+//
+//
+//        Mood testHappyMood = new Mood(MoodState.HAPPY);
+//        MoodEvent testHappy1 = new MoodEvent(testHappyMood, null, "", null, null);
+//        MoodEvent testHappy2 = new MoodEvent(testHappyMood, null, "", null, null);
+//        MoodEvent testHappy3 = new MoodEvent(testHappyMood, null, "", null, null);
+//        MoodEvent testHappy4 = new MoodEvent(testHappyMood, null, "", null, null);
+//        MoodEvent testHappy5 = new MoodEvent(testHappyMood, null, "", null, null);
+//        MoodEvent testHappy6 = new MoodEvent(testHappyMood, null, "", null, null);
+//        MoodEvent testHappy7 = new MoodEvent(testHappyMood, null, "", null, null);
+//        MoodEvent testHappy8 = new MoodEvent(testHappyMood, null, "", null, null);
+//
+//        testHappy1.setDate(parseDate("2017-03-27"));
+//        testHappy2.setDate(parseDate("2017-03-27"));
+//        testHappy3.setDate(parseDate("2017-03-27"));
+//        testHappy4.setDate(parseDate("2017-04-25"));
+//        testHappy5.setDate(parseDate("2017-04-25"));
+//        testHappy6.setDate(parseDate("2017-04-28"));
+//        testHappy7.setDate(parseDate("2019-03-23"));
+//        testHappy8.setDate(parseDate("2020-03-25"));
+//
+//        participant.addMoodEvent(testHappy1);
+//        participant.addMoodEvent(testHappy2);
+//        participant.addMoodEvent(testHappy3);
+//        participant.addMoodEvent(testHappy4);
+//        participant.addMoodEvent(testHappy5);
+//        participant.addMoodEvent(testHappy6);
+//        participant.addMoodEvent(testHappy7);
+//        participant.addMoodEvent(testHappy8);
+//
+//
+//
+//        Mood testShameMood = new Mood(MoodState.SHAME);
+//
+//        MoodEvent testShame1 = new MoodEvent(testShameMood, null, "", null, null);
+//
+//        testShame1.setDate(parseDate("2017-03-29"));
+//
+//        participant.addMoodEvent(testShame1);
+
+
+        /*~*********************************************************
+         *                         TEST DATA                       /
+         *********************************************************/
