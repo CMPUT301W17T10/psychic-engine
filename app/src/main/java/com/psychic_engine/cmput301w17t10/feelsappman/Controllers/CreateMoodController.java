@@ -1,5 +1,6 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.CreateMoodActivity;
@@ -33,9 +34,11 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 public class CreateMoodController extends MoodController {
 
     public static void createMoodEvent(String moodString, String socialSettingString,
-                                       String trigger, Photograph photo, MoodLocation location)
+                                       String trigger, Photograph photo, MoodLocation location,
+                                       Context context)
             throws EmptyMoodException, TriggerTooLongException {
 
+        ParticipantSingleton instance = ParticipantSingleton.getInstance();
         Mood mood = selectMood(moodString);
         SocialSetting socialSetting = selectSocialSetting(socialSettingString);
 
@@ -44,14 +47,18 @@ public class CreateMoodController extends MoodController {
             MoodEvent moodEvent = new MoodEvent(mood, socialSetting, trigger, photo, location);
 
             // add to participant locally
-            Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
+
+            Participant participant = instance.getSelfParticipant();
             ParticipantController.addMoodEvent(moodEvent);
 
             // add to the elastic server
-            ElasticMoodController.AddMoodEventTask addMoodEventTask = new ElasticMoodController
-                    .AddMoodEventTask();
-            addMoodEventTask.execute(moodEvent);
-
+            if (isConnected(context)) {
+                ElasticMoodController.AddMoodEventTask addMoodEventTask = new ElasticMoodController
+                        .AddMoodEventTask();
+                addMoodEventTask.execute(moodEvent);
+            } else{
+                instance.addNewOfflineMood(moodEvent);
+            }
             // editMoodEvent most recent mood event to be this mood event
             participant.setMostRecentMoodEvent(moodEvent);
 

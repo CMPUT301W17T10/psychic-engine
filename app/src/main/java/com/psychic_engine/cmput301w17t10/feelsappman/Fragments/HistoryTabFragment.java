@@ -179,7 +179,7 @@ public class HistoryTabFragment extends Fragment {
                 return true;
             case R.id.delete:
                 MoodEvent moodEventToBeRemoved = filteredMoodList.get(info.position);
-                DeleteMoodController.deleteMoodEvent(moodEventToBeRemoved);
+                DeleteMoodController.deleteMoodEvent(moodEventToBeRemoved, getActivity().getApplicationContext());
                 filteredMoodList.remove(moodEventToBeRemoved);
                 adapter.notifyDataSetChanged();
                 return true;

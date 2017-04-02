@@ -1,5 +1,9 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
@@ -59,5 +63,16 @@ abstract class MoodController {
                 socialSetting = null;
         }
         return socialSetting;
+    }
+
+    //http://www.ssaurel.com/blog/how-to-check-if-internet-connection-is-enabled-in-android/
+    // - S.Saurel
+    //obtained April 1, 2017
+    public static boolean isConnected(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }

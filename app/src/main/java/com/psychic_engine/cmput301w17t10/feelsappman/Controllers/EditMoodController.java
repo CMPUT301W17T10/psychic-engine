@@ -1,5 +1,6 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Controllers;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.EmptyMoodException;
@@ -43,7 +44,7 @@ public class EditMoodController extends MoodController{
      */
     public static void editMoodEvent(MoodEvent moodEvent, String moodString,
                                      String socialSettingString, String trigger,
-                                     Photograph photo, MoodLocation location)
+                                     Photograph photo, MoodLocation location, Context context)
             throws EmptyMoodException, TriggerTooLongException {
 
         // find mood and social setting
@@ -68,8 +69,11 @@ public class EditMoodController extends MoodController{
 
         // editMoodEvent the most recent mood event in elastic
         Log.i("Update", "Updating mood in the EditMoodController");
-        ElasticMoodController.UpdateMoodTask updateMoodTask = new ElasticMoodController.UpdateMoodTask();
-        updateMoodTask.execute(moodEvent);
+
+        if (isConnected(context)) {
+            ElasticMoodController.UpdateMoodTask updateMoodTask = new ElasticMoodController.UpdateMoodTask();
+            updateMoodTask.execute(moodEvent);
+        }
 
         // editMoodEvent the most recent mood event
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();

@@ -25,6 +25,8 @@ public class ParticipantSingleton {
      **/
     private static ParticipantSingleton instance = null;
     private ArrayList<Participant> participantList;
+    private ArrayList<MoodEvent> offlineCreatedMoodList = new ArrayList<>();
+    private ArrayList<MoodEvent> offlineDeleteMoodsList = new ArrayList<>();
     private Participant selfParticipant;
     private int participantCount;
 
@@ -156,5 +158,20 @@ public class ParticipantSingleton {
             }
         }
         return null;
+    }
+
+    public ArrayList<MoodEvent> getOfflineCreatedMoodList() {
+        return this.offlineCreatedMoodList;
+    }
+
+    public ArrayList<MoodEvent> getOfflineDeleteMoodsList() {
+        return this.offlineDeleteMoodsList;
+    }
+    public void addNewOfflineMood(MoodEvent moodEvent) {
+        this.offlineCreatedMoodList.add(moodEvent);
+    }
+
+    public void addDeleteOfflineMood(MoodEvent moodEvent) {
+        this.offlineDeleteMoodsList.add(moodEvent);
     }
 }

@@ -131,5 +131,46 @@ public class ElasticMoodController extends ElasticController{
             return null;
         }
     }
+    public static class DeleteOfflineMoodEventTask extends AsyncTask<ArrayList<MoodEvent>, Void, Void> {
+        @Override
+        protected Void doInBackground(ArrayList<MoodEvent>... deleteMoodList) {
+            verifySettings();
+            // for every mood needing to be deleted
+            for (MoodEvent mood : deleteMoodList[0]) {
+                String moodID = mood.getId();
+                Log.i("Delete", "Currently deleting mood " + moodID);
+                try {
+                    client.execute(new Delete.Builder(moodID).index("cmput301w17t10").type("moodevent").build());
+                } catch (Exception e) {
+                    Log.i("Error", "Error deleting moods");
+                }
+            }
+            return null;
+        }
+    }
 
+    public static class AddOfflineMoodEventTask extends AsyncTask<ArrayList<MoodEvent>, Void, Void> {
+
+        @Override
+        protected Void doInBackground(ArrayList<MoodEvent>... addMoodList) {
+            verifySettings();
+
+            // handling multiple mood events that need to be added
+            for (MoodEvent moodEvent : addMoodList[0]) {
+                Index index = new Index.Builder(moodEvent).index("cmput301w17t10")
+                        .type("moodevent").build();
+                try {
+                    DocumentResult result = client.execute(index);
+                    if (result.isSucceeded()) {
+                        moodEvent.setId(result.getId());
+                        Log.i("Success", "Mood event ID: "+ moodEvent.getId());
+                        Log.i("ID", "Added mood event to Participant: " + ParticipantSingleton.getInstance().getSelfParticipant().getId());
+                    }
+                } catch (Exception e) {
+                    Log.i("Error", "The application failed to build and send the participants");
+                }
+            }
+            return null;
+        }
+    }
 }
