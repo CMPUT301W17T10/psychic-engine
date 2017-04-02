@@ -32,50 +32,11 @@ public class ParticipantSingletonTest extends ActivityInstrumentationTestCase2{
         assertTrue(instance.isLoaded() != null);
     }
 
-
-    public void testAddParticipant() {
-        ParticipantSingleton instance = ParticipantSingleton.getInstance();
-        Participant test = new Participant("oi");
-        assertTrue(instance.addParticipant(test));
-    }
-
-    public void testGetParticipantCount() {
-        Participant test = new Participant("meep");
-        ParticipantSingleton instance = ParticipantSingleton.getInstance();
-        assertTrue("count not 1", instance.getParticipantCount() == 1);
-        assertTrue(instance.addParticipant(test));
-        assertTrue("count not 2", instance.getParticipantCount() == 2);
-    }
-
-
-    public void testGetParticipantList() {
-        ParticipantSingleton instance = ParticipantSingleton.getInstance();
-        ArrayList<Participant> participantArrayList = new ArrayList<Participant>();
-        participantArrayList.add(new Participant("oi"));
-        participantArrayList.add(new Participant("meep"));
-        assertEquals(participantArrayList.get(0).getLogin(), instance.getParticipantList().get(0).getLogin());
-    }
-
     // testSearchParticipant goes into removeParticipants?? - alex
     public void testSearchParticipant() {
         ParticipantSingleton instance = ParticipantSingleton.getInstance();
         assertEquals("index or error", instance.searchParticipant("meep"), instance.getParticipantList().get(1));
         assertEquals(instance.searchParticipant("notexist"), null);
-    }
-
-    public void testSetSelfParticipant() {
-        ParticipantSingleton instance = ParticipantSingleton.getInstance();
-        Participant someParticipant = instance.searchParticipant("aaa");
-        assertFalse("aaa was set but DNE",instance.setSelfParticipant(someParticipant));
-        Participant anotherParticipant = instance.searchParticipant("oi");
-        assertTrue("did not set 'oi' even if exists",instance.setSelfParticipant(anotherParticipant));
-    }
-
-    public void testGetSelfParticipant() {
-        ParticipantSingleton instance = ParticipantSingleton.getInstance();
-        assertTrue("it is null",instance.getSelfParticipant() == null);
-        instance.setSelfParticipant(instance.searchParticipant("oi"));
-        assertEquals("self participant not 'oi'",instance.getSelfParticipant().getLogin(), "oi");
     }
 
 }

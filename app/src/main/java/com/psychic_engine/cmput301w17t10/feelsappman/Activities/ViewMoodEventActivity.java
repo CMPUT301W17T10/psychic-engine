@@ -86,19 +86,32 @@ public class ViewMoodEventActivity extends AppCompatActivity{
      * represent the mood.
      */
     private void display() {
+        // set background color
         int color = parseColor(moodEvent.getMood().getColor().getBGColor());
         getWindow().getDecorView().setBackgroundColor(color);
-        name.setText(participant.getLogin());
-        dateTime.setText(moodEvent.getDate().toString());
-        if (moodEvent.getPicture() != null)
-            photo.setImageBitmap(moodEvent.getPicture().getImage());
-        if (moodEvent.getLocation() != null)
-            location.setText(moodEvent.getLocation().getLatitudeStr().concat(moodEvent.getLocation().getLongitudeStr()));
 
+        // set participant's name
+        name.setText(participant.getLogin());
+
+        // set date
+        dateTime.setText(moodEvent.getDate().toString());
+
+        // set icon
         String iconName = moodEvent.getMood().getIconName();
         int drawableResourceId = this.getResources().getIdentifier(iconName, "drawable", getPackageName());
         icon.setImageResource(drawableResourceId);
 
+        // set picture
+        if (moodEvent.getPicture() != null)
+            photo.setImageBitmap(moodEvent.getPicture().getImage());
+        else
+            photo.setImageResource(drawableResourceId);
+
+        // set location
+        if (moodEvent.getLocation() != null)
+            location.setText(moodEvent.getLocation().getLatitudeStr().concat(moodEvent.getLocation().getLongitudeStr()));
+
+        // set trigger
         trigger.setText(moodEvent.getTrigger());
         if (moodEvent.getSocialSetting() != null)
             socialIcon.setText(moodEvent.getSocialSetting().toString());
