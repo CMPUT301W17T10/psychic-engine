@@ -15,6 +15,9 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton
 
 import java.util.ArrayList;
 
+//http://stackoverflow.com/questions/21254555/how-to-check-internet-connectivity-continuously-in-background-while-android-appl
+//obtained April 1, 2017
+//by Ajay Venugopal
 public class CheckConnectivity extends BroadcastReceiver{
 
     @Override
