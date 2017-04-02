@@ -79,6 +79,16 @@ public class SummaryTabFragment extends Fragment implements
 
     int daysSince, range;
 
+    Map<Integer, MutableInteger> sadDayToCountMap;
+    Map<Integer, MutableInteger> happyDayToCountMap;
+    Map<Integer, MutableInteger> shameDayToCountMap;
+    Map<Integer, MutableInteger> fearDayToCountMap;
+    Map<Integer, MutableInteger> angerDayToCountMap;
+    Map<Integer, MutableInteger> disgustDayToCountMap;
+    Map<Integer, MutableInteger> confusedDayToCountMap;
+    Map<Integer, MutableInteger> surprisedDayToCountMap;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -103,6 +113,9 @@ public class SummaryTabFragment extends Fragment implements
         setChartProperties();
         setAxis();
         setLegend();
+
+        //set day to count hash maps
+        setDayToCountMaps();
 
         List<String> rangeSpinnerItems = new ArrayList<String>();
         rangeSpinnerItems.add("week");
@@ -173,110 +186,6 @@ public class SummaryTabFragment extends Fragment implements
      * @param startDay is the start day to display
      */
     private void setData(int num, int startDay) {
-
-        // TODO initialize hashmaps once when the user enters summary
-        // shouldn't be called every time setData is called
-        Map<Integer, MutableInteger> sadDayToCountMap = new HashMap();
-        Map<Integer, MutableInteger> happyDayToCountMap = new HashMap();
-        Map<Integer, MutableInteger> shameDayToCountMap = new HashMap();
-        Map<Integer, MutableInteger> fearDayToCountMap = new HashMap();
-        Map<Integer, MutableInteger> angerDayToCountMap = new HashMap();
-        Map<Integer, MutableInteger> disgustDayToCountMap = new HashMap();
-        Map<Integer, MutableInteger> confusedDayToCountMap = new HashMap();
-        Map<Integer, MutableInteger> surprisedDayToCountMap = new HashMap();
-
-
-        Date beginDate = parseDate("2017-01-01");
-        long diff;
-        int days;
-        MutableInteger count;
-
-        for (MoodEvent moodEvent : moodEventList) {
-
-            // TODO: look for better algorithm
-            // standardize days to reference start day
-            diff = moodEvent.getDate().getTime() - beginDate.getTime();
-            days = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;    // formatter begins at 1
-
-            switch (moodEvent.getMood().getMood()) {
-
-                // For each mood, createMoodEvent mappings from days to mood count for that day
-                case SAD:
-                    if (sadDayToCountMap.containsKey(days)) {
-                        count = sadDayToCountMap.get(days);
-                        count.set(count.get() + 1);
-                    }
-                    else {
-                        sadDayToCountMap.put(days, new MutableInteger(1));
-                    }
-                    break;
-                case HAPPY:
-                    if (happyDayToCountMap.containsKey(days)) {
-                        count = happyDayToCountMap.get(days);
-                        count.set(count.get() + 1);
-                    }
-                    else {
-                        happyDayToCountMap.put(days, new MutableInteger(1));
-                    }
-                    break;
-                case SHAME:
-                    if (shameDayToCountMap.containsKey(days)) {
-                        count = shameDayToCountMap.get(days);
-                        count.set(count.get() + 1);
-                    }
-                    else {
-                        shameDayToCountMap.put(days, new MutableInteger(1));
-                    }
-                    break;
-                case FEAR:
-                    if (fearDayToCountMap.containsKey(days)) {
-                        count = fearDayToCountMap.get(days);
-                        count.set(count.get() + 1);
-                    }
-                    else {
-                        fearDayToCountMap.put(days, new MutableInteger(1));
-                    }
-                    break;
-                case ANGER:
-                    if (angerDayToCountMap.containsKey(days)) {
-                        count = angerDayToCountMap.get(days);
-                        count.set(count.get() + 1);
-                    }
-                    else {
-                        angerDayToCountMap.put(days, new MutableInteger(1));
-                    }
-                    break;
-                case DISGUST:
-                    if (disgustDayToCountMap.containsKey(days)) {
-                        count = disgustDayToCountMap.get(days);
-                        count.set(count.get() + 1);
-                    }
-                    else {
-                        disgustDayToCountMap.put(days, new MutableInteger(1));
-                    }
-                    break;
-                case CONFUSED:
-                    if (confusedDayToCountMap.containsKey(days)) {
-                        count = confusedDayToCountMap.get(days);
-                        count.set(count.get() + 1);
-                    }
-                    else {
-                        confusedDayToCountMap.put(days, new MutableInteger(1));
-                    }
-                    break;
-                case SURPRISED:
-                    if (surprisedDayToCountMap.containsKey(days)) {
-                        count = surprisedDayToCountMap.get(days);
-                        count.set(count.get() + 1);
-                    }
-                    else {
-                        surprisedDayToCountMap.put(days, new MutableInteger(1));
-                    }
-                    break;
-                default:
-                    // pass
-            }
-        }
 
         // Create an array of data points for each mood
         ArrayList<Entry> yValsSad = new ArrayList<Entry>();
@@ -409,6 +318,110 @@ public class SummaryTabFragment extends Fragment implements
 
         mChart.invalidate();
 
+    }
+
+    private void setDayToCountMaps() {
+
+        sadDayToCountMap = new HashMap();
+        happyDayToCountMap = new HashMap();
+        shameDayToCountMap = new HashMap();
+        fearDayToCountMap = new HashMap();
+        angerDayToCountMap = new HashMap();
+        disgustDayToCountMap = new HashMap();
+        confusedDayToCountMap = new HashMap();
+        surprisedDayToCountMap = new HashMap();
+
+
+        Date beginDate = parseDate("2017-01-01");
+        long diff;
+        int days;
+        MutableInteger count;
+
+        for (MoodEvent moodEvent : moodEventList) {
+
+            // standardize days to reference start day
+            diff = moodEvent.getDate().getTime() - beginDate.getTime();
+            days = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;    // formatter begins at 1
+
+            switch (moodEvent.getMood().getMood()) {
+
+                // For each mood, createMoodEvent mappings from days to mood count for that day
+                case SAD:
+                    if (sadDayToCountMap.containsKey(days)) {
+                        count = sadDayToCountMap.get(days);
+                        count.set(count.get() + 1);
+                    }
+                    else {
+                        sadDayToCountMap.put(days, new MutableInteger(1));
+                    }
+                    break;
+                case HAPPY:
+                    if (happyDayToCountMap.containsKey(days)) {
+                        count = happyDayToCountMap.get(days);
+                        count.set(count.get() + 1);
+                    }
+                    else {
+                        happyDayToCountMap.put(days, new MutableInteger(1));
+                    }
+                    break;
+                case SHAME:
+                    if (shameDayToCountMap.containsKey(days)) {
+                        count = shameDayToCountMap.get(days);
+                        count.set(count.get() + 1);
+                    }
+                    else {
+                        shameDayToCountMap.put(days, new MutableInteger(1));
+                    }
+                    break;
+                case FEAR:
+                    if (fearDayToCountMap.containsKey(days)) {
+                        count = fearDayToCountMap.get(days);
+                        count.set(count.get() + 1);
+                    }
+                    else {
+                        fearDayToCountMap.put(days, new MutableInteger(1));
+                    }
+                    break;
+                case ANGER:
+                    if (angerDayToCountMap.containsKey(days)) {
+                        count = angerDayToCountMap.get(days);
+                        count.set(count.get() + 1);
+                    }
+                    else {
+                        angerDayToCountMap.put(days, new MutableInteger(1));
+                    }
+                    break;
+                case DISGUST:
+                    if (disgustDayToCountMap.containsKey(days)) {
+                        count = disgustDayToCountMap.get(days);
+                        count.set(count.get() + 1);
+                    }
+                    else {
+                        disgustDayToCountMap.put(days, new MutableInteger(1));
+                    }
+                    break;
+                case CONFUSED:
+                    if (confusedDayToCountMap.containsKey(days)) {
+                        count = confusedDayToCountMap.get(days);
+                        count.set(count.get() + 1);
+                    }
+                    else {
+                        confusedDayToCountMap.put(days, new MutableInteger(1));
+                    }
+                    break;
+                case SURPRISED:
+                    if (surprisedDayToCountMap.containsKey(days)) {
+                        count = surprisedDayToCountMap.get(days);
+                        count.set(count.get() + 1);
+                    }
+                    else {
+                        surprisedDayToCountMap.put(days, new MutableInteger(1));
+                    }
+                    break;
+                default:
+                    // pass
+            }
+        }
     }
 
     /**
