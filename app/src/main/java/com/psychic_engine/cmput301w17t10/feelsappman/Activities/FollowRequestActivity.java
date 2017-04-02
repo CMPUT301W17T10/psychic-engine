@@ -53,8 +53,6 @@ public class FollowRequestActivity extends AppCompatActivity {
 
         initializeSpinner();
 
-        //followerRequestArray = ParticipantSingleton.getInstance().getSelfParticipant().getPendingRequests();
-
         ElasticParticipantController.FindParticipantTask fpt = new ElasticParticipantController.FindParticipantTask();
         fpt.execute(ParticipantSingleton.getInstance().getSelfParticipant().getLogin());
 
@@ -104,6 +102,12 @@ public class FollowRequestActivity extends AppCompatActivity {
 
                 participantFollowArray.add(followerRequestArray.get(info.position));
                 followerRequestArray.remove(info.position);
+
+                ElasticParticipantController.UpdateParticipantTask upt = new ElasticParticipantController.UpdateParticipantTask();
+                upt.execute(participant);
+
+                ElasticParticipantController.UpdateParticipantTask upt1 = new ElasticParticipantController.UpdateParticipantTask();
+                upt1.execute(senderParticipant);
 
                 setResult(RESULT_OK);
                 adapter.notifyDataSetChanged();

@@ -13,18 +13,24 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class FollowersActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
     private Spinner menuSpinner;
     private ListView followerList;
     private ArrayList<String> followerArray;
+    private ArrayList<String> followerFollowingArray;
     private ArrayAdapter<String> adapter;
+    private Participant participant;
+    private Participant follower;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +45,24 @@ public class FollowersActivity extends AppCompatActivity {
 
         followerList = (ListView) findViewById(R.id.listViewFollowers);
         registerForContextMenu(followerList);
-        followerArray = new ArrayList<String>();
 
-        followerArray.add("Random");
-        followerArray.add("Test");
+        followerArray = new ArrayList<String>();
+        followerFollowingArray = new ArrayList<String>();
 
         initializeSpinner();
 
-        //followerArray = ParticipantSingleton.getInstance().getSelfParticipant().getFollowers();
+        ElasticParticipantController.FindParticipantTask fpt = new ElasticParticipantController.FindParticipantTask();
+        fpt.execute(ParticipantSingleton.getInstance().getSelfParticipant().getLogin());
+
+        try {
+            participant = fpt.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        followerArray = participant.getFollowers();
 
     }
 
@@ -68,7 +84,27 @@ public class FollowersActivity extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch(item.getItemId()) {
             case R.id.unfollow:
+                ElasticParticipantController.FindParticipantTask fpt1 = new ElasticParticipantController.FindParticipantTask();
+                fpt1.execute(ParticipantSingleton.getInstance().getSelfParticipant().getLogin());
+
+                try {
+                    follower = fpt1.get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+                followerFollowingArray = follower.getFollowing();
+                followerFollowingArray.remove(followerArray.get(info.position));
                 followerArray.remove(info.position);
+
+                ElasticParticipantController.UpdateParticipantTask upt = new ElasticParticipantController.UpdateParticipantTask();
+                upt.execute(participant);
+
+                ElasticParticipantController.UpdateParticipantTask upt1 = new ElasticParticipantController.UpdateParticipantTask();
+                upt1.execute(follower);
+
                 setResult(RESULT_OK);
                 adapter.notifyDataSetChanged();
                 return true;
