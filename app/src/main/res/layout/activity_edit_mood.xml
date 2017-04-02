@@ -3,98 +3,133 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     android:weightSum="1">
 
     <Spinner
         android:id="@+id/moodDropDown1"
-        android:prompt = "@string/select_mood"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
         android:background="@android:drawable/btn_dropdown"
+        android:prompt="@string/select_mood"
         android:spinnerMode="dropdown" />
 
     <Spinner
         android:id="@+id/socialSettingDropDown1"
         android:layout_width="match_parent"
 
-        android:prompt="@string/social_setting"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         android:background="@android:drawable/btn_dropdown"
+        android:prompt="@string/social_setting"
         android:spinnerMode="dropdown" />
 
     <EditText
         android:id="@+id/trigger1"
-        android:hint="@string/trigger_cause"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         android:ems="10"
+        android:hint="@string/trigger_cause"
         android:inputType="textPersonName"
         android:maxLength="20"
-        android:text="20 chars or 3 words." />
+        android:textColorHint="@color/black"
+        android:textColor="@color/black" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
 
-        <CheckBox android:id="@+id/editToCurrentLocation"
+        <CheckBox
+            android:id="@+id/editToCurrentLocation"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginEnd="3dp"
-            android:text="Use Current Location?" />
+            android:layout_weight="1"
+            android:elevation="0dp"
+            android:text="Use Current Location?"
+            android:textColor="@color/black"
+            app:buttonTint="@color/black" />
 
         <EditText
             android:id="@+id/locationLat"
-            android:hint="Latitude"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:layout_marginEnd="3dp"
-            android:inputType="numberDecimal|numberSigned" />
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Latitude"
+            android:inputType="numberDecimal|numberSigned"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textSize="16sp" />
+
         <EditText
             android:id="@+id/locationLong"
-            android:hint="Longitude"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:layout_marginEnd="3dp"
-            android:inputType="numberDecimal|numberSigned" />
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Longitude"
+            android:inputType="numberDecimal|numberSigned"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <Button
         android:id="@+id/browse1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         android:text="Browse" />
 
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="match_parent"
         android:layout_height="215dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="0.76" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
 
         <Button
-            android:text="Cancel"
+            android:id="@+id/cancel1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/cancel1"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="Cancel" />
 
         <Button
             android:id="@+id/save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="Save" />
     </LinearLayout>
 
 

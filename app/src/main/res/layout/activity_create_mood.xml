@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     android:weightSum="1">
 
@@ -10,63 +11,94 @@
         android:id="@+id/moodDropDown"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
         android:background="@android:drawable/btn_dropdown"
         android:prompt="@string/select_mood"
         android:spinnerMode="dropdown" />
 
     <Spinner
         android:id="@+id/socialSettingDropDown"
-        android:prompt="@string/social_setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         android:background="@android:drawable/btn_dropdown"
+        android:prompt="@string/social_setting"
         android:spinnerMode="dropdown" />
 
     <EditText
         android:id="@+id/trigger"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="@string/trigger_cause"
-        android:inputType="textPersonName"
-        android:maxLength="20" />
+        android:inputType="textShortMessage"
+        android:maxLength="20"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black" />
 
 
-    <CheckBox android:id="@+id/includeLocation"
+    <CheckBox
+        android:id="@+id/includeLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Include Location?" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="sans-serif"
+        android:text="Include Location?"
+        android:textAlignment="viewStart"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        app:buttonTint="@color/black" />
 
     <Button
         android:id="@+id/browse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         android:text="@string/browse" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="210dp"
-        android:layout_weight="0.73" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_weight="0.73"
+        android:paddingTop="10dp" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:elevation="0dp"
+        android:orientation="horizontal">
 
         <Button
-            android:text="@string/cancel"
+            android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/cancel"
-            android:layout_weight="1" />
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/create"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/create"
-            android:layout_weight="1" />
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:text="@string/create" />
     </LinearLayout>
 
 
