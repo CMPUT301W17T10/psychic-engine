@@ -1,14 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/chartTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mood Frequency Vs Time"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     <com.github.mikephil.charting.charts.ScatterChart
         android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/seekBar1"
+        android:layout_above="@+id/xLabel"
+        android:layout_below="@+id/chartTitle"
         android:background="@color/white" />
+
+    <TextView
+        android:id="@+id/yLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/xLabel"
+        android:layout_below="@+id/chartTitle"
+        android:layout_toLeftOf="@+id/chart"
+        android:text="Mood Count"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/xLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/seekBar1"
+        android:text="Date"
+        android:textAlignment="center"
+        android:textSize="16sp" />
 
     <SeekBar
         android:id="@+id/seekBar1"
@@ -18,7 +47,7 @@
         android:layout_margin="8dp"
         android:layout_marginBottom="35dp"
         android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/tvXMax"
+        android:layout_toLeftOf="@+id/spinnerTime1"
         android:max="29"
         android:paddingBottom="12dp" />
 
@@ -30,32 +59,31 @@
         android:layout_alignParentLeft="true"
         android:layout_margin="8dp"
         android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/tvYMax"
+        android:layout_toLeftOf="@+id/datePicker"
         android:max="337"
         android:paddingBottom="12dp" />
 
-    <TextView
-        android:id="@+id/tvXMax"
+    <Spinner
+        android:id="@+id/spinnerTime1"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/seekBar1"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="15dp"
         android:layout_marginRight="10dp"
-        android:gravity="right"
-        android:text="Density"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:gravity="right" />
 
-    <TextView
-        android:id="@+id/tvYMax"
+    <ImageButton
+        android:id="@+id/datePicker"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/seekBar2"
+        android:layout_below="@+id/spinnerTime1"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="15dp"
         android:layout_marginRight="10dp"
         android:gravity="right"
-        android:text="Window"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        app:srcCompat="@android:drawable/ic_menu_week" />
+
 
 </RelativeLayout>
