@@ -77,7 +77,8 @@
         <activity android:name=".Activities.FollowingActivity" />
         <activity android:name=".Activities.FollowersActivity" />
         <activity android:name=".Activities.FollowRequestActivity" />
-        <activity android:name=".Activities.MyFeedActivity"></activity>
+        <activity android:name=".Activities.MyFeedActivity" />
+        <activity android:name=".Activities.SearchActivity"></activity>
     </application>
 
 </manifest>

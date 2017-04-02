@@ -35,6 +35,10 @@ public class FollowersActivity extends AppCompatActivity {
         followerList = (ListView) findViewById(R.id.listViewFollowers);
 
         initializeSpinner();
+
+
+
+
     }
 
     public void initializeSpinner(){
