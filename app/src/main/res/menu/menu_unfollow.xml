@@ -6,5 +6,4 @@
     <item android:id="@+id/unfollow"
         android:title="Unfollow" />
 
-
 </menu>
