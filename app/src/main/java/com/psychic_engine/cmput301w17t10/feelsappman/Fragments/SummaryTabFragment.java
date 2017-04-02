@@ -194,7 +194,9 @@ public class SummaryTabFragment extends Fragment implements
                     daysSince -= range;
                 }
 
-                setData(range, daysSince);
+                if (daysSince >= 0) {           // >= REFERENCE_DATE
+                    setData(range, daysSince);
+                }
             }
         });
 
@@ -260,7 +262,7 @@ public class SummaryTabFragment extends Fragment implements
         int y = DateConverter.determineYear(startDay);
         int d = DateConverter.determineDayOfMonth(startDay, m + 12 * (y - 2017));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String formatedDate = sdf.format(new Date(y - 1900, m + 1, d));
+        String formatedDate = sdf.format(new Date(y - 1900, m, d));
         chartTitle.setText(formatedDate);
 
         // Create an array of data points for each mood
