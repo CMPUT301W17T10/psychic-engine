@@ -52,7 +52,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import static android.graphics.Color.parseColor;
 
@@ -139,20 +138,12 @@ public class SummaryTabFragment extends Fragment implements
                     range = 7;
                 } else if (position == 1) {
                     // Set graph view to the beginning of the month
-                    int month = DateConverter.determineMonth(daysSince);
-                    int year = DateConverter.determineYear(daysSince);
-                    range = DateConverter.getDaysForMonth(month, year);
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    String formatedDate = sdf.format(new Date(year - 1900, month, 1));
-                    Date date = parseDate(formatedDate);
-                    daysSince = daysDiff(date);
-
+                    daysSince = dayToBeginningOfMonth();
                 } else if (position == 2) {
                     range = 365;
                 }
 
-                setData(range, daysSince);
+                setData();
             }
 
             @Override
@@ -163,28 +154,17 @@ public class SummaryTabFragment extends Fragment implements
         });
 
         // TODO
-        // limit how far back and front you can go (jan1,2017 - end of dateconverter)
-        // fix prev and next
-        // put repeated code into function
         // fix number of labels on x-axis (week - 7/8, month - ?, year - 12)
         // get rid of 0 values
-        // make sure no off by 1s
         // fix UI clearer colors
         // set y axis label
-        // fix UI spinners etc
+
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (spinnerRange.getSelectedItemPosition() == 1) {
                     daysSince = daysSince - 1; // get the previous month
-                    int month = DateConverter.determineMonth(daysSince);
-                    int year = DateConverter.determineYear(daysSince);
-                    range = DateConverter.getDaysForMonth(month, year);
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    String formatedDate = sdf.format(new Date(year - 1900, month, 1));
-                    Date date = parseDate(formatedDate);
-                    daysSince = daysDiff(date);
+                    daysSince = dayToBeginningOfMonth();
                 }
                 else {
                     daysSince -= range;
@@ -192,7 +172,7 @@ public class SummaryTabFragment extends Fragment implements
 
                 // check limits
                 if (daysSince > 0) {           // > REFERENCE_DATE
-                    setData(range, daysSince);
+                    setData();
                 }
                 else {
                     daysSince += range;
@@ -200,19 +180,13 @@ public class SummaryTabFragment extends Fragment implements
             }
         });
 
+        // TODO: make dates futureproof, resolve looping date issue
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (spinnerRange.getSelectedItemPosition() == 1) {
                     daysSince = daysSince + range; // get the next month
-                    int month = DateConverter.determineMonth(daysSince);
-                    int year = DateConverter.determineYear(daysSince);
-                    range = DateConverter.getDaysForMonth(month, year);
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    String formatedDate = sdf.format(new Date(year - 1900, month, 1));
-                    Date date = parseDate(formatedDate);
-                    daysSince = daysDiff(date);
+                    daysSince = dayToBeginningOfMonth();
                 }
                 else {
                     daysSince += range;
@@ -220,7 +194,7 @@ public class SummaryTabFragment extends Fragment implements
 
                 // check limits
                 if (daysSince <= BOUND_DAY - range) {
-                    setData(range, daysSince);
+                    setData();
                 } else {
                     daysSince -= range;
                 }
@@ -230,7 +204,10 @@ public class SummaryTabFragment extends Fragment implements
 
         datePicker.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Calendar mcurrentDate = Calendar.getInstance();
+                //Calendar mcurrentDate = Calendar.getInstance();
+                int m = DateConverter.determineMonth(daysSince);
+                int y = DateConverter.determineYear(daysSince);
+                int d = DateConverter.determineDayOfMonth(daysSince, m + 12 * (y - 2017));
 
                 DatePickerDialog mDatePicker=new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     public void onDateSet(DatePicker datepicker, int year, int month, int day) {
@@ -240,10 +217,10 @@ public class SummaryTabFragment extends Fragment implements
                         Date viewDate = parseDate(formatedDate);
                         daysSince = daysDiff(viewDate);
 
-                        setData(range, daysSince);
+                        setData();
                     }
-                }, mcurrentDate.get(Calendar.YEAR), mcurrentDate.get(Calendar.MONTH), mcurrentDate.get(Calendar.DAY_OF_MONTH));
-
+                }, //mcurrentDate.get(Calendar.YEAR), mcurrentDate.get(Calendar.MONTH), mcurrentDate.get(Calendar.DAY_OF_MONTH));
+                    y, m, d);
                 mDatePicker.setTitle("Select date");
 
                 mDatePicker.getDatePicker().setMinDate(parseDate("2017-01-01").getTime());
@@ -260,14 +237,12 @@ public class SummaryTabFragment extends Fragment implements
 
     /**
      * Set the data to be displayed in the chart
-     * @param num is the number of days to display
-     * @param startDay is the start day to display
      */
-    private void setData(int num, int startDay) {
+    private void setData() {
 
-        int m = DateConverter.determineMonth(startDay);
-        int y = DateConverter.determineYear(startDay);
-        int d = DateConverter.determineDayOfMonth(startDay, m + 12 * (y - 2017));
+        int m = DateConverter.determineMonth(daysSince);
+        int y = DateConverter.determineYear(daysSince);
+        int d = DateConverter.determineDayOfMonth(daysSince, m + 12 * (y - 2017));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String formatedDate = sdf.format(new Date(y - 1900, m, d));
         chartTitle.setText(formatedDate);
@@ -284,7 +259,7 @@ public class SummaryTabFragment extends Fragment implements
 
 
         // the density of the window
-        for (int i = (int) startDay; i < startDay + num + 1; i++) {
+        for (int i = (int) daysSince; i < daysSince + range + 1; i++) {
 
             addEntry(yValsSad, sadDayToCountMap, i);
             addEntry(yValsHappy, happyDayToCountMap, i);
@@ -350,7 +325,7 @@ public class SummaryTabFragment extends Fragment implements
             // Styling
             setSad.setColor(parseColor(MoodColor.BLUE.getBGColor()));
             setSad.setScatterShapeSize(50f);
-            //setSad.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
+            setSad.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
             setHappy.setColor(parseColor(MoodColor.GREEN.getBGColor()));
             setHappy.setScatterShapeSize(50f);
@@ -641,6 +616,17 @@ public class SummaryTabFragment extends Fragment implements
         } catch (ParseException e) {
             return null;
         }
+    }
+
+    private int dayToBeginningOfMonth() {
+        int month = DateConverter.determineMonth(daysSince);
+        int year = DateConverter.determineYear(daysSince);
+        range = DateConverter.getDaysForMonth(month, year);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String formatedDate = sdf.format(new Date(year - 1900, month, 1));
+        Date date = parseDate(formatedDate);
+        return daysDiff(date);
     }
 
     /**
