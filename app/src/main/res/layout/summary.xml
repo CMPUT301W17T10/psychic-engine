@@ -48,15 +48,12 @@
         android:layout_width="20dp"
         android:layout_height="match_parent"
         android:layout_above="@+id/xLabel"
-        android:layout_alignBottom="@+id/xLabel"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentRight="false"
-
         android:layout_below="@+id/linearLayoutChartTop"
+        android:gravity="bottom"
         android:rotation="-90"
         android:text="Mood Count"
-        android:textAllCaps="false"
-        android:textSize="14sp" />
+        android:textAlignment="center"
+        android:textSize="8sp" />
 
     <TextView
         android:id="@+id/xLabel"

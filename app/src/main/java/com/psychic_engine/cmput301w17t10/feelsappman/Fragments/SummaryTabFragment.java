@@ -71,7 +71,7 @@ public class SummaryTabFragment extends Fragment implements
         OnChartGestureListener, OnChartValueSelectedListener {
 
     private static final String REFERENCE_DATE = "2017-01-01";
-    private static final int BOUND_DAY = 1822;
+    private static final int BOUND_DAY = 366 + 8;
 
     private ArrayList<MoodEvent> moodEventList;
 
@@ -243,7 +243,12 @@ public class SummaryTabFragment extends Fragment implements
                         setData(range, daysSince);
                     }
                 }, mcurrentDate.get(Calendar.YEAR), mcurrentDate.get(Calendar.MONTH), mcurrentDate.get(Calendar.DAY_OF_MONTH));
+
                 mDatePicker.setTitle("Select date");
+
+                mDatePicker.getDatePicker().setMinDate(parseDate("2017-01-01").getTime());
+                mDatePicker.getDatePicker().setMaxDate(parseDate("2017-12-31").getTime());
+
                 mDatePicker.show();  }
         });
 
@@ -518,14 +523,11 @@ public class SummaryTabFragment extends Fragment implements
      * Set chart properties
      */
     private void setChartProperties() {
-        // TODO add title, x, y axis description
         mChart.getDescription().setEnabled(false);
         mChart.setMaxVisibleValueCount(60);
         mChart.setPinchZoom(false);
         mChart.setDrawGridBackground(false);
         mChart.setOnChartValueSelectedListener(this);
-        //mChart.setVisibleXRangeMaximum(7f);
-        //mChart.setVisibleXRangeMinimum(7f);
         mChart.setVisibleXRange(7f, 7f);
 
     }
@@ -648,12 +650,7 @@ public class SummaryTabFragment extends Fragment implements
      */
     private int daysDiff(Date date) {
         Date refDate = parseDate(REFERENCE_DATE);
-        return DateConverter.getDaysBetween(refDate, date) + 1;
-        /*
-        Date refDate = parseDate(REFERENCE_DATE);
-        long diff = date.getTime() - refDate.getTime();
-        return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;    // DayAxisFormatter begins at day 0, 01/01/2017 is day 1
-        */
+        return DateConverter.getDaysBetween(refDate, date) + 1; // DayAxisFormatter begins at day 0, 01/01/2017 is day 1
 
     }
 
