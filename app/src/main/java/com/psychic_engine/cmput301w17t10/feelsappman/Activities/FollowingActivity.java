@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -20,6 +21,7 @@ public class FollowingActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
     private Spinner menuSpinner;
     private ListView followingList;
+    private Button search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +33,19 @@ public class FollowingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFollowing);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Following");
+        search = (Button) findViewById(R.id.search);
 
         followingList = (ListView) findViewById(R.id.listViewFollowing);
 
         initializeSpinner();
+
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FollowingActivity.this,SearchActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void initializeSpinner(){

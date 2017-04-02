@@ -190,7 +190,8 @@ public class CreateMoodActivity extends AppCompatActivity {
         if (photoSizeUnder) {   // TODO photo size limit exception
             boolean thrown = false;
             try {
-                createMoodController.createMoodEvent(moodString, socialSettingString, trigger, photo, location);
+                CreateMoodController.createMoodEvent(moodString, socialSettingString, trigger, photo
+                        , location, getApplicationContext());
             } catch (EmptyMoodException e) {
                 thrown = true;
                 Toast.makeText(CreateMoodActivity.this,

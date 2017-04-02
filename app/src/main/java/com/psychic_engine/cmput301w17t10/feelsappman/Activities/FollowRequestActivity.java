@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,6 +23,8 @@ public class FollowRequestActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
     private Spinner menuSpinner;
     private ListView followerRequestsList;
+    private ArrayList<String> followerRequestArray;
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +38,54 @@ public class FollowRequestActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Follower Requests");
 
         followerRequestsList = (ListView) findViewById(R.id.listViewFollowerRequests);
+        registerForContextMenu(followerRequestsList);
+        followerRequestArray = new ArrayList<String>();
+
+        followerRequestArray.add("rando");
+        followerRequestArray.add("dest");
+
 
         initializeSpinner();
+    }
+
+    //http://stackoverflow.com/questions/17207366/creating-a-menu-after-a-long-click-event-on-a-list-view
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        if (v.getId() == R.id.listViewFollowerRequests) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_handlefollow, menu);
+        }
+    }
+
+    //long click for editing and deleting
+    //http://stackoverflow.com/questions/17207366/creating-a-menu-after-a-long-click-event-on-a-list-view
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch(item.getItemId()) {
+            case R.id.acceptfollow:
+                followerRequestArray.remove(info.position);
+                setResult(RESULT_OK);
+                adapter.notifyDataSetChanged();
+                return true;
+            case R.id.rejectfollow:
+                followerRequestArray.remove(info.position);
+                setResult(RESULT_OK);
+                adapter.notifyDataSetChanged();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        // TODO Auto-generated method stub
+        super.onStart();
+        adapter = new ArrayAdapter<String>(this, R.layout.follower_handleitem, followerRequestArray);
+        followerRequestsList.setAdapter(adapter);
     }
 
     public void initializeSpinner(){
