@@ -70,29 +70,9 @@ public class SearchActivity extends AppCompatActivity {
 
                 adapter = new ArrayAdapter<>(SearchActivity.this, R.layout.item_history, arrayList);
                 results.setAdapter(adapter);
+                pendinglist = participant.getPendingRequests();
 
 
-                results.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        pendinglist = participant.getPendingRequests();
-
-                        if (pendinglist.contains(participantSingleton.getSelfParticipant().getLogin())){
-                            Toast.makeText(SearchActivity.this,"Request Already Sent!",Toast.LENGTH_SHORT).show();
-                            arrayList.clear();
-                            adapter.notifyDataSetChanged();
-                        }
-                        else {
-                            Toast.makeText(SearchActivity.this, "Request Sent!", Toast.LENGTH_SHORT).show();
-
-                            pendinglist.add(participantSingleton.getSelfParticipant().getLogin());
-                            arrayList.clear();
-                            adapter.notifyDataSetChanged();
-                        }
-                        
-
-                    }
-                });
 
 
 
@@ -101,6 +81,32 @@ public class SearchActivity extends AppCompatActivity {
 
             }
         });
+        results.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                if (pendinglist.contains(participantSingleton.getSelfParticipant().getLogin())){
+                    Toast.makeText(SearchActivity.this,"Request Already Sent!",Toast.LENGTH_SHORT).show();
+                    arrayList.clear();
+                    adapter.notifyDataSetChanged();
+                }
+                else {
+
+
+                    pendinglist.add(participantSingleton.getSelfParticipant().getLogin());
+                    ElasticParticipantController.UpdateParticipantTask upt = new ElasticParticipantController.UpdateParticipantTask();
+                    upt.execute(participant);
+
+                    arrayList.clear();
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(SearchActivity.this, "Request Sent!", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
+
 
 
     }
