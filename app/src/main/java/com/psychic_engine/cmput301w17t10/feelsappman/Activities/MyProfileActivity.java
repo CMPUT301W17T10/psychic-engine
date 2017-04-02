@@ -30,6 +30,7 @@ import java.util.List;
 public class MyProfileActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
     private Spinner menuSpinner;
+    private Integer spinnerPosition;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -190,7 +191,7 @@ public class MyProfileActivity extends AppCompatActivity {
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         //set default spinner item to current activity
-        int spinnerPosition = adapterSpinner.getPosition("My Profile");
+        spinnerPosition = adapterSpinner.getPosition("My Profile");
         menuSpinner.setSelection(spinnerPosition);
 
         //set onclick for spinner
@@ -231,6 +232,8 @@ public class MyProfileActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         FileManager.saveInFile(this);
+
+        menuSpinner.setSelection(spinnerPosition);
     }
 
     /**

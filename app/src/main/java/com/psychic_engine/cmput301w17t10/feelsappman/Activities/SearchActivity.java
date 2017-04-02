@@ -63,14 +63,15 @@ public class SearchActivity extends AppCompatActivity {
 
                 try {
                     arrayList.add(participant.getLogin());
+                    adapter = new ArrayAdapter<>(SearchActivity.this, R.layout.item_history, arrayList);
+                    results.setAdapter(adapter);
+                    pendinglist = participant.getPendingRequests();
                 }catch (NullPointerException e) {
                     Toast.makeText(SearchActivity.this,"Participant Not Found",Toast.LENGTH_SHORT).show();
 
                 }
 
-                adapter = new ArrayAdapter<>(SearchActivity.this, R.layout.item_history, arrayList);
-                results.setAdapter(adapter);
-                pendinglist = participant.getPendingRequests();
+
 
 
 

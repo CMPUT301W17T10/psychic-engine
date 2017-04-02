@@ -81,6 +81,17 @@ public class MyFeedActivity extends AppCompatActivity {
         Collections.sort(followingMoodsArray, new CustomComparator());
 
         initializeSpinner();
+
+
+
+
+
+
+
+
+
+
+
     }
 
     @Override
