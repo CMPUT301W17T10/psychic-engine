@@ -69,9 +69,9 @@ public class SearchActivity extends AppCompatActivity {
                 results.setAdapter(adapter);
 
 
-                results.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                results.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         pendinglist = participant.getPendingRequests();
 
                         if(pendinglist.contains(participant.getLogin())){
@@ -86,12 +86,6 @@ public class SearchActivity extends AppCompatActivity {
                             arrayList.clear();
                             adapter.notifyDataSetChanged();
                         }
-
-
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
 
                     }
                 });
