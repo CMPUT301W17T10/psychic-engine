@@ -33,6 +33,7 @@ import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.psychic_engine.cmput301w17t10.feelsappman.Custom.DateConverter;
 import com.psychic_engine.cmput301w17t10.feelsappman.Custom.DayAxisValueFormatter;
 import com.psychic_engine.cmput301w17t10.feelsappman.Custom.MutableInteger;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodColor;
@@ -119,7 +120,11 @@ public class SummaryTabFragment extends Fragment implements
                 if (position == 0) {
                     range = 7;
                 } else if (position == 1) {
-                    range = 30;     // TODO as appropriate for month
+                    int month = DateConverter.determineMonth(daysSince);
+                    if (month == 3 || month == 5 || month == 8 || month == 10)
+                        range = 30;
+                    else
+                        range = 31;
                 } else if (position == 2) {
                     range = 365;
                 }
@@ -356,7 +361,7 @@ public class SummaryTabFragment extends Fragment implements
             setSad.setColor(parseColor(MoodColor.BLUE.getBGColor()));
             setSad.setScatterShapeSize(50f);
             //setSad.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
-            
+
             setHappy.setColor(parseColor(MoodColor.GREEN.getBGColor()));
             setHappy.setScatterShapeSize(50f);
             setHappy.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
@@ -543,14 +548,13 @@ public class SummaryTabFragment extends Fragment implements
     }
 
 
-    public static Date parseDate(String date) {
+    private static Date parseDate(String date) {
         try {
             return new SimpleDateFormat("yyyy-MM-dd").parse(date);
         } catch (ParseException e) {
             return null;
         }
     }
-
 
 }
 
