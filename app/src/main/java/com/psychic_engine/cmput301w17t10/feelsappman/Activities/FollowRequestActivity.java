@@ -41,11 +41,9 @@ public class FollowRequestActivity extends AppCompatActivity {
         registerForContextMenu(followerRequestsList);
         followerRequestArray = new ArrayList<String>();
 
-        followerRequestArray.add("rando");
-        followerRequestArray.add("dest");
-
-
         initializeSpinner();
+
+        followerRequestArray = ParticipantSingleton.getInstance().getSelfParticipant().getPendingRequests();
     }
 
     //http://stackoverflow.com/questions/17207366/creating-a-menu-after-a-long-click-event-on-a-list-view
@@ -66,6 +64,7 @@ public class FollowRequestActivity extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch(item.getItemId()) {
             case R.id.acceptfollow:
+                ParticipantSingleton.getInstance().getSelfParticipant().getFollowers().add(followerRequestArray.get(info.position));
                 followerRequestArray.remove(info.position);
                 setResult(RESULT_OK);
                 adapter.notifyDataSetChanged();
