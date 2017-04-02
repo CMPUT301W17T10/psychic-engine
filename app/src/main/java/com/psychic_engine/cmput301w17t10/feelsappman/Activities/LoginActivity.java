@@ -1,8 +1,8 @@
 package com.psychic_engine.cmput301w17t10.feelsappman.Activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -142,7 +142,18 @@ public class LoginActivity extends AppCompatActivity {
                         // add participant into the server
                         ElasticParticipantController.AddParticipantTask addParticipantTask = new
                                 ElasticParticipantController.AddParticipantTask();
-                        addParticipantTask.execute(newParticipant);
+                        try {
+                            addParticipantTask.execute(newParticipant);
+                            String newId = addParticipantTask.get();
+                            newParticipant.setId(newId);
+                            Log.i("New", "New Participant signed up as "+ newParticipant.getId());
+                        } catch (Exception e) {
+                            Log.i("Fail", "Failed assigning index");
+                        }
+
+                        ElasticParticipantController.UpdateParticipantTask upt = new ElasticParticipantController.UpdateParticipantTask();
+                        upt.execute(newParticipant);
+
 
                         // add participant into the singleton locally
                         instance.addParticipant(newParticipant);

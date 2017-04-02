@@ -27,11 +27,12 @@ public class ElasticParticipantController extends ElasticController {
      * AddParticipantTask deals with adding new participants into the server when the participant
      * signs up at the login page.
      */
-    public static class AddParticipantTask extends AsyncTask<Participant, Void, Void>  {
+    public static class AddParticipantTask extends AsyncTask<Participant, Void, String>  {
 
         // Make it handle arbitrary number of arguments
         @Override
-        protected Void doInBackground(Participant... participants) {
+        protected String doInBackground(Participant... participants) {
+            DocumentResult result = null;
             verifySettings();
 
             // Index for each participant
@@ -41,11 +42,12 @@ public class ElasticParticipantController extends ElasticController {
 
                 // Attempt to createMoodEvent an index for the new participants to store into the server
                 try {
-                    DocumentResult result = client.execute(index);
+                    result = client.execute(index);
                     // Upon successful execution of index creation, attempt to save uniqueID to participant
                     if (result.isSucceeded()) {
                         participant.setId(result.getId());
                         Log.i("Success", "Participant UUID: "+participant.getId());
+                        return result.getId();
                     }
                     else {
                         Log.i("Error", "Elasticsearch was not able to add the new participant");
@@ -54,7 +56,7 @@ public class ElasticParticipantController extends ElasticController {
                     Log.i("Error", "The application failed to build and send the participants");
                 }
             }
-            return null;
+            return result.getId();
         }
     }
 
