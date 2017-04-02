@@ -13,18 +13,25 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class FollowRequestActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
     private Spinner menuSpinner;
     private ListView followerRequestsList;
     private ArrayList<String> followerRequestArray;
+    private ArrayList<String> participantFollowArray;
+    private ArrayList<String> senderFollowing;
     private ArrayAdapter<String> adapter;
+    private Participant participant;
+    private Participant senderParticipant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +46,28 @@ public class FollowRequestActivity extends AppCompatActivity {
 
         followerRequestsList = (ListView) findViewById(R.id.listViewFollowerRequests);
         registerForContextMenu(followerRequestsList);
+
         followerRequestArray = new ArrayList<String>();
+        participantFollowArray = new ArrayList<String>();
+        senderFollowing = new ArrayList<String>();
 
         initializeSpinner();
 
-        followerRequestArray = ParticipantSingleton.getInstance().getSelfParticipant().getPendingRequests();
+        //followerRequestArray = ParticipantSingleton.getInstance().getSelfParticipant().getPendingRequests();
+
+        ElasticParticipantController.FindParticipantTask fpt = new ElasticParticipantController.FindParticipantTask();
+        fpt.execute(ParticipantSingleton.getInstance().getSelfParticipant().getLogin());
+
+        try {
+            participant = fpt.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        followerRequestArray = participant.getPendingRequests();
+        participantFollowArray = participant.getFollowers();
     }
 
     //http://stackoverflow.com/questions/17207366/creating-a-menu-after-a-long-click-event-on-a-list-view
@@ -64,13 +88,29 @@ public class FollowRequestActivity extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch(item.getItemId()) {
             case R.id.acceptfollow:
-                ParticipantSingleton.getInstance().getSelfParticipant().getFollowers().add(followerRequestArray.get(info.position));
+                ElasticParticipantController.FindParticipantTask fpt1 = new ElasticParticipantController.FindParticipantTask();
+                fpt1.execute(followerRequestArray.get(info.position));
+
+                try {
+                    senderParticipant = fpt1.get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+                senderFollowing = senderParticipant.getFollowing();
+                senderFollowing.add(participant.getLogin());
+
+                participantFollowArray.add(followerRequestArray.get(info.position));
                 followerRequestArray.remove(info.position);
+
                 setResult(RESULT_OK);
                 adapter.notifyDataSetChanged();
                 return true;
             case R.id.rejectfollow:
                 followerRequestArray.remove(info.position);
+
                 setResult(RESULT_OK);
                 adapter.notifyDataSetChanged();
                 return true;
