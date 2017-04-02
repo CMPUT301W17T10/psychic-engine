@@ -4,20 +4,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/chartTitle"
+    <LinearLayout
+        android:id="@+id/linearLayoutChartTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mood Frequency Vs Time"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/previous"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:srcCompat="@drawable/previous" />
+
+        <TextView
+            android:id="@+id/chartTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:text="Mood Frequency Vs Time"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <ImageButton
+            android:id="@+id/next"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:srcCompat="@drawable/next" />
+
+    </LinearLayout>
 
     <com.github.mikephil.charting.charts.ScatterChart
         android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/xLabel"
-        android:layout_below="@+id/chartTitle"
+        android:layout_below="@+id/linearLayoutChartTop"
         android:background="@color/white" />
 
     <TextView
@@ -25,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_above="@+id/xLabel"
-        android:layout_below="@+id/chartTitle"
+        android:layout_below="@+id/linearLayoutChartTop"
         android:layout_toLeftOf="@+id/chart"
         android:text="Mood Count"
         android:layout_alignParentStart="true" />

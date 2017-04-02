@@ -77,6 +77,8 @@ public class SummaryTabFragment extends Fragment implements
     private TextView chartTitle;
     private Spinner spinnerRange;
     private ImageButton datePicker;
+    private ImageButton prev;
+    private ImageButton next;
 
     int daysSince, range;
 
@@ -100,6 +102,8 @@ public class SummaryTabFragment extends Fragment implements
 
         spinnerRange = (Spinner) rootView.findViewById(R.id.spinnerTime1);
         datePicker = (ImageButton) rootView.findViewById(R.id.datePicker);
+        prev = (ImageButton) rootView.findViewById(R.id.previous);
+        next = (ImageButton) rootView.findViewById(R.id.next);
 
         mChart = (ScatterChart) rootView.findViewById(R.id.chart);
         chartTitle = (TextView) rootView.findViewById(R.id.chartTitle);
@@ -132,11 +136,19 @@ public class SummaryTabFragment extends Fragment implements
                 if (position == 0) {
                     range = 7;
                 } else if (position == 1) {
+                    // Set graph view to the beginning of the month
                     int month = DateConverter.determineMonth(daysSince);
                     if (month == 3 || month == 5 || month == 8 || month == 10)
                         range = 30;
                     else
                         range = 31;
+
+                    int year = DateConverter.determineYear(daysSince);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String formatedDate = sdf.format(new Date(year - 1900, month + 1, 1));
+                    Date date = parseDate(formatedDate);
+                    daysSince = daysDiff(date);
+
                 } else if (position == 2) {
                     range = 365;
                 }
@@ -150,6 +162,67 @@ public class SummaryTabFragment extends Fragment implements
             }
 
         });
+
+        // TODO
+        // limit how far back and front you can go (jan1,2017 - end of dateconverter)
+        // fix prev and next
+        // put repeated code into function
+        // fix number of labels on x-axis (week - 7/8, month - ?, year - 12)
+        // get rid of 0 values
+        // make sure no off by 1s
+        // fix UI clearer colors
+        // set y axis label
+        // fix UI spinners etc
+        prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (spinnerRange.getSelectedItemPosition() == 1) {
+                    daysSince = daysSince - 1; // get the previous month
+                    int month = DateConverter.determineMonth(daysSince);
+                    if (month == 3 || month == 5 || month == 8 || month == 10)
+                        range = 30;
+                    else
+                        range = 31;
+
+                    int year = DateConverter.determineYear(daysSince);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String formatedDate = sdf.format(new Date(year - 1900, month + 1, 1));
+                    Date date = parseDate(formatedDate);
+                    daysSince = daysDiff(date);
+                }
+                else {
+                    daysSince -= range;
+                }
+
+                setData(range, daysSince);
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (spinnerRange.getSelectedItemPosition() == 1) {
+                    daysSince = daysSince + range; // get the next month
+                    int month = DateConverter.determineMonth(daysSince);
+                    if (month == 3 || month == 5 || month == 8 || month == 10)
+                        range = 30;
+                    else
+                        range = 31;
+
+                    int year = DateConverter.determineYear(daysSince);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String formatedDate = sdf.format(new Date(year - 1900, month + 1, 1));
+                    Date date = parseDate(formatedDate);
+                    daysSince = daysDiff(date);
+                }
+                else {
+                    daysSince += range;
+                }
+
+                setData(range, daysSince);
+            }
+        });
+
 
         datePicker.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -182,6 +255,13 @@ public class SummaryTabFragment extends Fragment implements
      * @param startDay is the start day to display
      */
     private void setData(int num, int startDay) {
+
+        int m = DateConverter.determineMonth(startDay);
+        int y = DateConverter.determineYear(startDay);
+        int d = DateConverter.determineDayOfMonth(startDay, m + 12 * (y - 2017));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String formatedDate = sdf.format(new Date(y - 1900, m + 1, d));
+        chartTitle.setText(formatedDate);
 
         // Create an array of data points for each mood
         ArrayList<Entry> yValsSad = new ArrayList<Entry>();
