@@ -175,7 +175,7 @@ public class MoodEvent implements Serializable{
      * @return
      */
     public String toString(){
-        return "I feel "+ this.mood.getMood().toString() + " | " + this.getDate() ;
+        return moodOwner + " feels "+ this.mood.getMood().toString() + " | " + this.getDate() ;
     }
 
     /**

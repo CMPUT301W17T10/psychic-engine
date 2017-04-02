@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Custom.CustomComparator;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
@@ -18,6 +19,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -76,7 +78,7 @@ public class MyFeedActivity extends AppCompatActivity {
             }
         }
 
-
+        Collections.sort(followingMoodsArray, new CustomComparator());
 
         initializeSpinner();
     }
