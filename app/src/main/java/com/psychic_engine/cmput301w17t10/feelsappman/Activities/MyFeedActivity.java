@@ -125,6 +125,16 @@ public class MyFeedActivity extends AppCompatActivity {
             }
         });
 
+        myFeedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MyFeedActivity.this, ViewMoodEventActivity.class);
+                intent.putExtra("moodEventId", followingMoodsArray.get(position).getId());
+                startActivity(intent);
+
+            }
+        });
+
 
 
 
