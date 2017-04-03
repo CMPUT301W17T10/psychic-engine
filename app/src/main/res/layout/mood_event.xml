@@ -65,16 +65,11 @@
             android:textAlignment="center"
             android:textSize="20sp" />
 
-        <TextView
+        <ImageView
             android:id="@+id/me_social"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp"
-            android:textAlignment="textEnd" />
+            android:layout_width="51dp"
+            android:layout_height="52dp"
+            android:layout_marginRight="20dp" />
 
     </LinearLayout>
 
