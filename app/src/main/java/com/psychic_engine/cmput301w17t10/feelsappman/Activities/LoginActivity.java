@@ -49,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText participantEditText;
     private Button loginButton;
     private Button signupButton;
-    private Button generateButton;
     private ParticipantSingleton instance;
 
 
@@ -61,11 +60,6 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.loginButton);
         signupButton = (Button) findViewById(R.id.signupButton);
         participantEditText = (EditText) findViewById(R.id.nameEditText);
-
-        // for testing purposes generate test data to test queries and filter
-        // delete resets the instance to be equivalent to the elastic server
-        // pls no press
-        generateButton = (Button) findViewById(R.id.generateButton);
 
         loadInstance();
         instance = ParticipantSingleton.getInstance();
@@ -173,14 +167,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
-        // generates data for testing purposes
-        generateButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                generateData();
-                Toast.makeText(LoginActivity.this, "Data has been generated!", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     /**
@@ -216,75 +202,5 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         FileManager.saveInFile(this);
-    }
-
-
-    /**
-     * Method that generates set data to utilize for the app testing purposes. It will automatically
-     * set the selfParticipant in the singleton to be "USER". To see what moods that would be added,
-     * you need to login as USER as it is added into the singleton and the server as well.
-     * @see ParticipantSingleton
-     */
-    public void generateData() {
-
-        // reset the server
-        ElasticMasterController.ResetElasticServer reset = new ElasticMasterController.ResetElasticServer();
-        reset.execute();
-
-        // instantiate elastic controllers
-        ElasticParticipantController.AddParticipantTask addParticipantTask = new  ElasticParticipantController
-                .AddParticipantTask();
-        ElasticMoodController.AddMoodEventTask addMoodEventTask = new ElasticMoodController
-                .AddMoodEventTask();
-
-        // instantiate participants
-        Participant testParticipant = new Participant("user");
-        Participant test1 = new Participant("testHappy1");
-        Participant test2 = new Participant("testSad2");
-        Participant test3 = new Participant("testConfused3");
-
-        // setup singleton for the person using the app
-        // clear the participant list in case
-        // set USER as the participant using the app
-        ParticipantSingleton instance = ParticipantSingleton.getInstance();
-        instance.getParticipantList().clear();
-        instance.addParticipant(testParticipant);
-        instance.setSelfParticipant(testParticipant);
-        Log.i("Participant", "Participant set to "+ testParticipant.getLogin());
-
-        // add participants into the elastic server
-        addParticipantTask.execute(testParticipant, test1, test2, test3);
-
-
-        // add mood events for the participants
-        // mood events will be mainly in USER for filtering with combination of reason/date/mood
-        // test1/2/3 will follow recent later
-
-        MoodEvent testMood1 = null, testMood2 = null, testMood3 = null, testMood4 = null, testMood5 = null;
-        try {
-            testMood1 = new MoodEvent(new Mood(MoodState.HAPPY), SocialSetting.ALONE,
-                    "", null, null);
-            testMood2 = new MoodEvent(new Mood(MoodState.SAD), SocialSetting.ONEOTHER,
-                    "test", null, null);
-            testMood3 = new MoodEvent(new Mood(MoodState.CONFUSED), SocialSetting.TWOTOSEVERAL,
-                    "test", null, null);
-            testMood4 = new MoodEvent(new Mood(MoodState.HAPPY), SocialSetting.CROWD,
-                    "test", null, null);
-            testMood5 = new MoodEvent(new Mood(MoodState.HAPPY), SocialSetting.CROWD,
-                    "", null, null);
-        } catch (EmptyMoodException e) {
-            e.printStackTrace();
-        } catch (TriggerTooLongException e) {
-            e.printStackTrace();
-        }
-
-        // add mood events into the server
-        addMoodEventTask.execute(testMood1, testMood2, testMood3, testMood4);
-        ParticipantController.addMoodEvent(testMood1);
-        ParticipantController.addMoodEvent(testMood2);
-        ParticipantController.addMoodEvent(testMood3);
-        ParticipantController.addMoodEvent(testMood4);
-        ParticipantController.addMoodEvent(testMood5);
-
     }
 }
