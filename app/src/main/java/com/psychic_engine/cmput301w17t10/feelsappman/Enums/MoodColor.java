@@ -70,6 +70,7 @@ public enum MoodColor {
             case PURPLE: return "#B388FF";
             case ORANGE: return "#FF6D00";
             case RED: return "#F44336";
+            case PINK: return "#F48FB1";
             case BROWN: return "#795548";
             case YELLOW: return "#FFFF00";
             default: throw new IllegalArgumentException();

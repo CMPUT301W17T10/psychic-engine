@@ -35,7 +35,7 @@ public class ViewMoodEventActivity extends AppCompatActivity{
     private TextView dateTime;
     private ImageView photo;
     private TextView location;
-    private ImageView icon;          // Temporary for now to meet requirements until we have icons for mood
+    private ImageView icon;
     private TextView trigger;
     private TextView socialIcon;    // Temporary for now to meet requirements until we have icon for social setting
     private ImageButton returnButton;
