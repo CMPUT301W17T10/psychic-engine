@@ -149,8 +149,9 @@ public class RecentTabFragment extends Fragment {
     private void viewMood() {
         if (moodEvent != null) {
             Intent intent = new Intent(getActivity(), ViewMoodEventActivity.class);
-            intent.putExtra("moodEventId", moodEvent.getId());
-            intent.putExtra("callingActivity", "SelfRecentFrag");
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("moodEvent", moodEvent);
+            intent.putExtras(bundle);
             startActivity(intent);
         }
     }

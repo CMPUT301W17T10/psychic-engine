@@ -58,33 +58,10 @@ public class ViewMoodEventActivity extends AppCompatActivity{
         socialIcon = (TextView) findViewById(R.id.me_social);
         returnButton = (ImageButton) findViewById(R.id.me_return);
 
-        String moodEventId = getIntent().getExtras().getString("moodEventId");
-        String callingActivity = getIntent().getExtras().getString("callingActivity");
+        moodEvent = (MoodEvent) getIntent().getExtras().getSerializable("moodEvent");
 
-        moodEvent = null;
-        if (callingActivity.equals("MyFeed")) {
-
-            ArrayList<MoodEvent> moodList = (ArrayList<MoodEvent>) getIntent().getExtras().getSerializable("moodEventList");
-
-            for (MoodEvent m : moodList) {
-                if (moodEventId.equals(m.getId()))
-                    moodEvent = m;
-            }
-
-        } else {
-            participant = ParticipantSingleton.getInstance().getSelfParticipant();
-
-            for (MoodEvent m : participant.getMoodList()) {
-                if (moodEventId.equals(m.getId()))
-                    moodEvent = m;
-            }
-        }
-
-        if (moodEvent != null) {
+        if (moodEvent != null)
             display();
-        } else {
-            //dateTime.setText("SDFSJDFKJSDLF");
-        }
 
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -51,7 +51,7 @@
         android:layout_below="@+id/linearLayoutChartTop"
         android:gravity="bottom"
         android:rotation="-90"
-        android:text="Mood Count"
+        android:text="1"
         android:textAlignment="center"
         android:textSize="8sp" />
 

@@ -135,8 +135,9 @@ public class HistoryTabFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ViewMoodEventActivity.class);
-                intent.putExtra("moodEventId", filteredMoodList.get(position).getId());
-                intent.putExtra("callingActivity", "SelfHistoryFrag");
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("moodEvent",filteredMoodList.get(position));
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
