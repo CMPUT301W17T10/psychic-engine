@@ -79,16 +79,7 @@ public class MyFeedActivity extends AppCompatActivity {
 
         followingArray = new ArrayList<String>();
 
-        ElasticParticipantController.FindParticipantTask fpt = new ElasticParticipantController.FindParticipantTask();
-        fpt.execute(ParticipantSingleton.getInstance().getSelfParticipant().getLogin());
-
-        try {
-            participant = fpt.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        participant = instance.getSelfParticipant();
 
         followingArray = participant.getFollowing();
 
