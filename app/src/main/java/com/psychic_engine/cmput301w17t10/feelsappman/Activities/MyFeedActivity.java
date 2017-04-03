@@ -8,11 +8,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Custom.CustomComparator;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
@@ -21,6 +24,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -34,12 +38,22 @@ public class MyFeedActivity extends AppCompatActivity {
     private Participant participant;
     private Participant following;
     private Button maps;
-    private Button reason;
-    private Button recent;
-    private Button mood;
+
     private ArrayList<MoodEvent> filteredMoodList;
 
-
+    private CheckBox filterDate;
+    private CheckBox filterWeek;
+    private EditText filterTrigger;
+    private Button applyFilters;
+    private Boolean dateFilterSelected;
+    private Boolean weekFilterSelected;
+    private Boolean moodFilterSelected;
+    private Boolean triggerFilterSelected;
+    private Spinner moodSpinner;
+    private boolean satisfiesMood;
+    private boolean satisfiesDate;
+    private boolean satisfiesTrigger;
+    private final long ONEWEEK = 604800000L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +68,16 @@ public class MyFeedActivity extends AppCompatActivity {
 
         myFeedList = (ListView) findViewById(R.id.listViewMyFeed);
         maps = (Button) findViewById(R.id.maps);
-        recent = (Button) findViewById(R.id.recentweek);
-        reason = (Button)findViewById(R.id.reason);
-        mood = (Button)findViewById(R.id.moodfilter);
+
+        filterDate = (CheckBox) findViewById(R.id.recentfilter1);
+        filterWeek = (CheckBox) findViewById(R.id.weekfilter1);
+        filterTrigger = (EditText) findViewById(R.id.filterreason1);
+        applyFilters = (Button) findViewById(R.id.applyfilters1);
+        moodSpinner = (Spinner) findViewById(R.id.moodsspinner1);
+
         followingMoodsArray = new ArrayList<MoodEvent>();
+
         followingArray = new ArrayList<String>();
-
-
-
 
         ElasticParticipantController.FindParticipantTask fpt = new ElasticParticipantController.FindParticipantTask();
         fpt.execute(ParticipantSingleton.getInstance().getSelfParticipant().getLogin());
@@ -87,45 +103,46 @@ public class MyFeedActivity extends AppCompatActivity {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            for (MoodEvent moodEvent : following.getMoodList()) {
-                followingMoodsArray.add(moodEvent);
-            }
+
+            followingMoodsArray.add(following.getMostRecentMoodEvent());
         }
 
         Collections.sort(followingMoodsArray, new CustomComparator());
 
+        filteredMoodList = new ArrayList<MoodEvent>(followingMoodsArray);
+
         initializeSpinner();
+
+        // Spinner drop down elements
+        List<String> moodCategories = new ArrayList<String>();
+        moodCategories.add("None");     // default option
+        MoodState[] moodStates = MoodState.values();
+        for (MoodState moodState : moodStates) {
+            moodCategories.add(moodState.toString());
+        }
+
+        // Set adapter for spinner
+        ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, moodCategories);
+        moodSpinner.setAdapter(adapterSpinner);
+
+        //apply the filters now
+        applyFilters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refresh();
+            }
+        });
 
         maps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MyFeedActivity.this,FollowingMapActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("moodEventLists",followingMoodsArray);
+                bundle.putSerializable("moodEventLists",filteredMoodList);
                 intent.putExtras(bundle);
                 startActivity(intent);
 
-
-            }
-        });
-
-        reason.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        mood.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        recent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
             }
         });
@@ -141,24 +158,13 @@ public class MyFeedActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
-
-
-
-
-
-
-
     }
 
     @Override
     protected void onStart() {
         // TODO Auto-generated method stub
         super.onStart();
-        adapter = new ArrayAdapter<MoodEvent>(this, R.layout.myfeed_item, followingMoodsArray);
+        adapter = new ArrayAdapter<MoodEvent>(this, R.layout.myfeed_item, filteredMoodList);
         myFeedList.setAdapter(adapter);
     }
 
@@ -213,5 +219,89 @@ public class MyFeedActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
+
+    /**
+     * This method is used to determine the mood events that satisfies the filter that the participant
+     * has set. The application will be able to filter locally without the use of an internet
+     * connection.
+     */
+    private void filter() {
+        filteredMoodList.clear();
+
+        // Check which filters have been selected
+        checkFilterSelected();
+
+        // elastic version of filter by reason
+        /*
+        String selfName = ParticipantSingleton.getInstance().getSelfParticipant().getLogin();
+        ElasticMoodController.FilterMoodByReasonTask filter = new ElasticMoodController.FilterMoodByReasonTask();
+        try {
+            filter.execute(selfName, "test");
+            ArrayList<MoodEvent> results = filter.get();
+            for (MoodEvent event : results) {
+                filteredMoodList.add(event);
+            }
+        } catch (Exception e) {
+            Log.i("Failed", "Failed filter");
+        }
+        */
+
+        // offline version
+        for (MoodEvent moodEvent : followingMoodsArray) {
+
+            satisfiesMood = true;
+            satisfiesDate = true;
+            satisfiesTrigger = true;
+
+            // check if mood event satisfies mood filter
+            if (moodFilterSelected && !(moodEvent.getMood().getMood().toString().equals(
+                    moodSpinner.getSelectedItem().toString())))
+                satisfiesMood = false;
+
+            // check if mood event satisfies trigger filter
+            if (triggerFilterSelected && !moodEvent.getTrigger().toLowerCase().
+                    contains(filterTrigger.getText().toString().toLowerCase()))
+                satisfiesTrigger = false;
+
+            // check if mood event satisfies date filter
+            if (weekFilterSelected && moodEvent.getDate().before(
+                    new Date(new Date().getTime() - ONEWEEK)))
+                satisfiesDate = false;
+
+            // add mood event to the list to be displayed if it satisfies all conditions
+            if (satisfiesMood && satisfiesDate && satisfiesTrigger)
+                filteredMoodList.add(moodEvent);
+        }
+
+        // sort mood events in reverse chronological order
+        if (dateFilterSelected)
+            Collections.sort(filteredMoodList, new CustomComparator());
+    }
+
+    /**
+     * This method determines what filters have been selected by the participant to be utilized.
+     */
+    private void checkFilterSelected() {
+
+        // Check if the date filter is selected
+        dateFilterSelected = (filterDate.isChecked());
+
+        // Check if the week filter is selected
+        weekFilterSelected = (filterWeek.isChecked());
+
+        // Check if trigger filter is selected
+        triggerFilterSelected = (!filterTrigger.getText().toString().
+                equals(""));
+
+        // Check if mood is selected in mood filter
+        moodFilterSelected = (!moodSpinner.getSelectedItem().toString().
+                equals("None"));
+
+    }
+
+    private void refresh() {
+        filter();
+        adapter.notifyDataSetChanged();
     }
 }
