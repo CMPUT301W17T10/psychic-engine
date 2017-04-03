@@ -37,6 +37,8 @@ public class MyFeedActivity extends AppCompatActivity {
     private Button reason;
     private Button recent;
     private Button mood;
+    private ArrayList<MoodEvent> filteredMoodList;
+
 
 
     @Override
@@ -57,6 +59,9 @@ public class MyFeedActivity extends AppCompatActivity {
         mood = (Button)findViewById(R.id.moodfilter);
         followingMoodsArray = new ArrayList<MoodEvent>();
         followingArray = new ArrayList<String>();
+
+
+
 
         ElasticParticipantController.FindParticipantTask fpt = new ElasticParticipantController.FindParticipantTask();
         fpt.execute(ParticipantSingleton.getInstance().getSelfParticipant().getLogin());
