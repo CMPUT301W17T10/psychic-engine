@@ -59,13 +59,13 @@ public class PhotographTest extends ActivityInstrumentationTestCase2 {
             //Taken from http://stackoverflow.com/questions/13095718/where-are-android-emulator-image-stored
             //March 10, 2017
             String path = Environment.getExternalStorageDirectory().getPath();
-            String jpgPath = path + "/Download/masterpiece.jpg";
+            String jpgPath = path + "/Download/792d0f374edb70e4cdf78365b9747aa5.jpg";
             File file = new File(jpgPath);
             Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
 
             Photograph testPhotograph = new Photograph(bitmap);
 
-            assertFalse(testPhotograph.getLimitSize());
+            assertTrue(testPhotograph.getLimitSize());
         }
 
 
