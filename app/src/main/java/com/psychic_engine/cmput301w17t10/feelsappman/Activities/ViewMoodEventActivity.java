@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
-import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
 import java.util.ArrayList;
@@ -39,9 +38,8 @@ public class ViewMoodEventActivity extends AppCompatActivity{
     private TextView location;
     private ImageView icon;
     private TextView trigger;
-    private TextView socialIcon;    // Temporary for now to meet requirements until we have icon for social setting
+    private ImageView socialIcon;    // Temporary for now to meet requirements until we have icon for social setting
     private ImageButton returnButton;
-    private Participant participant;
     private MoodEvent moodEvent;
 
     @Override
@@ -55,7 +53,7 @@ public class ViewMoodEventActivity extends AppCompatActivity{
         location = (TextView) findViewById(R.id.me_location);
         icon = (ImageView) findViewById(R.id.me_icon);
         trigger = (TextView) findViewById(R.id.me_trigger);
-        socialIcon = (TextView) findViewById(R.id.me_social);
+        socialIcon = (ImageView) findViewById(R.id.me_social);
         returnButton = (ImageButton) findViewById(R.id.me_return);
 
         moodEvent = (MoodEvent) getIntent().getExtras().getSerializable("moodEvent");
@@ -79,6 +77,9 @@ public class ViewMoodEventActivity extends AppCompatActivity{
      * represent the mood.
      */
     private void display() {
+        String iconName;
+        int drawableResourceId;
+
         // set background color
         int color = parseColor(moodEvent.getMood().getColor().getBGColor());
         getWindow().getDecorView().setBackgroundColor(color);
@@ -90,8 +91,8 @@ public class ViewMoodEventActivity extends AppCompatActivity{
         dateTime.setText(moodEvent.getDate().toString());
 
         // set icon
-        String iconName = moodEvent.getMood().getIconName();
-        int drawableResourceId = this.getResources().getIdentifier(iconName, "drawable", getPackageName());
+        iconName = moodEvent.getMood().getIconName();
+        drawableResourceId = this.getResources().getIdentifier(iconName, "drawable", getPackageName());
         icon.setImageResource(drawableResourceId);
 
         // set picture
@@ -106,8 +107,12 @@ public class ViewMoodEventActivity extends AppCompatActivity{
 
         // set trigger
         trigger.setText(moodEvent.getTrigger());
-        if (moodEvent.getSocialSetting() != null)
-            socialIcon.setText(moodEvent.getSocialSetting().toString());
+        if (moodEvent.getSocialSetting() != null) {
+            iconName = moodEvent.getSocialSetting().getSocialIcon();
+            drawableResourceId = this.getResources().getIdentifier(iconName, "drawable", getPackageName());
+            socialIcon.setImageResource(drawableResourceId);
+        }
+
     }
 
     /**
