@@ -59,13 +59,13 @@ public class CreateMoodControllerTest extends TestCase {
                 instance.getSelfParticipant().getMoodList().clear();
             }
         }
-            catch (NullPointerException e) {
+            catch (NullPointerException n) {
                 try {
                     CreateMoodController.createMoodEvent(moodString, socialSettingString, trigger, null, null, ctx);
                     assertEquals("empty, editMoodEvent fail", instance.getSelfParticipant().getMoodList()
                                     .get(0).getMood().getMood(),
                             moodEvent.getMood().getMood());
-                } catch (Exception e) {
+                } catch (Exception f) {
                     assertTrue("Failed create", false);
                 }
             }

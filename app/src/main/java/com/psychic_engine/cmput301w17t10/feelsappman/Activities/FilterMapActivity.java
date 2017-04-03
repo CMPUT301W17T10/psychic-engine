@@ -65,6 +65,7 @@ public class FilterMapActivity extends Activity {
         x.setOvershootTileCache(x.getOvershootTileCache() * 2);
 
         ArrayList<MoodEvent> moodList = (ArrayList<MoodEvent>) getIntent().getExtras().getSerializable("moodEventList");
+        
 
         //Initializing arrays of OverlayItems
         //each item in the array will be a moodEvent with the corresponding moodState

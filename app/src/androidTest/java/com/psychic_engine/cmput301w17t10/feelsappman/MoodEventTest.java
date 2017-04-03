@@ -51,7 +51,7 @@ public class MoodEventTest extends TestCase {
         moodTestUser = new Participant("MoodTester");
         instance.addParticipant(moodTestUser);
         instance.setSelfParticipant(moodTestUser);
-        moodEvent = new MoodEvent(mood, SocialSetting.ALONE, "", null, null);
+       // moodEvent = new MoodEvent(mood, SocialSetting.ALONE, "", null, null);
         trigger = "301";
         failTrigger1 = "a a a a";
         failTrigger2 = "aaaaaaaaaaaaaaaaaaaaa";

@@ -60,6 +60,7 @@ public class Participant {
      * if called when empty.
      * @return
      */
+
     public ArrayList<MoodEvent> getMoodList() {
         return this.moodEvents;
     }

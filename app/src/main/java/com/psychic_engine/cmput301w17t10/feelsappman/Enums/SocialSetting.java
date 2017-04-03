@@ -20,4 +20,14 @@ public enum SocialSetting {
                 }
         }
 
+        public String getSocialIcon() {
+                switch(this) {
+                        case ALONE: return "ss_alone";
+                        case ONEOTHER: return "ss_oneother";
+                        case TWOTOSEVERAL: return "ss_two_to_several";
+                        case CROWD: return "ss_crowd";
+                        default: throw new IllegalArgumentException();
+                }
+        }
+
 }

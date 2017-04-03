@@ -41,12 +41,11 @@ public class Photograph implements Serializable {
         byte tempArray[];
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         int compression = 100;
-        do {
-            image.compress(Bitmap.CompressFormat.JPEG, compression, stream);
-            tempArray = stream.toByteArray();
-            this.encodedPhoto = Base64.encodeToString(tempArray, Base64.DEFAULT);
-            compression -= 5;
-        } while (encodedPhoto.length() > 65536);
+
+        image.compress(Bitmap.CompressFormat.JPEG, compression, stream);
+        tempArray = stream.toByteArray();
+        this.encodedPhoto = Base64.encodeToString(tempArray, Base64.DEFAULT);
+
         Log.i("PhotoSize", Integer.toString(encodedPhoto.length()));
         this.limitSize = encodedPhoto.length() < 65536;
 
