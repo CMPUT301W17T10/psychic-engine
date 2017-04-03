@@ -107,13 +107,6 @@ public class EditMoodActivityTest  extends ActivityInstrumentationTestCase2<Edit
         assertTrue("trigger edit text does not say \"Happy :)\"", solo.searchText("Happy :)"));
     }
 
-    /*
-    public void testLocationEditText() {
-        solo.assertCurrentActivity("Wrong Activity", EditMoodActivity.class);
-        // TODO part 5
-    }
-    */
-
     /**
      * Tests the image view that displays the picture that the participant decides to upload. The
      * bitmap is compared to the other bitmap through the bytes.

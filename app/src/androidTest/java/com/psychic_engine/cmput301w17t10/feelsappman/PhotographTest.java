@@ -14,9 +14,13 @@ import java.io.File;
  * Created by hnkhan on 2/27/17. Editted by adong
  */
 
+/**
+ * Photograph test to determine the picture functions are working properly. You require a picture
+ * that is stored locally such as Pierre's laptop that contains a picture that is too big, as well
+ * as the directory.
+ */
 public class PhotographTest extends ActivityInstrumentationTestCase2 {
 
-        //TODO Temporary activity to be the added
         public PhotographTest() {
             super(MyProfileActivity.class);
         }
@@ -67,18 +71,4 @@ public class PhotographTest extends ActivityInstrumentationTestCase2 {
 
             assertTrue(testPhotograph.getLimitSize());
         }
-
-
-//        public void testDeleteImage() {
-//            //assume photograph exists
-//            Photograph testPhotograph = new Photograph();
-//            testPhotograph.getImage();
-//            if (testPhotograph.getImage() != null) {
-//                testPhotograph.deleteImage();
-//                assertTrue(testPhotograph.getImage() == null);
-//            } else {
-//                assertTrue(false);
-//            }
-//
-//        }
     }

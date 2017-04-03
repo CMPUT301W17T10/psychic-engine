@@ -34,7 +34,11 @@ public class DeleteMoodController extends MoodController {
         } else {
             if (instance.getOfflineCreatedList().contains(moodEvent)) {
                 instance.getOfflineCreatedList().remove(moodEvent);
-            } else {
+            }
+            else if (instance.getOfflineEditList().contains(moodEvent)) {
+                instance.getOfflineEditList().remove(moodEvent);
+            }
+            else {
                 instance.addDeleteOfflineMood(moodEvent);
             }
         }

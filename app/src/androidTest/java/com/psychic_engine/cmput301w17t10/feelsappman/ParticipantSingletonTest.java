@@ -12,8 +12,11 @@ import java.util.ArrayList;
 /**
  * Created by adong on 3/8/17.
  */
-// TODO: App crashes on reopening of app when trying to enter a name - alex
-// Note: Instances do carry over when you run the tests, singular tests will not work anymore
+
+/**
+ * Tests for the singleton to determine whether the special functions were working properly.
+ * Getters and setters were not tested as they were trivial unless it was special
+ */
 public class ParticipantSingletonTest extends ActivityInstrumentationTestCase2{
 
     public ParticipantSingletonTest() {

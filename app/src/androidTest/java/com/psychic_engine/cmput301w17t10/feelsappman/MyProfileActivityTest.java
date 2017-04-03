@@ -15,6 +15,10 @@ import com.robotium.solo.Solo;
  * Created by adong on 2017-03-10.
  */
 
+/**
+ * MyProfile tests all the functionality of the activity. Below contains test data that has been
+ * commented out for the time being. This test data would be used further in the charts.
+ */
 public class MyProfileActivityTest extends ActivityInstrumentationTestCase2<MyProfileActivity> {
     private Solo solo;
     ParticipantSingleton instance;

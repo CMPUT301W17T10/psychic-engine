@@ -219,6 +219,7 @@ public class ElasticMoodController extends ElasticController {
                     Log.i("Error", "Error updating in elastic");
                 }
             }
+
             return null;
         }
     }

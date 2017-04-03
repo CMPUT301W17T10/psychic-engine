@@ -68,19 +68,19 @@ public class ElasticParticipantController extends ElasticController {
      */
     public static class FindParticipantTask extends AsyncTask<String, Void, Participant> {
         @Override
-        protected Participant doInBackground(String... params) {
+        protected Participant doInBackground(String... login) {
             verifySettings();
             Participant participantFound = null;
 
             // set a query to find 1 hit of a participant with the login name
-            String query = "{\"size\" : 1,\"query\" : {\"match\" : { \"login\" : \"" +params[0] + "\" }}}";
+            String query = "{\"size\" : 1,\"query\" : {\"match\" : { \"login\" : \"" +login[0] + "\" }}}";
             Search search = new Search.Builder(query)
                     .addIndex("cmput301w17t10")
                     .addType("participant")
                     .build();
 
             try {
-                Log.i("Attempt", "Search for " + params[0] + " Query: "+ query);
+                Log.i("Attempt", "Search for " + login[0] + " Query: "+ query);
 
                 SearchResult result = client.execute(search);
 

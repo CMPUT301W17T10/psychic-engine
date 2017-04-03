@@ -109,12 +109,6 @@ public class CreateMoodActivityTest extends ActivityInstrumentationTestCase2<Cre
         solo.enterText((EditText) solo.getView(R.id.trigger), "Happy :)");
         assertTrue("trigger edit text does not say \"Happy :)\"", solo.searchText("Happy :)"));
     }
-    /*
-    public void testLocationEditText() {
-        solo.assertCurrentActivity("Wrong Activity", CreateMoodActivity.class);
-        // TODO part 5
-    }
-    */
 
     /**
      * Test to determine that the bitmap view is displaying the correct image that the participant
@@ -127,15 +121,6 @@ public class CreateMoodActivityTest extends ActivityInstrumentationTestCase2<Cre
         Drawable actualDrawable = getActivity().getResources().getDrawable(R.mipmap.ic_launcher);
         Bitmap actualBitmap = ((BitmapDrawable) actualDrawable).getBitmap();
         assertEquals(actualBitmap, photoBitmap);
-    }
-
-    /**
-     * Tests the Browse button to ensure that the participant is sent to the file explorer
-     */
-    public void testBrowseButton() {
-        solo.assertCurrentActivity("Wrong Activity", CreateMoodActivity.class);
-        solo.clickOnText("Browse");
-        // TODO part 5
     }
 
     /**

@@ -81,10 +81,11 @@ public class EditMoodController extends MoodController{
         participant.setMostRecentMoodEvent(moodEvent);
 
         // editMoodEvent the participant in the elastic server
-        Log.i("Update", "Updating participant in the EditMoodController");
-        ElasticParticipantController.UpdateParticipantTask upt = new ElasticParticipantController
-                .UpdateParticipantTask();
-        upt.execute(participant);
+        if (isConnected(context)) {
+            ElasticParticipantController.UpdateParticipantTask upt = new ElasticParticipantController
+                    .UpdateParticipantTask();
+            upt.execute(participant);
+        }
 
     }
 }

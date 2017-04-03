@@ -12,6 +12,9 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
  * Taken from https://github.com/PhilJay/MPAndroidChart on 3/26/2017
  */
 
+/**
+ * Setups the axis of the chart being used as the "wow" factor
+ */
 public class DayAxisValueFormatter implements IAxisValueFormatter
 {
 
