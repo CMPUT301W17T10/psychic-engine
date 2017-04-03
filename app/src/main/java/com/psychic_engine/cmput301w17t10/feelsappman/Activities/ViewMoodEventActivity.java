@@ -15,6 +15,8 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
+import java.util.ArrayList;
+
 import static android.graphics.Color.parseColor;
 
 /**
@@ -41,6 +43,7 @@ public class ViewMoodEventActivity extends AppCompatActivity{
     private ImageButton returnButton;
     private Participant participant;
     private String moodEventId;
+    private String callingActivity;
     private MoodEvent moodEvent;
 
     @Override
@@ -58,12 +61,25 @@ public class ViewMoodEventActivity extends AppCompatActivity{
         returnButton = (ImageButton) findViewById(R.id.me_return);
 
         moodEventId = getIntent().getExtras().getString("moodEventId");
-        moodEvent = null;
-        participant = ParticipantSingleton.getInstance().getSelfParticipant();
+        callingActivity = getIntent().getExtras().getString("callingActivity");
 
-        for (MoodEvent m : participant.getMoodList()) {
-            if (moodEventId.equals(m.getId()))
-                moodEvent = m;
+        moodEvent = null;
+        if (callingActivity == "MyFeed") {
+
+            ArrayList<MoodEvent> moodList = (ArrayList<MoodEvent>) getIntent().getExtras().getSerializable("moodEventList");
+
+            for (MoodEvent m : moodList) {
+                if (moodEventId.equals(m.getId()))
+                    moodEvent = m;
+            }
+
+        } else {
+            participant = ParticipantSingleton.getInstance().getSelfParticipant();
+
+            for (MoodEvent m : participant.getMoodList()) {
+                if (moodEventId.equals(m.getId()))
+                    moodEvent = m;
+            }
         }
 
         if (moodEvent != null) {
@@ -91,7 +107,7 @@ public class ViewMoodEventActivity extends AppCompatActivity{
         getWindow().getDecorView().setBackgroundColor(color);
 
         // set participant's name
-        name.setText(participant.getLogin());
+        name.setText(moodEvent.getMoodOwner());
 
         // set date
         dateTime.setText(moodEvent.getDate().toString());

@@ -107,6 +107,12 @@ public class MoodEvent implements Serializable{
     public MoodLocation getLocation() { return this.location; }
 
     /**
+     * Getter for owner of mood event
+     * @return
+     */
+    public String getMoodOwner() { return this.moodOwner; }
+
+    /**
      * Setter for uniqueID
      * @param id
      */

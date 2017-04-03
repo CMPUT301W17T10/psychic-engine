@@ -130,6 +130,10 @@ public class MyFeedActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MyFeedActivity.this, ViewMoodEventActivity.class);
                 intent.putExtra("moodEventId", followingMoodsArray.get(position).getId());
+                intent.putExtra("callingActivity", "MyFeed");
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("moodEventList",followingMoodsArray);
+                intent.putExtras(bundle);
                 startActivity(intent);
 
             }
