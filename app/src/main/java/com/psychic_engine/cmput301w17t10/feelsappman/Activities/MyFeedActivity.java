@@ -94,9 +94,9 @@ public class MyFeedActivity extends AppCompatActivity {
         maps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MyFeedActivity.this,FilterMapActivity.class);
+                Intent intent = new Intent(MyFeedActivity.this,FollowingMapActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("moodEventList",followingMoodsArray);
+                bundle.putSerializable("moodEventLists",followingMoodsArray);
                 intent.putExtras(bundle);
                 startActivity(intent);
 

@@ -26,7 +26,7 @@ import java.util.ArrayList;
 // TODO: Arrange asserts so that it is properly tested
 public class EditMoodControllerTest extends TestCase {
 
-    public void test1_EditMoodController () {
+    /*public void test1_EditMoodController() {
         //Initialize parameters used in the editMoodEvent method.
         Participant selfParticipant = new Participant("alex");
         String moodString = "Sad";
@@ -54,9 +54,10 @@ public class EditMoodControllerTest extends TestCase {
                        (moodEventsRecent.get(position), moodString, socialSettingString, trigger, null, null);
         } catch (TriggerTooLongException e) {
             e.printStackTrace();
-        }*/
+        }
         assertEquals("empty, editMoodEvent fail", instance.getSelfParticipant().getMoodList()
-        .get(0).getMood().getMood(),
-        MoodState.SAD);
-}
+                        .get(0).getMood().getMood(),
+                MoodState.SAD);
+
+    }*/
 }

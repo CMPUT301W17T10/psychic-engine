@@ -65,7 +65,7 @@ public class CreateMoodControllerTest extends TestCase {
                     assertEquals("empty, editMoodEvent fail", instance.getSelfParticipant().getMoodList()
                                     .get(0).getMood().getMood(),
                             moodEvent.getMood().getMood());
-                } catch (Exception e) {
+                } catch (Exception f) {
                     assertTrue("Failed create", false);
                 }
             }
