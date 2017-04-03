@@ -323,36 +323,36 @@ public class SummaryTabFragment extends Fragment implements
             setSurprised = new ScatterDataSet(yValsSurprised, "surprised");
 
             // Styling
-            setSad.setColor(parseColor(MoodColor.BLUE.getBGColor()));
-            setSad.setScatterShapeSize(50f);
+            setSad.setColor(parseColor(MoodColor.BLUE.getChartColor()));
+            setSad.setScatterShapeSize(80f);
             setSad.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
-            setHappy.setColor(parseColor(MoodColor.GREEN.getBGColor()));
-            setHappy.setScatterShapeSize(50f);
+            setHappy.setColor(parseColor(MoodColor.GREEN.getChartColor()));
+            setHappy.setScatterShapeSize(80f);
             setHappy.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
-            setShame.setColor(parseColor(MoodColor.PURPLE.getBGColor()));
-            setShame.setScatterShapeSize(50f);
+            setShame.setColor(parseColor(MoodColor.PURPLE.getChartColor()));
+            setShame.setScatterShapeSize(80f);
             setShame.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
-            setFear.setColor(parseColor(MoodColor.ORANGE.getBGColor()));
-            setFear.setScatterShapeSize(50f);
+            setFear.setColor(parseColor(MoodColor.ORANGE.getChartColor()));
+            setFear.setScatterShapeSize(80f);
             setFear.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
-            setAnger.setColor(parseColor(MoodColor.RED.getBGColor()));
-            setAnger.setScatterShapeSize(50f);
+            setAnger.setColor(parseColor(MoodColor.RED.getChartColor()));
+            setAnger.setScatterShapeSize(80f);
             setAnger.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
-            setDisgust.setColor(parseColor(MoodColor.BROWN.getBGColor()));
-            setDisgust.setScatterShapeSize(50f);
+            setDisgust.setColor(parseColor(MoodColor.BROWN.getChartColor()));
+            setDisgust.setScatterShapeSize(80f);
             setDisgust.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
-            setConfused.setColor(parseColor(MoodColor.YELLOW.getBGColor()));
-            setConfused.setScatterShapeSize(50f);
+            setConfused.setColor(parseColor(MoodColor.YELLOW.getChartColor()));
+            setConfused.setScatterShapeSize(80f);
             setConfused.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
-            setSurprised.setColor(parseColor(MoodColor.PINK.getBGColor()));
-            setSurprised.setScatterShapeSize(50f);
+            setSurprised.setColor(parseColor(MoodColor.PINK.getChartColor()));
+            setSurprised.setScatterShapeSize(80f);
             setSurprised.setScatterShape(ScatterChart.ScatterShape.TRIANGLE);
 
 
@@ -526,7 +526,7 @@ public class SummaryTabFragment extends Fragment implements
         leftAxis.setLabelCount(8, false);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setSpaceTop(15f);
-        leftAxis.setAxisMinimum(0f);
+        leftAxis.setAxisMinimum(0.5f);
         leftAxis.setAxisMaximum(5f);
         leftAxis.setGranularity(1f);
 

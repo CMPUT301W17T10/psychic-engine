@@ -63,5 +63,18 @@ public enum MoodColor {
         }
     }
 
+    public String getChartColor() {
+        switch(this) {
+            case BLUE: return "#2196F3";
+            case GREEN: return "#76FF03";
+            case PURPLE: return "#B388FF";
+            case ORANGE: return "#FF6D00";
+            case RED: return "#F44336";
+            case BROWN: return "#795548";
+            case YELLOW: return "#FFFF00";
+            default: throw new IllegalArgumentException();
+        }
+    }
+
 
 }
