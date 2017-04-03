@@ -18,6 +18,13 @@ import java.util.ArrayList;
 //http://stackoverflow.com/questions/21254555/how-to-check-internet-connectivity-continuously-in-background-while-android-appl
 //obtained April 1, 2017
 //by Ajay Venugopal
+
+/**
+ * Constant connectivity status checker that will determine when the app has available connection. At
+ * this time, we can start to sync up the mood events. Upon disconnection, it will bring a popup
+ * stating so. At this point on, mood events could still be done locally for yourself, but it will
+ * not be saved in the server, thus other areas of the app will be unavailable.
+ */
 public class CheckConnectivity extends BroadcastReceiver{
 
     @Override
@@ -33,19 +40,26 @@ public class CheckConnectivity extends BroadcastReceiver{
             Toast.makeText(context, "Internet Connected", Toast.LENGTH_LONG).show();
 
             Toast.makeText(context, "Attempting to sync your profile", Toast.LENGTH_LONG).show();
-            ArrayList<MoodEvent> deleteMoodList = instance.getOfflineDeleteMoodsList();
-            ArrayList<MoodEvent> addMoodList = instance.getOfflineCreatedMoodList();
             Participant updateSelf = instance.getSelfParticipant();
             ElasticParticipantController.UpdateParticipantTask update = new ElasticParticipantController
                     .UpdateParticipantTask();
-
             update.execute(updateSelf);
 
+            ArrayList<MoodEvent> deleteMoodList = instance.getOfflineDeleteList();
             ElasticMoodController.DeleteOfflineMoodEventTask delete = new ElasticMoodController.DeleteOfflineMoodEventTask();
             delete.execute(deleteMoodList);
 
+            // add to server
+            ArrayList<MoodEvent> addMoodList = instance.getOfflineCreatedList();
             ElasticMoodController.AddOfflineMoodEventTask add = new ElasticMoodController.AddOfflineMoodEventTask();
             add.execute(addMoodList);
+
+            // update edits
+            ArrayList<MoodEvent> editMoodsList = instance.getOfflineEditList();
+            ElasticMoodController.UpdateOfflineMoodTask updateList = new ElasticMoodController.UpdateOfflineMoodTask();
+            updateList.execute(editMoodsList);
+
+
         }
     }
 }

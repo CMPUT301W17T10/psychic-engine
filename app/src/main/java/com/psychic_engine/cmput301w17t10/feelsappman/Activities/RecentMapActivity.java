@@ -40,8 +40,15 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Pierre Lin on 3/30/2017.
+ * Commented by Alex Dong on 04/03/2017
  */
 
+/**
+ * RecentMapActivity displays the recent mood events around you (5 km). All mood events within
+ * this radius will be shown that were the most recent mood events of any participant. Markers are
+ * shown that displays the default mood icon and upon clicking on these markers, you would be able
+ * to view the mood state as well as a text trigger if it was included.
+ */
 public class RecentMapActivity extends Activity {
     //Initializing Arraylist of OverlayItems
     private ArrayList<OverlayItem> sadEvents;
@@ -261,6 +268,11 @@ public class RecentMapActivity extends Activity {
         //Log.i("myTag", "setting Moodlist");
     }
 
+    /**
+     * With given permissions, the method pulls the
+     * @param coords
+     * @return
+     */
     public Location getCurrentLocation(Location coords) {
         //Taken from http://stackoverflow.com/questions/17584374/check-if-gps-and-or-mobile-network-location-is-enabled
         //March 27, 2017

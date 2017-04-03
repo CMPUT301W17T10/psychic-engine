@@ -22,6 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * FollowersActivity displays a list view of all of the participants that are following you. Since
+ * they are following you on their end. They would be able to see your most recent mood event. As well,
+ * if you are following another participant, you would be able to see their recent mood event as well.
+ *
+ */
 public class FollowersActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
     private Spinner menuSpinner;
@@ -77,6 +83,13 @@ public class FollowersActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Included with the follower functionality, one would be able to unfollow other participants
+     * if wish to. Upon removal of the following, their new follower list will be updated to exclude
+     * that following participant. You would then be unable to view their most recent mood events.
+     * @param item
+     * @return
+     */
     //long click for editing and deleting
     //http://stackoverflow.com/questions/17207366/creating-a-menu-after-a-long-click-event-on-a-list-view
     @Override
@@ -121,6 +134,9 @@ public class FollowersActivity extends AppCompatActivity {
         followerList.setAdapter(adapter);
     }
 
+    /**
+     * Initialize the spinner that will allow you to navigate around your UI
+     */
     public void initializeSpinner(){
         //initalize menu items for spinner
         List<String> menuItems = new ArrayList<String>();

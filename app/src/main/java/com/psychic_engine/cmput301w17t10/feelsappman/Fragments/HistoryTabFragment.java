@@ -12,6 +12,7 @@ package com.psychic_engine.cmput301w17t10.feelsappman.Fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -191,8 +192,6 @@ public class HistoryTabFragment extends Fragment {
         }
     }
 
-    //TODO USE THIS for filtered mapview
-
     /**
      * This method is used to determine the mood events that satisfies the filter that the participant
      * has set. The application will be able to filter locally without the use of an internet
@@ -203,21 +202,6 @@ public class HistoryTabFragment extends Fragment {
 
         // Check which filters have been selected
         checkFilterSelected();
-
-        // elastic version of filter by reason
-        /*
-        String selfName = ParticipantSingleton.getInstance().getSelfParticipant().getLogin();
-        ElasticMoodController.FilterMoodByReasonTask filter = new ElasticMoodController.FilterMoodByReasonTask();
-        try {
-            filter.execute(selfName, "test");
-            ArrayList<MoodEvent> results = filter.get();
-            for (MoodEvent event : results) {
-                filteredMoodList.add(event);
-            }
-        } catch (Exception e) {
-            Log.i("Failed", "Failed filter");
-        }
-        */
 
         // offline version
         for (MoodEvent moodEvent : unfilteredMoodList) {

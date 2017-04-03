@@ -64,6 +64,10 @@ public class ParticipantController {
         }
     }
 
+    /**
+     * Access the singleton participant's mood list to add a mood event
+     * @param moodEvent
+     */
     public static void addMoodEvent(MoodEvent moodEvent) {
         Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
         participant.getMoodList().add(moodEvent);

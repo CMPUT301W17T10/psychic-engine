@@ -18,6 +18,11 @@ public class MoodLocation implements Serializable {
     private double latitude;
     private double longitude;
 
+    /**
+     * Constructor method utilizes the latitude and longitude that was previously set in the emulator.
+     * Unless custom coordinates were given
+     * @param currentLocation
+     */
     public MoodLocation(GeoPoint currentLocation) {
         this.loc = currentLocation;
         this.latitude = loc.getLatitude();

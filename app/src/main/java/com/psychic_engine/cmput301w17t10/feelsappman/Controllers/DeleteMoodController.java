@@ -32,7 +32,11 @@ public class DeleteMoodController extends MoodController {
             ElasticMoodController.DeleteMoodEventTask dmt = new ElasticMoodController.DeleteMoodEventTask();
             dmt.execute(moodEvent);
         } else {
-            instance.addDeleteOfflineMood(moodEvent);
+            if (instance.getOfflineCreatedList().contains(moodEvent)) {
+                instance.getOfflineCreatedList().remove(moodEvent);
+            } else {
+                instance.addDeleteOfflineMood(moodEvent);
+            }
         }
         // get the participant's mood list to delete from locally
         Participant participant = instance.getSelfParticipant();

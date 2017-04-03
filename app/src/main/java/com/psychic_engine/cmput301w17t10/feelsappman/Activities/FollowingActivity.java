@@ -23,6 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * The FollowingActivity allows a function where you would be able to search for other users of the
+ * app (exact name). Upon searching for the participant you would like to follow, you would be able
+ * to submit a follow request. This request would be sent to the other participant and they would be
+ * able to accept or decline your request. If they do choose to accept your request. The list show
+ * on the bottom of the activity displays the most recent mood event of your following participants.
+ */
 public class FollowingActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
     private Spinner menuSpinner;
@@ -92,6 +99,12 @@ public class FollowingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * You would be able to delete following participants, thus severing the relationship between
+     * follower and following
+     * @param item choice
+     * @return true if successful execution of item operation
+     */
     //long click for editing and deleting
     //http://stackoverflow.com/questions/17207366/creating-a-menu-after-a-long-click-event-on-a-list-view
     @Override
@@ -138,6 +151,9 @@ public class FollowingActivity extends AppCompatActivity {
         followingList.setAdapter(adapter);
     }
 
+    /**
+     * Initializes a spinner to allow flexibility in navigating throughout your UI.
+     */
     public void initializeSpinner(){
         //initalize menu items for spinner
         List<String> menuItems = new ArrayList<String>();

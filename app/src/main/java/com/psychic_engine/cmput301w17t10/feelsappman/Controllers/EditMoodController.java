@@ -7,14 +7,12 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.EmptyMoodExcepti
 import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
-import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodLocation;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -50,6 +48,7 @@ public class EditMoodController extends MoodController{
         // find mood and social setting
         Mood mood = selectMood(moodString);
         SocialSetting socialSetting = selectSocialSetting(socialSettingString);
+        ParticipantSingleton instance = ParticipantSingleton.getInstance();
 
         // editMoodEvent properties of the mood event
         try {
@@ -73,6 +72,8 @@ public class EditMoodController extends MoodController{
         if (isConnected(context)) {
             ElasticMoodController.UpdateMoodTask updateMoodTask = new ElasticMoodController.UpdateMoodTask();
             updateMoodTask.execute(moodEvent);
+        } else {
+            instance.addEditOfflineMood(moodEvent);
         }
 
         // editMoodEvent the most recent mood event

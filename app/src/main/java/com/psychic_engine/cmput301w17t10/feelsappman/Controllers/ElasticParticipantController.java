@@ -46,7 +46,8 @@ public class ElasticParticipantController extends ElasticController {
                     // Upon successful execution of index creation, attempt to save uniqueID to participant
                     if (result.isSucceeded()) {
                         participant.setId(result.getId());
-                        Log.i("Success", "Participant UUID: "+participant.getId());
+                        Log.i("Success", "Participant Reference: "+participant.toString());
+                        Log.i("Success", "Participant Reference INPUT: "+participants[0].toString());
                         return result.getId();
                     }
                     else {

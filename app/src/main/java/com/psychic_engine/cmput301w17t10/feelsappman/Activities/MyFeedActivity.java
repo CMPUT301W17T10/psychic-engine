@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,6 +29,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Commented by Alex Dong 04-03-2017
+ */
+
+/**
+ * MyFeedActivity contains the functionality of filtering with your mood following list. The most
+ * recent mood events of your following will be displayed under a list view. Navigation to a map
+ * that shows your current location and potentially nearby mood events that have been created with
+ * a location.
+ */
 public class MyFeedActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
     private Spinner menuSpinner;
@@ -82,7 +93,6 @@ public class MyFeedActivity extends AppCompatActivity {
         participant = instance.getSelfParticipant();
 
         followingArray = participant.getFollowing();
-
         for (String followerName : followingArray) {
             ElasticParticipantController.FindParticipantTask fpt1 = new ElasticParticipantController.FindParticipantTask();
             fpt1.execute(followerName);
@@ -159,6 +169,9 @@ public class MyFeedActivity extends AppCompatActivity {
         myFeedList.setAdapter(adapter);
     }
 
+    /**
+     * Initializes the spinner entries so that you would be able to navigate else where in the app.
+     */
     public void initializeSpinner(){
         //initalize menu items for spinner
         List<String> menuItems = new ArrayList<String>();
@@ -223,21 +236,6 @@ public class MyFeedActivity extends AppCompatActivity {
         // Check which filters have been selected
         checkFilterSelected();
 
-        // elastic version of filter by reason
-        /*
-        String selfName = ParticipantSingleton.getInstance().getSelfParticipant().getLogin();
-        ElasticMoodController.FilterMoodByReasonTask filter = new ElasticMoodController.FilterMoodByReasonTask();
-        try {
-            filter.execute(selfName, "test");
-            ArrayList<MoodEvent> results = filter.get();
-            for (MoodEvent event : results) {
-                filteredMoodList.add(event);
-            }
-        } catch (Exception e) {
-            Log.i("Failed", "Failed filter");
-        }
-        */
-
         // offline version
         for (MoodEvent moodEvent : followingMoodsArray) {
 
@@ -291,6 +289,10 @@ public class MyFeedActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Refresh the display every time the filter method has been called. This is to display the
+     * filtered mood list under the requirements that has been set.
+     */
     private void refresh() {
         filter();
         adapter.notifyDataSetChanged();

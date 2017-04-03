@@ -34,17 +34,18 @@ import io.searchbox.core.SearchResult;
  * task_name.execute(parameters)
  * @author adong
  */
-public class ElasticMoodController extends ElasticController{
+public class ElasticMoodController extends ElasticController {
 
     /**
      * AddMoodEventTask adds a mood event into the elastic server. Utilized when the participant
      * would like to createMoodEvent a mood event in the CreateMoodActivity.
      */
-    public static class AddMoodEventTask extends AsyncTask<MoodEvent, Void, Void> {
+    public static class AddMoodEventTask extends AsyncTask<MoodEvent, Void, String> {
 
         @Override
-        protected Void doInBackground(MoodEvent... moodEvents) {
+        protected String doInBackground(MoodEvent... moodEvents) {
             verifySettings();
+            DocumentResult result = null;
 
             // handling multiple mood events that need to be added
             Log.i("AddMoodEventTask", "Attempt to add mood event into es");
@@ -52,17 +53,18 @@ public class ElasticMoodController extends ElasticController{
                 Index index = new Index.Builder(moodEvent).index("cmput301w17t10")
                         .type("moodevent").build();
                 try {
-                    DocumentResult result = client.execute(index);
+                    result = client.execute(index);
                     if (result.isSucceeded()) {
                         moodEvent.setId(result.getId());
-                        Log.i("Success", "Mood event ID: "+ moodEvent.getId());
+                        Log.i("Success", "Mood event REFERENCE: " + moodEvent.toString());
+                        Log.i("Success", "Mood event ADDED REFERENCE" + moodEvents[0]);
                         Log.i("ID", "Added mood event to Participant: " + ParticipantSingleton.getInstance().getSelfParticipant().getId());
                     }
                 } catch (Exception e) {
                     Log.i("Error", "The application failed to build and send the participants");
                 }
             }
-            return null;
+            return result.getId();
         }
     }
 
@@ -131,6 +133,11 @@ public class ElasticMoodController extends ElasticController{
             return null;
         }
     }
+
+    /**
+     * DeleteTask that handles an arraylist of mood events to properly bulk delete. It pulls the ID
+     * of each of the mood events to be deleted and removes it from the server.
+     */
     public static class DeleteOfflineMoodEventTask extends AsyncTask<ArrayList<MoodEvent>, Void, Void> {
         @Override
         protected Void doInBackground(ArrayList<MoodEvent>... deleteMoodList) {
@@ -138,7 +145,6 @@ public class ElasticMoodController extends ElasticController{
             // for every mood needing to be deleted
             for (MoodEvent mood : deleteMoodList[0]) {
                 String moodID = mood.getId();
-                Log.i("Delete", "Currently deleting mood " + moodID);
                 try {
                     client.execute(new Delete.Builder(moodID).index("cmput301w17t10").type("moodevent").build());
                 } catch (Exception e) {
@@ -149,6 +155,10 @@ public class ElasticMoodController extends ElasticController{
         }
     }
 
+    /**
+     * Add Task that utilizes an arraylist of mood events that handles the offline mood events that
+     * needs to be added into the server upon online reconnection.
+     */
     public static class AddOfflineMoodEventTask extends AsyncTask<ArrayList<MoodEvent>, Void, Void> {
 
         @Override
@@ -163,7 +173,6 @@ public class ElasticMoodController extends ElasticController{
                     DocumentResult result = client.execute(index);
                     if (result.isSucceeded()) {
                         moodEvent.setId(result.getId());
-                        Log.i("Success", "Mood event ID: "+ moodEvent.getId());
                         Log.i("ID", "Added mood event to Participant: " + ParticipantSingleton.getInstance().getSelfParticipant().getId());
                     }
                 } catch (Exception e) {
@@ -173,4 +182,45 @@ public class ElasticMoodController extends ElasticController{
             return null;
         }
     }
+
+    /**
+     * Update task that utilizes the arraylist of mood events that needs to be editted upon
+     * reconnection of the network
+     */
+    public static class UpdateOfflineMoodTask extends AsyncTask<ArrayList<MoodEvent>, Void, Void> {
+
+        @Override
+        protected Void doInBackground(ArrayList<MoodEvent>... updateEvent) {
+            Log.i("UpdateMoodTask", "Attempt to editMoodEvent mood event");
+            // for every mood event that is added
+            for (MoodEvent updatingMood : updateEvent[0]) {
+                String updateID = updatingMood.getId();
+                try {
+                    client.execute(new Delete.Builder(updateID).index("cmput301w17t10").type("moodevent").build());
+                } catch (Exception e) {
+                    Log.i("Error", "Unable to editMoodEvent mood into the server");
+                }
+
+                // then add the updated participant with the newer info (keep id)
+                // createMoodEvent new index in the elastic with the same id before that was deleted
+                Index index = new Index.Builder(updatingMood)
+                        .index("cmput301w17t10")
+                        .type("moodevent")
+                        .id(updateID)
+                        .build();
+                try {
+                    //execute the index command
+                    DocumentResult result = client.execute(index);
+                    if (result.isSucceeded()) {
+                        updatingMood.setId(result.getId());
+                        Log.i("Success", "Successful addition again");
+                    }
+                } catch (Exception e) {
+                    Log.i("Error", "Error updating in elastic");
+                }
+            }
+            return null;
+        }
+    }
 }
+

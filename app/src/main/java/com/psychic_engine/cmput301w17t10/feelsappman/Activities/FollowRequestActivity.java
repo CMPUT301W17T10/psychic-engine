@@ -22,6 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * FollowRequestActivity displays the pending requests of anyone who wishes to follow your mood events.
+ * You would be able to accept and decline these requests through a long click. Of course, upon
+ * accepting the request, a follower-following relationship will be created and they will be able
+ * to see your most recent mood event in other areas of the app.
+ */
 public class FollowRequestActivity extends AppCompatActivity {
     private ParticipantSingleton instance;
     private Spinner menuSpinner;
@@ -79,6 +85,12 @@ public class FollowRequestActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method implements the functionality of being able to accept/decline the request through
+     * a long click on the participant you would be handle.
+     * @param item
+     * @return
+     */
     //long click for editing and deleting
     //http://stackoverflow.com/questions/17207366/creating-a-menu-after-a-long-click-event-on-a-list-view
     @Override
@@ -131,6 +143,9 @@ public class FollowRequestActivity extends AppCompatActivity {
         followerRequestsList.setAdapter(adapter);
     }
 
+    /**
+     * Initialize the spinner to create the flexibility of being able to navigate anywhere in your UI.
+     */
     public void initializeSpinner(){
         //initalize menu items for spinner
         List<String> menuItems = new ArrayList<String>();

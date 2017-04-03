@@ -25,6 +25,12 @@ import org.osmdroid.views.overlay.TilesOverlay;
 
 import java.util.ArrayList;
 
+/**
+ * FollowingMapActivity allows you to view a map of mood events of your following participants.
+ * Since the following participants displays their most recent mood event, you would only be able
+ * to view those mood events. Filters can also be applied to your mood following list, and displayed
+ * on the map as well.
+ */
 public class FollowingMapActivity extends AppCompatActivity {
     private ArrayList<OverlayItem> sadEvents;
     private ArrayList<OverlayItem> happyEvents;
@@ -226,6 +232,12 @@ public class FollowingMapActivity extends AppCompatActivity {
         map.invalidate();
     }
 
+    /**
+     * Given the location permissions, the method is able to pull the coordinates of your phone
+     * and utilize it displaying the map corresponding to the latitude and longitude coordinates.
+     * @param coords
+     * @return
+     */
     public Location getCurrentLocation(Location coords) {
         //Taken from http://stackoverflow.com/questions/17584374/check-if-gps-and-or-mobile-network-location-is-enabled
         //March 27, 2017
@@ -276,6 +288,10 @@ public class FollowingMapActivity extends AppCompatActivity {
 
     //Taken from https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library
     //March 29, 2017
+
+    /**
+     * Refreshes the Open Street Maps upon resuming the FollowingMapActivity.
+     */
     public void onResume(){
         super.onResume();
         //this will refresh the osmdroid configuration on resuming.

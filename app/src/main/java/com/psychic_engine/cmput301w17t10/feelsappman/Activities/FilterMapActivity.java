@@ -34,8 +34,16 @@ import java.util.ArrayList;
 
 /**
  * Created by Pierre Lin on 3/28/2017.
+ * Commented by Alex Dong on 4/3/2017
  */
 
+/**
+ * FilterMapActivity sets up the map view that displays the mood events that have gone under
+ * filtering requirements prior to being displayed. The map view will display a map of your current
+ * location that has been set under GPS, and creates mood markers mood pictures pinning where the
+ * mood event has been created. Upon clicking these markers, one would be able to view the mood
+ * state of the event as well as a trigger if any.
+ */
 public class FilterMapActivity extends Activity {
     //Initializing Arraylist of OverlayItems
     private ArrayList<OverlayItem> sadEvents;
@@ -222,6 +230,12 @@ public class FilterMapActivity extends Activity {
         map.invalidate();
     }
 
+    /**
+     * Assuming proper permissions are given, this method obtains the coordinates that has been
+     * set on the phone whether it was through gps or mobile network.
+     * @param coords
+     * @return coordinates of your location
+     */
     public Location getCurrentLocation(Location coords) {
         //Taken from http://stackoverflow.com/questions/17584374/check-if-gps-and-or-mobile-network-location-is-enabled
         //March 27, 2017
@@ -272,6 +286,10 @@ public class FilterMapActivity extends Activity {
 
     //Taken from https://github.com/osmdroid/osmdroid/wiki/How-to-use-the-osmdroid-library
     //March 29, 2017
+
+    /**
+     * OpenStreetMap refresher upon resuming the activity
+     */
     public void onResume(){
         super.onResume();
         //this will refresh the osmdroid configuration on resuming.

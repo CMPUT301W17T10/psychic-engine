@@ -14,6 +14,8 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Photograph;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * Created by jyuen1 on 3/7/17.
  * Comments by adong on 3/28/2017
@@ -49,17 +51,25 @@ public class CreateMoodController extends MoodController {
             // add to participant locally
 
             Participant participant = instance.getSelfParticipant();
-            ParticipantController.addMoodEvent(moodEvent);
+
 
             // add to the elastic server
             if (isConnected(context)) {
                 ElasticMoodController.AddMoodEventTask addMoodEventTask = new ElasticMoodController
                         .AddMoodEventTask();
                 addMoodEventTask.execute(moodEvent);
+                try {
+                    String id = addMoodEventTask.get();
+                    moodEvent.setId(id);
+                } catch (Exception e) {
+                    Log.i("Invalid", "ID not sent back");
+                }
             } else{
                 instance.addNewOfflineMood(moodEvent);
             }
             // editMoodEvent most recent mood event to be this mood event
+
+            ParticipantController.addMoodEvent(moodEvent);
             participant.setMostRecentMoodEvent(moodEvent);
 
             // editMoodEvent the participant in the elastic server to show the new/recent mood event
@@ -68,6 +78,8 @@ public class CreateMoodController extends MoodController {
                     new ElasticParticipantController.UpdateParticipantTask();
             updateParticipantTask.execute(participant);
 
+            ElasticMoodController.UpdateMoodTask updateMoodTask = new ElasticMoodController.UpdateMoodTask();
+            updateMoodTask.execute(moodEvent);
         } catch (EmptyMoodException e) {
             throw new EmptyMoodException();
         } catch (TriggerTooLongException e) {

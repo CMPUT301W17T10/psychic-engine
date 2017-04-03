@@ -12,7 +12,9 @@ import junit.framework.TestCase;
  */
 
 /**
- * Unit tests to determine the functionality of the methods that were created in the Mood model.
+ * Unit tests to determine the functionality of the methods that were created in the Mood model. Getter
+ * and setters tested as well to determine proper functionality of the enumerations that were
+ * implemented.
  * @see Mood
  * @see MoodState
  *

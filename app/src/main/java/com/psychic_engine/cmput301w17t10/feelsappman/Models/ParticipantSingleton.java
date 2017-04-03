@@ -25,10 +25,10 @@ public class ParticipantSingleton {
      **/
     private static ParticipantSingleton instance = null;
     private ArrayList<Participant> participantList;
-    private ArrayList<MoodEvent> offlineCreatedMoodList = new ArrayList<>();
-    private ArrayList<MoodEvent> offlineDeleteMoodsList = new ArrayList<>();
+    private ArrayList<MoodEvent> offlineCreatedList = new ArrayList<>();
+    private ArrayList<MoodEvent> offlineDeleteList = new ArrayList<>();
+    private ArrayList<MoodEvent> offlineEditList = new ArrayList<>();
     private Participant selfParticipant;
-    private int participantCount;
 
     /**
      * Constructor ParticipantSingleton will initialize a new ArrayList<Participants>
@@ -39,7 +39,6 @@ public class ParticipantSingleton {
      **/
     private ParticipantSingleton() {
         participantList = new ArrayList<>();
-        participantCount = 0;
     }
 
     /**
@@ -91,13 +90,6 @@ public class ParticipantSingleton {
         return selfParticipant;
     }
 
-    /**
-     * Getter method to obtain the participant count stored
-     * @return size of participant list
-     */
-    public int getParticipantCount() {
-        return participantCount;
-    }
 
     /**
      * Method to add a new participant into storage. It is only called in the login page
@@ -114,7 +106,6 @@ public class ParticipantSingleton {
                 return false;
             }
             participantList.add(participant);
-            participantCount = participantList.size();
             return true;
         } catch (Throwable e) {
             return false;
@@ -160,18 +151,52 @@ public class ParticipantSingleton {
         return null;
     }
 
-    public ArrayList<MoodEvent> getOfflineCreatedMoodList() {
-        return this.offlineCreatedMoodList;
+    /**
+     * Getter method to return the mood list that was populated when there is no data connection.
+     * @return list of moods to be added upon reconnection
+     */
+    public ArrayList<MoodEvent> getOfflineCreatedList() {
+        return this.offlineCreatedList;
     }
 
-    public ArrayList<MoodEvent> getOfflineDeleteMoodsList() {
-        return this.offlineDeleteMoodsList;
+    /**
+     * Getter method to return the mood that was populated when there is no data connection. These
+     * mood events in the list would be deleted in the server upon reconnection.
+     * @return list of moods to be deleted upon reconnection
+     */
+    public ArrayList<MoodEvent> getOfflineDeleteList() {
+        return this.offlineDeleteList;
     }
+
+    /**
+     * Adds the mood event into a singleton array to preserve the details for later use when there
+     * is data connection. Upon connectivity, the mood events would eventually be synced to the servers
+     * @param moodEvent
+     */
     public void addNewOfflineMood(MoodEvent moodEvent) {
-        this.offlineCreatedMoodList.add(moodEvent);
+        this.offlineCreatedList.add(moodEvent);
     }
 
+    /**
+     * Adds the mood event that is to be deleted upon connection.  Acts as a carrier to keep track
+     * of mood events that were deleted during offline mode
+     * @param moodEvent
+     */
     public void addDeleteOfflineMood(MoodEvent moodEvent) {
-        this.offlineDeleteMoodsList.add(moodEvent);
+        this.offlineDeleteList.add(moodEvent);
+    }
+
+    /**
+     * Adds the mood event that needs to be updated upon connection.
+     */
+    public void addEditOfflineMood(MoodEvent moodEvent) {
+        this.offlineEditList.add(moodEvent);
+    }
+
+    /**
+     * Getter method for edit mood list
+     */
+    public ArrayList<MoodEvent> getOfflineEditList() {
+        return this.offlineEditList;
     }
 }

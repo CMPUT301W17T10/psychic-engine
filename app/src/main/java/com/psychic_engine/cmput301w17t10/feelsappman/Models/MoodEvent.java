@@ -25,7 +25,6 @@ import java.util.Date;
 public class MoodEvent implements Serializable{
     private String id;
     private String moodOwner;
-    private ArrayList<String> followers;
     private Mood mood;
     private String trigger;
     private SocialSetting socialSetting;
@@ -49,7 +48,6 @@ public class MoodEvent implements Serializable{
                      MoodLocation location) throws EmptyMoodException, TriggerTooLongException {
         this.id = "";
         setMood(mood);
-        this.followers = new ArrayList<>();
         this.socialSetting = socialSetting;
         this.date = new Date();
         this.moodOwner = ParticipantSingleton.getInstance().getSelfParticipant().getLogin();
@@ -182,15 +180,6 @@ public class MoodEvent implements Serializable{
      */
     public String toString(){
         return moodOwner + " feels "+ this.mood.getMood().toString() + " | " + this.getDate() ;
-    }
-
-    /**
-     * Getter method to get all of the participants that follow this mood event
-     * @return eventFollower list for the mood event
-     */
-    // "adder method" will be put in the mood controller
-    public ArrayList<String> getEventFollowers() {
-        return this.getEventFollowers();
     }
 
 }

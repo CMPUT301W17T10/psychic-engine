@@ -9,16 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMasterController;
-import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticMoodController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.FileManager;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ParticipantController;
-import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
-import com.psychic_engine.cmput301w17t10.feelsappman.Enums.SocialSetting;
-import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.EmptyMoodException;
-import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
-import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
@@ -66,8 +59,8 @@ public class LoginActivity extends AppCompatActivity {
         ParticipantController.updateSingletonList();
 
         // clear local lists in case of offline behaviour
-        instance.getOfflineCreatedMoodList().clear();
-        instance.getOfflineDeleteMoodsList().clear();
+        instance.getOfflineCreatedList().clear();
+        instance.getOfflineDeleteList().clear();
 
         /**
          * A login button action is used to pull the name from the EditText given in the activity.
