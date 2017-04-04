@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -33,11 +34,14 @@ import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ParticipantController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Custom.DateConverter;
 import com.psychic_engine.cmput301w17t10.feelsappman.Custom.DayAxisValueFormatter;
 import com.psychic_engine.cmput301w17t10.feelsappman.Custom.MutableInteger;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodColor;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.EmptyMoodException;
+import com.psychic_engine.cmput301w17t10.feelsappman.Exceptions.TriggerTooLongException;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
@@ -80,6 +84,9 @@ public class SummaryTabFragment extends Fragment implements
     private ImageButton datePicker;
     private ImageButton prev;
     private ImageButton next;
+
+    // TODO: demo button
+    private Button demo;
 
     int daysSince, range;
 
@@ -153,11 +160,16 @@ public class SummaryTabFragment extends Fragment implements
 
         });
 
-        // TODO
-        // fix number of labels on x-axis (week - 7/8, month - ?, year - 12)
-        // get rid of 0 values
-        // fix UI clearer colors
-        // set y axis label
+        //TODO demo
+        demo = (Button) rootView.findViewById(R.id.demo);
+        demo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                demo();
+                setDayToCountMaps();
+                setData();
+            }
+        });
 
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -377,7 +389,6 @@ public class SummaryTabFragment extends Fragment implements
     }
 
     private void setDayToCountMaps() {
-
         sadDayToCountMap = new HashMap();
         happyDayToCountMap = new HashMap();
         shameDayToCountMap = new HashMap();
@@ -638,6 +649,257 @@ public class SummaryTabFragment extends Fragment implements
         Date refDate = parseDate(REFERENCE_DATE);
         return DateConverter.getDaysBetween(refDate, date) + 1; // DayAxisFormatter begins at day 0, 01/01/2017 is day 1
 
+    }
+
+    // TODO demo
+    private void demo() {
+        Participant participant = ParticipantSingleton.getInstance().getSelfParticipant();
+
+        Mood testSadMood = new Mood(MoodState.SAD);
+        Mood testHappyMood = new Mood(MoodState.HAPPY);
+        Mood testShameMood = new Mood(MoodState.SHAME);
+        Mood testFearMood = new Mood(MoodState.FEAR);
+        Mood testAngerMood = new Mood(MoodState.ANGER);
+        Mood testSurprisedMood = new Mood(MoodState.SURPRISED);
+        Mood testDisgustMood = new Mood(MoodState.DISGUST);
+        Mood testConfusedMood = new Mood(MoodState.CONFUSED);
+
+        try {
+            MoodEvent testSad1 = new MoodEvent(testSadMood, null, "", null, null);
+            MoodEvent testSad2 = new MoodEvent(testSadMood, null, "", null, null);
+            MoodEvent testSad3 = new MoodEvent(testSadMood, null, "", null, null);
+            MoodEvent testSad4 = new MoodEvent(testSadMood, null, "", null, null);
+            MoodEvent testSad5 = new MoodEvent(testSadMood, null, "", null, null);
+            MoodEvent testSad6 = new MoodEvent(testSadMood, null, "", null, null);
+            MoodEvent testSad7 = new MoodEvent(testSadMood, null, "", null, null);
+            MoodEvent testSad8 = new MoodEvent(testSadMood, null, "", null, null);
+
+            testSad1.setDate(parseDate("2017-03-25"));
+            testSad2.setDate(parseDate("2017-03-25"));
+            testSad3.setDate(parseDate("2017-04-05"));
+            testSad4.setDate(parseDate("2017-05-01"));
+            testSad5.setDate(parseDate("2017-05-15"));
+            testSad6.setDate(parseDate("2017-05-15"));
+            testSad7.setDate(parseDate("2017-05-25"));
+            testSad8.setDate(parseDate("2017-05-30"));
+
+            ParticipantController.addMoodEvent(testSad1);
+            ParticipantController.addMoodEvent(testSad2);
+            ParticipantController.addMoodEvent(testSad3);
+            ParticipantController.addMoodEvent(testSad4);
+            ParticipantController.addMoodEvent(testSad5);
+            ParticipantController.addMoodEvent(testSad6);
+            ParticipantController.addMoodEvent(testSad7);
+            ParticipantController.addMoodEvent(testSad8);
+
+            //////////////////////////////////////////////////////////////////////////////
+
+            MoodEvent testHappy1 = new MoodEvent(testHappyMood, null, "", null, null);
+            MoodEvent testHappy2 = new MoodEvent(testHappyMood, null, "", null, null);
+            MoodEvent testHappy3 = new MoodEvent(testHappyMood, null, "", null, null);
+            MoodEvent testHappy4 = new MoodEvent(testHappyMood, null, "", null, null);
+            MoodEvent testHappy5 = new MoodEvent(testHappyMood, null, "", null, null);
+            MoodEvent testHappy6 = new MoodEvent(testHappyMood, null, "", null, null);
+            MoodEvent testHappy7 = new MoodEvent(testHappyMood, null, "", null, null);
+            MoodEvent testHappy8 = new MoodEvent(testHappyMood, null, "", null, null);
+
+            testHappy1.setDate(parseDate("2017-03-27"));
+            testHappy2.setDate(parseDate("2017-03-28"));
+            testHappy3.setDate(parseDate("2017-03-30"));
+            testHappy4.setDate(parseDate("2017-04-25"));
+            testHappy5.setDate(parseDate("2017-04-25"));
+            testHappy6.setDate(parseDate("2017-04-28"));
+            testHappy7.setDate(parseDate("2017-05-05"));
+            testHappy8.setDate(parseDate("2017-05-07"));
+
+            ParticipantController.addMoodEvent(testHappy1);
+            ParticipantController.addMoodEvent(testHappy2);
+            ParticipantController.addMoodEvent(testHappy3);
+            ParticipantController.addMoodEvent(testHappy4);
+            ParticipantController.addMoodEvent(testHappy5);
+            ParticipantController.addMoodEvent(testHappy6);
+            ParticipantController.addMoodEvent(testHappy7);
+            ParticipantController.addMoodEvent(testHappy8);
+
+            //////////////////////////////////////////////////////////////////////////////
+
+            MoodEvent testShame1 = new MoodEvent(testShameMood, null, "", null, null);
+            MoodEvent testShame2 = new MoodEvent(testShameMood, null, "", null, null);
+            MoodEvent testShame3 = new MoodEvent(testShameMood, null, "", null, null);
+            MoodEvent testShame4 = new MoodEvent(testShameMood, null, "", null, null);
+            MoodEvent testShame5 = new MoodEvent(testShameMood, null, "", null, null);
+            MoodEvent testShame6 = new MoodEvent(testShameMood, null, "", null, null);
+            MoodEvent testShame7 = new MoodEvent(testShameMood, null, "", null, null);
+            MoodEvent testShame8 = new MoodEvent(testShameMood, null, "", null, null);
+
+            testShame1.setDate(parseDate("2017-04-01"));
+            testShame2.setDate(parseDate("2017-04-03"));
+            testShame3.setDate(parseDate("2017-04-04"));
+            testShame4.setDate(parseDate("2017-04-14"));
+            testShame5.setDate(parseDate("2017-04-14"));
+            testShame6.setDate(parseDate("2017-04-14"));
+            testShame7.setDate(parseDate("2017-05-01"));
+            testShame8.setDate(parseDate("2017-05-02"));
+
+            ParticipantController.addMoodEvent(testShame1);
+            ParticipantController.addMoodEvent(testShame2);
+            ParticipantController.addMoodEvent(testShame3);
+            ParticipantController.addMoodEvent(testShame4);
+            ParticipantController.addMoodEvent(testShame5);
+            ParticipantController.addMoodEvent(testShame6);
+            ParticipantController.addMoodEvent(testShame7);
+            ParticipantController.addMoodEvent(testShame8);
+
+            //////////////////////////////////////////////////////////////////////////////
+
+            MoodEvent testFear1 = new MoodEvent(testFearMood, null, "", null, null);
+            MoodEvent testFear2 = new MoodEvent(testFearMood, null, "", null, null);
+            MoodEvent testFear3 = new MoodEvent(testFearMood, null, "", null, null);
+            MoodEvent testFear4 = new MoodEvent(testFearMood, null, "", null, null);
+            MoodEvent testFear5 = new MoodEvent(testFearMood, null, "", null, null);
+            MoodEvent testFear6 = new MoodEvent(testFearMood, null, "", null, null);
+            MoodEvent testFear7 = new MoodEvent(testFearMood, null, "", null, null);
+            MoodEvent testFear8 = new MoodEvent(testFearMood, null, "", null, null);
+
+            testFear1.setDate(parseDate("2017-03-03"));
+            testFear2.setDate(parseDate("2017-03-10"));
+            testFear3.setDate(parseDate("2017-03-10"));
+            testFear4.setDate(parseDate("2017-03-28"));
+            testFear5.setDate(parseDate("2017-04-19"));
+            testFear6.setDate(parseDate("2017-04-20"));
+            testFear7.setDate(parseDate("2017-04-20"));
+            testFear8.setDate(parseDate("2017-05-03"));
+
+            ParticipantController.addMoodEvent(testFear1);
+            ParticipantController.addMoodEvent(testFear2);
+            ParticipantController.addMoodEvent(testFear3);
+            ParticipantController.addMoodEvent(testFear4);
+            ParticipantController.addMoodEvent(testFear5);
+            ParticipantController.addMoodEvent(testFear6);
+            ParticipantController.addMoodEvent(testFear7);
+            ParticipantController.addMoodEvent(testFear8);
+
+            //////////////////////////////////////////////////////////////////////////////
+
+            MoodEvent testAnger1 = new MoodEvent(testAngerMood, null, "", null, null);
+            MoodEvent testAnger2 = new MoodEvent(testAngerMood, null, "", null, null);
+            MoodEvent testAnger3 = new MoodEvent(testAngerMood, null, "", null, null);
+            MoodEvent testAnger4 = new MoodEvent(testAngerMood, null, "", null, null);
+            MoodEvent testAnger5 = new MoodEvent(testAngerMood, null, "", null, null);
+            MoodEvent testAnger6 = new MoodEvent(testAngerMood, null, "", null, null);
+            MoodEvent testAnger7 = new MoodEvent(testAngerMood, null, "", null, null);
+            MoodEvent testAnger8 = new MoodEvent(testAngerMood, null, "", null, null);
+
+            testAnger1.setDate(parseDate("2017-03-02"));
+            testAnger2.setDate(parseDate("2017-03-12"));
+            testAnger3.setDate(parseDate("2017-03-15"));
+            testAnger4.setDate(parseDate("2017-03-15"));
+            testAnger5.setDate(parseDate("2017-04-12"));
+            testAnger6.setDate(parseDate("2017-04-22"));
+            testAnger7.setDate(parseDate("2017-04-22"));
+            testAnger8.setDate(parseDate("2017-05-23"));
+
+            ParticipantController.addMoodEvent(testAnger1);
+            ParticipantController.addMoodEvent(testAnger2);
+            ParticipantController.addMoodEvent(testAnger3);
+            ParticipantController.addMoodEvent(testAnger4);
+            ParticipantController.addMoodEvent(testAnger5);
+            ParticipantController.addMoodEvent(testAnger6);
+            ParticipantController.addMoodEvent(testAnger7);
+            ParticipantController.addMoodEvent(testAnger8);
+
+            //////////////////////////////////////////////////////////////////////////////
+
+            MoodEvent testSurprised1 = new MoodEvent(testSurprisedMood, null, "", null, null);
+            MoodEvent testSurprised2 = new MoodEvent(testSurprisedMood, null, "", null, null);
+            MoodEvent testSurprised3 = new MoodEvent(testSurprisedMood, null, "", null, null);
+            MoodEvent testSurprised4 = new MoodEvent(testSurprisedMood, null, "", null, null);
+            MoodEvent testSurprised5 = new MoodEvent(testSurprisedMood, null, "", null, null);
+            MoodEvent testSurprised6 = new MoodEvent(testSurprisedMood, null, "", null, null);
+            MoodEvent testSurprised7 = new MoodEvent(testSurprisedMood, null, "", null, null);
+            MoodEvent testSurprised8 = new MoodEvent(testSurprisedMood, null, "", null, null);
+
+            testSurprised1.setDate(parseDate("2017-03-18"));
+            testSurprised2.setDate(parseDate("2017-03-19"));
+            testSurprised3.setDate(parseDate("2017-03-20"));
+            testSurprised4.setDate(parseDate("2017-04-27"));
+            testSurprised5.setDate(parseDate("2017-04-27"));
+            testSurprised6.setDate(parseDate("2017-04-27"));
+            testSurprised7.setDate(parseDate("2017-05-11"));
+            testSurprised8.setDate(parseDate("2017-05-11"));
+
+            ParticipantController.addMoodEvent(testSurprised1);
+            ParticipantController.addMoodEvent(testSurprised2);
+            ParticipantController.addMoodEvent(testSurprised3);
+            ParticipantController.addMoodEvent(testSurprised4);
+            ParticipantController.addMoodEvent(testSurprised5);
+            ParticipantController.addMoodEvent(testSurprised6);
+            ParticipantController.addMoodEvent(testSurprised7);
+            ParticipantController.addMoodEvent(testSurprised8);
+
+            //////////////////////////////////////////////////////////////////////////////
+
+            MoodEvent testDisgust1 = new MoodEvent(testDisgustMood, null, "", null, null);
+            MoodEvent testDisgust2 = new MoodEvent(testDisgustMood, null, "", null, null);
+            MoodEvent testDisgust3 = new MoodEvent(testDisgustMood, null, "", null, null);
+            MoodEvent testDisgust4 = new MoodEvent(testDisgustMood, null, "", null, null);
+            MoodEvent testDisgust5 = new MoodEvent(testDisgustMood, null, "", null, null);
+            MoodEvent testDisgust6 = new MoodEvent(testDisgustMood, null, "", null, null);
+            MoodEvent testDisgust7 = new MoodEvent(testDisgustMood, null, "", null, null);
+            MoodEvent testDisgust8 = new MoodEvent(testDisgustMood, null, "", null, null);
+
+            testDisgust1.setDate(parseDate("2017-05-20"));
+            testDisgust2.setDate(parseDate("2017-05-20"));
+            testDisgust3.setDate(parseDate("2017-05-20"));
+            testDisgust4.setDate(parseDate("2017-05-20"));
+            testDisgust5.setDate(parseDate("2017-05-28"));
+            testDisgust6.setDate(parseDate("2017-05-29"));
+            testDisgust7.setDate(parseDate("2017-03-26"));
+            testDisgust8.setDate(parseDate("2017-04-26"));
+
+            ParticipantController.addMoodEvent(testDisgust1);
+            ParticipantController.addMoodEvent(testDisgust2);
+            ParticipantController.addMoodEvent(testDisgust3);
+            ParticipantController.addMoodEvent(testDisgust4);
+            ParticipantController.addMoodEvent(testDisgust5);
+            ParticipantController.addMoodEvent(testDisgust6);
+            ParticipantController.addMoodEvent(testDisgust7);
+            ParticipantController.addMoodEvent(testDisgust8);
+
+            //////////////////////////////////////////////////////////////////////////////
+
+            MoodEvent testConfused1 = new MoodEvent(testConfusedMood, null, "", null, null);
+            MoodEvent testConfused2 = new MoodEvent(testConfusedMood, null, "", null, null);
+            MoodEvent testConfused3 = new MoodEvent(testConfusedMood, null, "", null, null);
+            MoodEvent testConfused4 = new MoodEvent(testConfusedMood, null, "", null, null);
+            MoodEvent testConfused5 = new MoodEvent(testConfusedMood, null, "", null, null);
+            MoodEvent testConfused6 = new MoodEvent(testConfusedMood, null, "", null, null);
+            MoodEvent testConfused7 = new MoodEvent(testConfusedMood, null, "", null, null);
+            MoodEvent testConfused8 = new MoodEvent(testConfusedMood, null, "", null, null);
+
+            testConfused1.setDate(parseDate("2017-03-30"));
+            testConfused2.setDate(parseDate("2017-03-30"));
+            testConfused3.setDate(parseDate("2017-04-07"));
+            testConfused4.setDate(parseDate("2017-04-07"));
+            testConfused5.setDate(parseDate("2017-04-09"));
+            testConfused6.setDate(parseDate("2017-04-19"));
+            testConfused7.setDate(parseDate("2017-04-19"));
+            testConfused8.setDate(parseDate("2017-04-19"));
+
+            ParticipantController.addMoodEvent(testConfused1);
+            ParticipantController.addMoodEvent(testConfused1);
+            ParticipantController.addMoodEvent(testConfused1);
+            ParticipantController.addMoodEvent(testConfused1);
+            ParticipantController.addMoodEvent(testConfused1);
+            ParticipantController.addMoodEvent(testConfused1);
+            ParticipantController.addMoodEvent(testConfused1);
+            ParticipantController.addMoodEvent(testConfused1);
+
+        } catch (EmptyMoodException e) {
+            //pass
+        } catch (TriggerTooLongException e) {
+            //pass
+        }
     }
 
 }
