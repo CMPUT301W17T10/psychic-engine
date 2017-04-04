@@ -20,10 +20,11 @@
             android:id="@+id/spinnerMyFeed"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="87dp"
             android:layout_above="@+id/listViewMyFeed"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="20dp" />
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="87dp"
+            android:overlapAnchor="false"/>
 
     </android.support.v7.widget.Toolbar>
 
