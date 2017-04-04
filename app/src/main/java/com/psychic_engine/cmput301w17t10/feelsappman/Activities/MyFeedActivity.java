@@ -168,6 +168,7 @@ public class MyFeedActivity extends AppCompatActivity {
         super.onStart();
         adapter = new LazyAdapter(this, filteredMoodList);
         myFeedList.setAdapter(adapter);
+        refresh();
     }
 
     /**
@@ -297,5 +298,11 @@ public class MyFeedActivity extends AppCompatActivity {
     private void refresh() {
         filter();
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refresh();
     }
 }
