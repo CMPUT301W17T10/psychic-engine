@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton
 import com.psychic_engine.cmput301w17t10.feelsappman.R;
 
 import static android.graphics.Color.parseColor;
+import static com.psychic_engine.cmput301w17t10.feelsappman.R.id.mood;
 
 /**
  * RecentTabFragment contain the details of the most recent mood event that the participant has
@@ -36,27 +38,27 @@ import static android.graphics.Color.parseColor;
 public class RecentTabFragment extends Fragment {
 
     private TextView date;
-    private TextView viewMood;
+    private ImageView viewMood;
     private TextView location;
     private ImageView imageView;
-    private Button deleteButton;
-    private Button editButton;
+    private ImageButton deleteButton;
+    private ImageButton editButton;
     private Participant participant;
     private MoodEvent moodEvent;
-    private Button displayRecentMapButton;
+    private ImageButton displayRecentMapButton;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.recent, container, false);
-        deleteButton = (Button)rootView.findViewById(R.id.deletebutton);
-        editButton = (Button)rootView.findViewById(R.id.editbutton);
+        deleteButton = (ImageButton)rootView.findViewById(R.id.deletebutton);
+        editButton = (ImageButton)rootView.findViewById(R.id.editbutton);
         date = (TextView) rootView.findViewById(R.id.date);
-        viewMood = (TextView) rootView.findViewById(R.id.mood);
+        viewMood = (ImageView) rootView.findViewById(mood);
         location = (TextView) rootView.findViewById(R.id.location);
         imageView = (ImageView) rootView.findViewById(R.id.picture);
-        displayRecentMapButton = (Button) rootView.findViewById(R.id.recentmap);
+        displayRecentMapButton = (ImageButton) rootView.findViewById(R.id.recentmap);
         participant = ParticipantSingleton.getInstance().getSelfParticipant();
         moodEvent = participant.getMostRecentMoodEvent();
 
@@ -109,7 +111,11 @@ public class RecentTabFragment extends Fragment {
         if (moodEvent != null) {
             int color = parseColor(moodEvent.getMood().getColor().getBGColor());
             this.getView().setBackgroundColor(color);
-            viewMood.setText(moodEvent.getMood().toString());
+
+            String iconName = moodEvent.getMood().getIconName();
+            int resourceId = this.getResources().getIdentifier(iconName, "drawable", getActivity().getPackageName());
+            viewMood.setImageResource(resourceId);
+
             date.setText(moodEvent.getDate().toString());
             if (moodEvent.getPicture() != null) {
                 imageView.setImageBitmap(moodEvent.getPicture().getImage());
@@ -122,8 +128,8 @@ public class RecentTabFragment extends Fragment {
             if (moodEvent.getLocation() != null)
                 location.setText(moodEvent.getLocation().getLatitudeStr().concat(moodEvent.getLocation().getLongitudeStr()));
         } else {
-            this.getView().setBackgroundColor(Color.BLACK);
-            viewMood.setText("");
+            this.getView().setBackgroundColor(Color.WHITE);
+            viewMood.setImageBitmap(null);
             date.setText("There's No Mood Event Yet! Why Don't you add one!");
             //location.setText("");
             imageView.setImageBitmap(null);
