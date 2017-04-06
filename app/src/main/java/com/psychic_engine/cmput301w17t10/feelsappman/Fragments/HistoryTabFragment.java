@@ -33,6 +33,7 @@ import com.psychic_engine.cmput301w17t10.feelsappman.Activities.FilterMapActivit
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.ViewMoodEventActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Custom.CustomComparator;
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.DeleteMoodController;
+import com.psychic_engine.cmput301w17t10.feelsappman.Custom.LazyAdapter;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
@@ -71,7 +72,7 @@ public class HistoryTabFragment extends Fragment {
     private boolean satisfiesTrigger;
     private ArrayList<MoodEvent> filteredMoodList;
     private ArrayList<MoodEvent> unfilteredMoodList;
-    private ArrayAdapter<MoodEvent> adapter;
+    private LazyAdapter adapter;
     private final long ONEWEEK = 604800000L;    // one weeks time
 
     @Override
@@ -264,7 +265,7 @@ public class HistoryTabFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        adapter = new ArrayAdapter<>(getActivity(), R.layout.item_history, filteredMoodList);
+        adapter = new LazyAdapter(getActivity(), filteredMoodList);
         moodEventsListView.setAdapter(adapter);
 
         // initial filter according to users last settings

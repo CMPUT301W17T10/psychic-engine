@@ -63,7 +63,7 @@ public class SearchActivity extends AppCompatActivity {
 
                 try {
                     arrayList.add(participant.getLogin());
-                    adapter = new ArrayAdapter<>(SearchActivity.this, R.layout.item_history, arrayList);
+                    adapter = new ArrayAdapter<>(SearchActivity.this, R.layout.myfeed_item, arrayList);
                     results.setAdapter(adapter);
                     pendinglist = participant.getPendingRequests();
                 }catch (NullPointerException e) {

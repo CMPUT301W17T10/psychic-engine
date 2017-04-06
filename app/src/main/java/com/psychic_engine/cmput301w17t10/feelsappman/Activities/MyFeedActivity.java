@@ -16,6 +16,7 @@ import android.widget.Spinner;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Controllers.ElasticParticipantController;
 import com.psychic_engine.cmput301w17t10.feelsappman.Custom.CustomComparator;
+import com.psychic_engine.cmput301w17t10.feelsappman.Custom.LazyAdapter;
 import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.MoodEvent;
@@ -45,7 +46,7 @@ public class MyFeedActivity extends AppCompatActivity {
     private ArrayList<MoodEvent> followingMoodsArray;
     private ArrayList<String> followingArray;
     private ListView myFeedList;
-    private ArrayAdapter<MoodEvent> adapter;
+    private LazyAdapter adapter;
     private Participant participant;
     private Participant following;
     private Button maps;
@@ -165,8 +166,9 @@ public class MyFeedActivity extends AppCompatActivity {
     protected void onStart() {
         // TODO Auto-generated method stub
         super.onStart();
-        adapter = new ArrayAdapter<MoodEvent>(this, R.layout.myfeed_item, filteredMoodList);
+        adapter = new LazyAdapter(this, filteredMoodList);
         myFeedList.setAdapter(adapter);
+        refresh();
     }
 
     /**
@@ -296,5 +298,11 @@ public class MyFeedActivity extends AppCompatActivity {
     private void refresh() {
         filter();
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refresh();
     }
 }

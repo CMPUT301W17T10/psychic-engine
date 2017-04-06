@@ -7,6 +7,8 @@ import android.view.View;
 
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.MyFeedActivity;
 import com.psychic_engine.cmput301w17t10.feelsappman.Activities.MyProfileActivity;
+import com.psychic_engine.cmput301w17t10.feelsappman.Enums.MoodState;
+import com.psychic_engine.cmput301w17t10.feelsappman.Models.Mood;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.Participant;
 import com.psychic_engine.cmput301w17t10.feelsappman.Models.ParticipantSingleton;
 import com.robotium.solo.Solo;
